@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXT CANDLE — Member Terminal</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NEXT CANDLE — Trading Journal</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,40 +11,41 @@
 
 <style>
 :root{
-    --bg:#f4f5f7;
-    --bg2:#ffffff;
-    --panel:rgba(255,255,255,.82);
-    --panel-solid:#ffffff;
-    --text:#101114;
-    --muted:#74777f;
-    --line:#e5e7eb;
-    --line2:#d7d9df;
-    --black:#0d0e10;
-    --white:#ffffff;
+    --bg:#f5f6f8;
+    --surface:#fff;
+    --surface2:#fafafa;
+    --text:#111214;
+    --muted:#7b7f87;
+    --line:#e7e8eb;
+    --line2:#d8dbe0;
     --accent:#735cff;
-    --accent2:#a38fff;
-    --blue:#3b82f6;
-    --green:#16a36a;
-    --red:#e05252;
-    --shadow:0 20px 60px rgba(20,22,30,.08);
-    --shadow2:0 8px 30px rgba(20,22,30,.06);
-    --radius:22px;
-    --sidebar:260px;
+    --accent-soft:rgba(115,92,255,.10);
+    --green:#159b67;
+    --green-soft:rgba(21,155,103,.10);
+    --red:#df5555;
+    --red-soft:rgba(223,85,85,.10);
+    --shadow:0 18px 55px rgba(20,23,30,.07);
+    --shadow-small:0 8px 25px rgba(20,23,30,.05);
+    --radius:20px;
+    --sidebar:245px;
 }
 
 [data-theme="dark"]{
     --bg:#08090b;
-    --bg2:#0d0f12;
-    --panel:rgba(18,20,24,.82);
-    --panel-solid:#111317;
+    --surface:#101216;
+    --surface2:#14161a;
     --text:#f5f6f8;
     --muted:#858a94;
-    --line:#24272e;
-    --line2:#30343c;
-    --black:#ffffff;
-    --white:#0b0c0f;
-    --shadow:0 25px 70px rgba(0,0,0,.38);
-    --shadow2:0 10px 35px rgba(0,0,0,.3);
+    --line:#25282e;
+    --line2:#343840;
+    --accent:#8975ff;
+    --accent-soft:rgba(137,117,255,.13);
+    --green:#32c98b;
+    --green-soft:rgba(50,201,139,.11);
+    --red:#ff6868;
+    --red-soft:rgba(255,104,104,.11);
+    --shadow:0 25px 70px rgba(0,0,0,.35);
+    --shadow-small:0 10px 35px rgba(0,0,0,.25);
 }
 
 *{
@@ -58,21 +59,21 @@ html{
 }
 
 body{
-    font-family:Inter,sans-serif;
+    min-height:100vh;
     background:
-        radial-gradient(circle at 80% -10%,rgba(115,92,255,.10),transparent 28%),
-        radial-gradient(circle at 10% 40%,rgba(59,130,246,.05),transparent 25%),
+        radial-gradient(circle at 85% -10%,rgba(115,92,255,.10),transparent 27%),
+        radial-gradient(circle at -10% 70%,rgba(70,120,255,.055),transparent 25%),
         var(--bg);
     color:var(--text);
-    min-height:100vh;
+    font-family:Inter,sans-serif;
     overflow-x:hidden;
-    transition:background .4s,color .4s;
+    transition:background .35s,color .35s;
 }
 
 button,
 input,
-textarea,
-select{
+select,
+textarea{
     font:inherit;
 }
 
@@ -80,102 +81,117 @@ button{
     cursor:pointer;
 }
 
-a{
-    color:inherit;
-    text-decoration:none;
+button,
+input,
+select,
+textarea{
+    outline:none;
 }
 
-::selection{
-    background:var(--accent);
-    color:white;
+::-webkit-scrollbar{
+    width:7px;
 }
 
-/* =========================
+::-webkit-scrollbar-track{
+    background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--line2);
+    border-radius:20px;
+}
+
+/* =====================================
    BACKGROUND
-========================= */
+===================================== */
 
-.background{
+.bg-orb{
     position:fixed;
-    inset:0;
     pointer-events:none;
-    overflow:hidden;
     z-index:-1;
-}
-
-.orb{
-    position:absolute;
-    width:500px;
-    height:500px;
     border-radius:50%;
-    filter:blur(100px);
-    opacity:.10;
-    animation:float 15s ease-in-out infinite;
+    filter:blur(110px);
+    opacity:.08;
 }
 
-.orb.one{
+.bg-orb.one{
+    width:430px;
+    height:430px;
+    right:-180px;
+    top:-170px;
     background:#735cff;
-    top:-250px;
-    right:-100px;
+    animation:orbOne 16s infinite ease-in-out;
 }
 
-.orb.two{
+.bg-orb.two{
+    width:350px;
+    height:350px;
+    left:-180px;
+    bottom:-150px;
     background:#3b82f6;
-    bottom:-300px;
-    left:-150px;
-    animation-delay:-6s;
+    animation:orbTwo 19s infinite ease-in-out;
 }
 
-@keyframes float{
-    0%,100%{transform:translate(0,0) scale(1)}
-    50%{transform:translate(30px,25px) scale(1.08)}
+@keyframes orbOne{
+    0%,100%{transform:translate(0,0)}
+    50%{transform:translate(-35px,35px)}
 }
 
-/* =========================
+@keyframes orbTwo{
+    0%,100%{transform:translate(0,0)}
+    50%{transform:translate(35px,-20px)}
+}
+
+/* =====================================
    SIDEBAR
-========================= */
+===================================== */
 
 .sidebar{
     position:fixed;
-    top:0;
     left:0;
+    top:0;
     bottom:0;
     width:var(--sidebar);
+    background:rgba(255,255,255,.72);
     border-right:1px solid var(--line);
-    background:var(--panel);
-    backdrop-filter:blur(24px);
-    -webkit-backdrop-filter:blur(24px);
-    padding:25px 17px;
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+    padding:24px 15px;
     z-index:100;
     display:flex;
     flex-direction:column;
-    transition:transform .35s ease,background .4s;
+    transition:.35s ease;
 }
 
-.logo{
-    padding:4px 12px 30px;
+[data-theme="dark"] .sidebar{
+    background:rgba(12,14,17,.78);
 }
 
-.logo-main{
-    font-size:19px;
+.brand{
+    padding:4px 12px 29px;
+}
+
+.brand-name{
+    font-size:18px;
     font-weight:800;
-    letter-spacing:-.8px;
+    letter-spacing:-.9px;
 }
 
-.logo-sub{
+.brand-sub{
+    margin-top:5px;
+    color:var(--muted);
     font-family:"DM Mono",monospace;
     font-size:8px;
-    color:var(--muted);
-    letter-spacing:2.5px;
-    margin-top:5px;
+    letter-spacing:2px;
 }
 
-.nav-label{
+.sidebar-label{
     color:var(--muted);
-    font-size:9px;
-    font-weight:700;
-    letter-spacing:1.7px;
+    font-size:8px;
+    font-weight:800;
+    letter-spacing:1.6px;
     text-transform:uppercase;
-    padding:0 12px 10px;
+    padding:0 12px 9px;
 }
 
 .nav{
@@ -184,152 +200,151 @@ a{
     gap:4px;
 }
 
-.nav button{
-    position:relative;
-    display:flex;
-    align-items:center;
-    gap:12px;
+.nav-button{
     width:100%;
     border:0;
     background:transparent;
     color:var(--muted);
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    gap:11px;
     padding:11px 12px;
-    border-radius:12px;
     text-align:left;
-    font-size:12px;
+    font-size:11px;
     font-weight:600;
-    transition:.25s;
+    transition:.22s;
 }
 
-.nav button svg{
-    width:17px;
-    height:17px;
-    stroke-width:1.7;
+.nav-button svg{
+    width:16px;
+    height:16px;
+    flex:none;
 }
 
-.nav button:hover{
-    background:rgba(127,127,127,.08);
+.nav-button:hover{
+    background:rgba(127,127,127,.07);
     color:var(--text);
     transform:translateX(2px);
 }
 
-.nav button.active{
-    background:var(--text);
+.nav-button.active{
     color:var(--bg);
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    background:var(--text);
 }
 
 .sidebar-bottom{
     margin-top:auto;
 }
 
-.profile-mini{
+.user-box{
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:11px;
     display:flex;
     align-items:center;
-    gap:10px;
-    padding:12px;
-    border:1px solid var(--line);
-    border-radius:16px;
+    gap:9px;
     background:rgba(127,127,127,.035);
 }
 
-.avatar{
-    width:32px;
-    height:32px;
-    border-radius:50%;
-    display:grid;
-    place-items:center;
+.user-avatar{
+    width:31px;
+    height:31px;
+    border-radius:10px;
     background:var(--text);
     color:var(--bg);
-    font-size:11px;
+    display:grid;
+    place-items:center;
+    font-size:9px;
     font-weight:800;
 }
 
-.profile-mini strong{
-    display:block;
-    font-size:11px;
+.user-name{
+    font-size:10px;
+    font-weight:700;
 }
 
-.profile-mini span{
+.user-status{
     color:var(--muted);
-    font-size:9px;
+    font-size:8px;
+    margin-top:3px;
 }
 
-/* =========================
+/* =====================================
    MAIN
-========================= */
+===================================== */
 
 .main{
     margin-left:var(--sidebar);
     min-height:100vh;
-    padding:22px 28px 50px;
+    padding:20px 27px 45px;
 }
 
 .topbar{
-    height:58px;
+    height:54px;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    margin-bottom:25px;
+    margin-bottom:22px;
 }
 
-.mobile-logo{
+.mobile-brand{
     display:none;
     font-weight:800;
     letter-spacing:-.7px;
+    font-size:14px;
 }
 
-.top-actions{
-    display:flex;
-    align-items:center;
-    gap:8px;
+.top-right{
     margin-left:auto;
+    display:flex;
+    gap:7px;
 }
 
-.icon-btn{
-    width:38px;
-    height:38px;
+.icon-button{
+    width:37px;
+    height:37px;
+    border-radius:11px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--text);
     display:grid;
     place-items:center;
-    border:1px solid var(--line);
-    background:var(--panel);
-    color:var(--text);
-    border-radius:11px;
-    transition:.25s;
-    backdrop-filter:blur(15px);
+    transition:.22s;
 }
 
-.icon-btn:hover{
-    border-color:var(--line2);
+.icon-button svg{
+    width:16px;
+    height:16px;
+}
+
+.icon-button:hover{
     transform:translateY(-2px);
-    box-shadow:var(--shadow2);
+    border-color:var(--line2);
+    box-shadow:var(--shadow-small);
 }
 
-.icon-btn svg{
-    width:17px;
-}
-
-.menu-btn{
+.menu-button{
     display:none;
 }
 
-/* =========================
+/* =====================================
    PAGE
-========================= */
+===================================== */
 
 .page{
     display:none;
-    animation:pageIn .45s ease both;
+    animation:pageEnter .35s ease both;
 }
 
 .page.active{
     display:block;
 }
 
-@keyframes pageIn{
+@keyframes pageEnter{
     from{
         opacity:0;
-        transform:translateY(10px);
+        transform:translateY(8px);
     }
     to{
         opacity:1;
@@ -337,255 +352,176 @@ a{
     }
 }
 
-.page-heading{
-    margin-bottom:22px;
+.page-title{
+    margin-bottom:21px;
 }
 
-.page-heading h1{
-    font-size:28px;
-    letter-spacing:-1.3px;
+.page-title h1{
+    font-size:27px;
+    letter-spacing:-1.4px;
 }
 
-.page-heading p{
+.page-title p{
     color:var(--muted);
-    margin-top:6px;
-    font-size:12px;
+    font-size:11px;
+    margin-top:5px;
 }
 
-/* =========================
-   HERO
-========================= */
+/* =====================================
+   DASHBOARD HEADER
+===================================== */
 
-.hero{
-    position:relative;
-    overflow:hidden;
-    border-radius:27px;
-    min-height:265px;
-    padding:34px;
-    background:#0d0e10;
-    color:#fff;
-    box-shadow:var(--shadow);
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:15px;
     margin-bottom:18px;
 }
 
-.hero:before{
-    content:"";
-    position:absolute;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    background:radial-gradient(circle,rgba(115,92,255,.45),transparent 65%);
-    right:-180px;
-    top:-270px;
+.dashboard-title h1{
+    font-size:28px;
+    letter-spacing:-1.5px;
 }
 
-.hero:after{
-    content:"";
-    position:absolute;
-    width:350px;
-    height:350px;
-    border-radius:50%;
-    border:1px solid rgba(255,255,255,.07);
-    right:30px;
-    top:-120px;
-    box-shadow:0 0 0 50px rgba(255,255,255,.018),
-               0 0 0 100px rgba(255,255,255,.012);
+.dashboard-title p{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:6px;
 }
 
-.hero-content{
-    position:relative;
-    z-index:2;
-    max-width:650px;
-}
-
-.eyebrow{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    color:#aaaeb8;
-    font-family:"DM Mono",monospace;
-    font-size:9px;
-    letter-spacing:1.8px;
-    text-transform:uppercase;
-    margin-bottom:15px;
-}
-
-.status-dot{
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:#64d6a2;
-    box-shadow:0 0 12px #64d6a2;
-}
-
-.hero h1{
-    font-size:37px;
-    line-height:1.05;
-    letter-spacing:-2px;
-    max-width:600px;
-}
-
-.hero h1 span{
-    color:#8f7dff;
-}
-
-.hero p{
-    color:#aeb2ba;
-    max-width:520px;
-    font-size:12px;
-    line-height:1.8;
-    margin:14px 0 23px;
-}
-
-.hero-buttons{
-    display:flex;
-    gap:9px;
-    flex-wrap:wrap;
-}
-
-.primary-btn{
+.add-trade{
     border:0;
-    background:#fff;
-    color:#111;
-    padding:11px 16px;
+    background:var(--text);
+    color:var(--bg);
     border-radius:11px;
-    font-size:11px;
+    padding:11px 16px;
+    font-size:10px;
     font-weight:800;
     transition:.25s;
 }
 
-.primary-btn:hover{
+.add-trade:hover{
     transform:translateY(-2px);
-    box-shadow:0 10px 25px rgba(0,0,0,.2);
+    box-shadow:var(--shadow-small);
 }
 
-.secondary-btn{
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(255,255,255,.06);
-    color:#fff;
-    padding:10px 15px;
-    border-radius:11px;
-    font-size:11px;
-    font-weight:700;
-    transition:.25s;
-    backdrop-filter:blur(10px);
-}
+/* =====================================
+   STAT CARDS
+===================================== */
 
-.secondary-btn:hover{
-    background:rgba(255,255,255,.1);
-    transform:translateY(-2px);
-}
-
-/* =========================
-   GRID
-========================= */
-
-.grid{
+.stats{
     display:grid;
-    gap:15px;
+    grid-template-columns:repeat(6,1fr);
+    gap:11px;
+    margin-bottom:14px;
 }
 
-.kpi-grid{
-    grid-template-columns:repeat(5,1fr);
-    margin-bottom:15px;
-}
-
-.card{
+.stat-card{
+    background:var(--surface);
     border:1px solid var(--line);
-    background:var(--panel);
-    backdrop-filter:blur(20px);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow2);
-    transition:transform .3s,border .3s,box-shadow .3s;
+    border-radius:17px;
+    padding:17px;
+    min-height:116px;
+    box-shadow:var(--shadow-small);
+    transition:.25s;
 }
 
-.card:hover{
+.stat-card:hover{
     transform:translateY(-3px);
     border-color:var(--line2);
     box-shadow:var(--shadow);
 }
 
-.kpi{
-    padding:20px;
-    min-height:125px;
-}
-
-.kpi-label{
+.stat-label{
     color:var(--muted);
-    font-size:9px;
-    font-weight:700;
     text-transform:uppercase;
-    letter-spacing:1.3px;
-}
-
-.kpi-value{
-    font-size:25px;
+    letter-spacing:1.1px;
+    font-size:7.5px;
     font-weight:800;
-    letter-spacing:-1.2px;
-    margin-top:18px;
 }
 
-.kpi-meta{
+.stat-value{
+    margin-top:17px;
+    font-size:21px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.stat-small{
     color:var(--muted);
     font-family:"DM Mono",monospace;
-    font-size:8px;
+    font-size:7.5px;
     margin-top:6px;
 }
 
-.positive{
+.green{
     color:var(--green)!important;
 }
 
-.negative{
+.red{
     color:var(--red)!important;
 }
 
-/* =========================
-   CHART
-========================= */
+/* =====================================
+   CHART GRID
+===================================== */
 
-.dashboard-grid{
+.chart-grid{
     display:grid;
-    grid-template-columns:1.7fr 1fr;
-    gap:15px;
+    grid-template-columns:1.55fr 1fr;
+    gap:14px;
+    margin-bottom:14px;
 }
 
 .chart-card{
-    padding:22px;
-    min-height:350px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:21px;
+    box-shadow:var(--shadow-small);
+    min-width:0;
 }
 
-.card-header{
+.chart-header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
 
-.card-title{
-    font-size:12px;
+.chart-title{
+    font-size:11px;
     font-weight:800;
 }
 
-.card-sub{
+.chart-description{
     color:var(--muted);
-    font-size:9px;
+    font-size:8.5px;
     margin-top:4px;
 }
 
-.chart-wrap{
-    position:relative;
-    height:255px;
-    margin-top:15px;
+.chart-badge{
+    color:var(--muted);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:5px 7px;
+    font-family:"DM Mono",monospace;
+    font-size:7px;
 }
 
-.chart-svg{
+.chart{
+    height:270px;
+    position:relative;
+}
+
+.chart svg{
     width:100%;
     height:100%;
     overflow:visible;
 }
 
-.chart-grid-line{
+.grid-line{
     stroke:var(--line);
     stroke-width:1;
 }
@@ -596,139 +532,232 @@ a{
     stroke-width:3;
     stroke-linecap:round;
     stroke-linejoin:round;
-    filter:drop-shadow(0 5px 9px rgba(115,92,255,.25));
-    stroke-dasharray:1000;
-    stroke-dashoffset:1000;
-    animation:drawChart 2s ease forwards .3s;
-}
-
-@keyframes drawChart{
-    to{stroke-dashoffset:0}
+    filter:drop-shadow(0 5px 8px rgba(115,92,255,.22));
+    transition:d .65s ease;
 }
 
 .chart-area{
-    fill:url(#chartGradient);
-    opacity:.14;
+    fill:url(#equityGradient);
+    opacity:.16;
+    transition:d .65s ease;
 }
 
-/* =========================
-   SESSION CARD
-========================= */
-
-.session-card{
-    padding:22px;
-}
-
-.session{
-    padding:15px 0;
-    border-bottom:1px solid var(--line);
-}
-
-.session:last-child{
-    border-bottom:0;
-}
-
-.session-top{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:10px;
-}
-
-.session-name{
-    font-size:10px;
-    font-weight:700;
-}
-
-.session-value{
+.axis-label{
+    fill:var(--muted);
     font-family:"DM Mono",monospace;
-    font-size:10px;
+    font-size:8px;
 }
 
-.bar{
-    height:5px;
-    background:var(--line);
-    border-radius:99px;
-    overflow:hidden;
+/* =====================================
+   MINI CHARTS
+===================================== */
+
+.mini-charts{
+    display:grid;
+    gap:14px;
 }
 
-.bar span{
-    display:block;
+.mini-chart{
+    min-height:177px;
+}
+
+.mini-chart-box{
+    height:95px;
+    position:relative;
+}
+
+.mini-chart-box svg{
+    width:100%;
     height:100%;
-    border-radius:99px;
-    background:var(--accent);
-    transform-origin:left;
-    animation:barIn 1s ease both;
 }
 
-@keyframes barIn{
-    from{transform:scaleX(0)}
-    to{transform:scaleX(1)}
+.mini-line{
+    fill:none;
+    stroke:var(--accent);
+    stroke-width:2.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    transition:d .55s ease;
 }
 
-/* =========================
-   TABLE
-========================= */
+.mini-area{
+    fill:url(#miniGradient);
+    opacity:.13;
+}
+
+/* =====================================
+   RECENT TRADES
+===================================== */
 
 .table-card{
-    margin-top:15px;
-    padding:22px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow-small);
     overflow:hidden;
 }
 
-.table{
+.table-header{
+    padding:20px 21px 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.table-title{
+    font-size:11px;
+    font-weight:800;
+}
+
+.table-sub{
+    color:var(--muted);
+    font-size:8.5px;
+    margin-top:4px;
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
     width:100%;
     border-collapse:collapse;
 }
 
-.table th{
-    text-align:left;
+th{
+    padding:11px 15px;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
     color:var(--muted);
-    font-size:8px;
+    text-align:left;
     text-transform:uppercase;
-    letter-spacing:1.2px;
-    padding:10px;
-    border-bottom:1px solid var(--line);
+    letter-spacing:1px;
+    font-size:7px;
+    font-weight:800;
+    white-space:nowrap;
 }
 
-.table td{
-    padding:14px 10px;
+td{
+    padding:14px 15px;
     border-bottom:1px solid var(--line);
-    font-size:10px;
+    font-size:9px;
+    white-space:nowrap;
 }
 
-.table tr:last-child td{
+tr:last-child td{
     border-bottom:0;
 }
 
-.instrument{
-    font-weight:800;
+.trade-name{
+    font-weight:700;
 }
 
-.tag{
-    display:inline-flex;
-    padding:5px 7px;
-    border-radius:7px;
-    background:rgba(127,127,127,.08);
+.trade-symbol{
+    font-family:"DM Mono",monospace;
+    font-size:8px;
+}
+
+.result{
+    font-family:"DM Mono",monospace;
+    font-weight:500;
+}
+
+.trade-date{
     color:var(--muted);
     font-size:8px;
-    font-family:"DM Mono",monospace;
 }
 
-/* =========================
+.direction-tag{
+    padding:5px 7px;
+    border-radius:6px;
+    background:var(--accent-soft);
+    color:var(--accent);
+    font-size:7px;
+    font-weight:700;
+}
+
+.delete-small{
+    width:27px;
+    height:27px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--muted);
+    border-radius:8px;
+}
+
+.delete-small:hover{
+    color:var(--red);
+    border-color:var(--red);
+}
+
+/* =====================================
+   PAGINATION
+===================================== */
+
+.table-footer{
+    border-top:1px solid var(--line);
+    padding:12px 15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.rows-label{
+    color:var(--muted);
+    font-size:8px;
+}
+
+.rows-select{
+    border:1px solid var(--line);
+    background:var(--surface2);
+    color:var(--text);
+    padding:6px 9px;
+    border-radius:7px;
+    font-size:8px;
+}
+
+.pagination{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.page-btn{
+    min-width:27px;
+    height:27px;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--muted);
+    border-radius:7px;
+    font-size:8px;
+}
+
+.page-btn.active{
+    background:var(--text);
+    color:var(--bg);
+}
+
+.page-btn:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+/* =====================================
    JOURNAL
-========================= */
+===================================== */
 
 .journal-toolbar{
     display:flex;
+    align-items:center;
     justify-content:space-between;
     gap:10px;
-    margin-bottom:15px;
+    margin-bottom:14px;
 }
 
 .search{
-    position:relative;
     flex:1;
-    max-width:350px;
+    max-width:370px;
 }
 
 .search input{
@@ -736,194 +765,264 @@ a{
     height:40px;
     border:1px solid var(--line);
     border-radius:11px;
-    background:var(--panel);
+    background:var(--surface);
     color:var(--text);
     padding:0 13px;
-    outline:0;
-}
-
-.add-btn{
-    border:0;
-    border-radius:11px;
-    background:var(--text);
-    color:var(--bg);
-    padding:0 16px;
     font-size:10px;
-    font-weight:800;
-    transition:.25s;
 }
 
-.add-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:var(--shadow2);
+.search input:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px var(--accent-soft);
 }
 
 .empty{
-    padding:60px 20px;
     text-align:center;
+    padding:60px 20px;
     color:var(--muted);
+    font-size:10px;
 }
 
 .empty strong{
     display:block;
     color:var(--text);
     font-size:14px;
-    margin-bottom:7px;
+    margin-bottom:6px;
 }
 
-/* =========================
-   PLAYBOOK
-========================= */
+/* =====================================
+   ANALYTICS
+===================================== */
 
-.playbook-grid{
+.analytics-grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
 }
 
-.lesson{
-    padding:23px;
-    min-height:210px;
-    position:relative;
-    overflow:hidden;
-}
-
-.lesson-number{
-    font-family:"DM Mono",monospace;
-    font-size:9px;
-    color:var(--muted);
-}
-
-.lesson h3{
-    margin-top:35px;
-    font-size:16px;
-    letter-spacing:-.5px;
-}
-
-.lesson p{
-    color:var(--muted);
-    font-size:10px;
-    line-height:1.7;
-    margin-top:9px;
-}
-
-.lesson-arrow{
-    position:absolute;
-    right:20px;
-    bottom:20px;
-    width:28px;
-    height:28px;
-    border-radius:50%;
-    display:grid;
-    place-items:center;
+.analytics-card{
+    background:var(--surface);
     border:1px solid var(--line);
+    border-radius:20px;
+    padding:21px;
+    box-shadow:var(--shadow-small);
 }
 
-/* =========================
-   ACADEMY
-========================= */
+.large-chart{
+    height:310px;
+}
 
-.course{
+.breakdown{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.break-row{
     display:grid;
-    grid-template-columns:65px 1fr 100px;
-    gap:15px;
+    grid-template-columns:100px 1fr 65px;
     align-items:center;
-    padding:17px;
-    border-bottom:1px solid var(--line);
+    gap:12px;
 }
 
-.course:last-child{
-    border-bottom:0;
-}
-
-.course-num{
-    width:44px;
-    height:44px;
-    display:grid;
-    place-items:center;
-    border-radius:13px;
-    background:rgba(127,127,127,.08);
-    font-family:"DM Mono",monospace;
-    font-size:10px;
-}
-
-.course h3{
-    font-size:11px;
-}
-
-.course p{
-    color:var(--muted);
+.break-name{
     font-size:9px;
-    margin-top:4px;
+    font-weight:700;
 }
 
-.progress{
-    height:4px;
+.break-bar{
+    height:5px;
     background:var(--line);
     border-radius:99px;
     overflow:hidden;
 }
 
-.progress span{
+.break-bar span{
     display:block;
     height:100%;
     background:var(--accent);
+    border-radius:99px;
+    transition:width .6s ease;
 }
 
-/* =========================
+.break-value{
+    text-align:right;
+    color:var(--muted);
+    font-family:"DM Mono",monospace;
+    font-size:8px;
+}
+
+/* =====================================
+   CALENDAR
+===================================== */
+
+.calendar-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:21px;
+    box-shadow:var(--shadow-small);
+}
+
+.calendar-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:17px;
+}
+
+.calendar-month{
+    font-size:14px;
+    font-weight:800;
+}
+
+.calendar-controls{
+    display:flex;
+    gap:5px;
+}
+
+.calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+}
+
+.weekday{
+    text-align:center;
+    color:var(--muted);
+    font-size:7px;
+    font-weight:800;
+    padding:7px;
+}
+
+.calendar-day{
+    min-height:92px;
+    border:1px solid var(--line);
+    border-radius:11px;
+    padding:9px;
+    background:var(--surface2);
+    transition:.2s;
+}
+
+.calendar-day:hover{
+    transform:translateY(-2px);
+    border-color:var(--line2);
+}
+
+.calendar-number{
+    color:var(--muted);
+    font-family:"DM Mono",monospace;
+    font-size:8px;
+}
+
+.calendar-result{
+    margin-top:28px;
+    font-size:9px;
+    font-family:"DM Mono",monospace;
+    font-weight:500;
+}
+
+/* =====================================
+   PSYCHOLOGY
+===================================== */
+
+.reflection-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.reflection-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:21px;
+    box-shadow:var(--shadow-small);
+}
+
+textarea{
+    width:100%;
+    min-height:260px;
+    resize:vertical;
+    border:1px solid var(--line);
+    border-radius:13px;
+    background:var(--surface2);
+    color:var(--text);
+    padding:14px;
+    font-size:10px;
+    line-height:1.7;
+}
+
+.save-button{
+    margin-top:9px;
+    width:100%;
+    height:40px;
+    border:0;
+    border-radius:10px;
+    background:var(--text);
+    color:var(--bg);
+    font-size:9px;
+    font-weight:800;
+}
+
+/* =====================================
    SETTINGS
-========================= */
+===================================== */
 
 .settings-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:15px;
+    gap:14px;
 }
 
 .settings-card{
-    padding:23px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:21px;
+    box-shadow:var(--shadow-small);
 }
 
-.setting-row{
+.setting{
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    padding:15px 0;
+    justify-content:space-between;
+    gap:15px;
+    padding:16px 0;
     border-bottom:1px solid var(--line);
 }
 
-.setting-row:last-child{
+.setting:last-child{
     border-bottom:0;
 }
 
 .setting-title{
-    font-size:11px;
+    font-size:10px;
     font-weight:700;
 }
 
 .setting-description{
     color:var(--muted);
-    font-size:9px;
+    font-size:8px;
     margin-top:4px;
 }
 
 .toggle{
-    width:44px;
-    height:25px;
+    width:42px;
+    height:24px;
     border:0;
     border-radius:99px;
     background:var(--line2);
     padding:3px;
-    transition:.25s;
 }
 
 .toggle span{
+    width:18px;
+    height:18px;
     display:block;
-    width:19px;
-    height:19px;
     border-radius:50%;
     background:var(--text);
-    transition:.25s;
+    transition:.2s;
 }
 
 .toggle.on{
@@ -931,19 +1030,28 @@ a{
 }
 
 .toggle.on span{
-    transform:translateX(19px);
+    transform:translateX(18px);
     background:white;
 }
 
-/* =========================
-   MODAL
-========================= */
+.secondary-action{
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--text);
+    padding:8px 11px;
+    border-radius:8px;
+    font-size:8px;
+}
 
-.modal-bg{
+/* =====================================
+   MODAL
+===================================== */
+
+.modal-background{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.55);
-    backdrop-filter:blur(12px);
+    background:rgba(0,0,0,.58);
+    backdrop-filter:blur(13px);
     z-index:500;
     display:none;
     align-items:center;
@@ -951,48 +1059,56 @@ a{
     padding:20px;
 }
 
-.modal-bg.show{
+.modal-background.show{
     display:flex;
-    animation:fade .2s ease;
+    animation:modalFade .2s ease;
 }
 
-@keyframes fade{
+@keyframes modalFade{
     from{opacity:0}
     to{opacity:1}
 }
 
 .modal{
-    width:min(520px,100%);
-    background:var(--panel-solid);
+    width:min(580px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:var(--surface);
     border:1px solid var(--line);
-    border-radius:24px;
-    padding:26px;
+    border-radius:23px;
+    padding:25px;
     box-shadow:0 30px 100px rgba(0,0,0,.3);
-    animation:modalIn .3s ease;
+    animation:modalIn .28s ease;
 }
 
 @keyframes modalIn{
-    from{opacity:0;transform:translateY(15px) scale(.97)}
-    to{opacity:1;transform:none}
+    from{
+        opacity:0;
+        transform:translateY(14px) scale(.98);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
 }
 
 .modal h2{
     font-size:19px;
-    letter-spacing:-.7px;
+    letter-spacing:-.8px;
 }
 
-.modal-description{
+.modal-sub{
     color:var(--muted);
-    font-size:10px;
-    margin-top:6px;
+    font-size:9px;
     line-height:1.6;
+    margin-top:6px;
 }
 
-.form{
+.form-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-top:22px;
+    gap:11px;
+    margin-top:21px;
 }
 
 .field{
@@ -1006,223 +1122,199 @@ a{
 }
 
 .field label{
-    font-size:8px;
     color:var(--muted);
+    font-size:7px;
     text-transform:uppercase;
     letter-spacing:1px;
-    font-weight:700;
+    font-weight:800;
 }
 
 .field input,
-.field select,
-.field textarea{
-    width:100%;
+.field select{
+    height:40px;
     border:1px solid var(--line);
-    background:var(--bg);
+    background:var(--surface2);
     color:var(--text);
-    outline:0;
     border-radius:10px;
-    padding:11px;
-    font-size:10px;
-    transition:.2s;
-}
-
-.field textarea{
-    min-height:85px;
-    resize:vertical;
+    padding:0 11px;
+    font-size:9px;
 }
 
 .field input:focus,
-.field select:focus,
-.field textarea:focus{
+.field select:focus{
     border-color:var(--accent);
-    box-shadow:0 0 0 3px rgba(115,92,255,.1);
+    box-shadow:0 0 0 3px var(--accent-soft);
+}
+
+.required-note{
+    margin-top:12px;
+    color:var(--muted);
+    font-size:7.5px;
+}
+
+.required-note b{
+    color:var(--text);
 }
 
 .modal-actions{
     display:flex;
     justify-content:flex-end;
-    gap:8px;
-    margin-top:20px;
+    gap:7px;
+    margin-top:19px;
 }
 
-.cancel{
+.cancel-button{
     border:1px solid var(--line);
     background:transparent;
     color:var(--text);
     padding:10px 14px;
-    border-radius:10px;
-    font-size:10px;
+    border-radius:9px;
+    font-size:9px;
 }
 
-.save{
+.save-trade-button{
     border:0;
     background:var(--text);
     color:var(--bg);
     padding:10px 16px;
-    border-radius:10px;
-    font-size:10px;
+    border-radius:9px;
+    font-size:9px;
     font-weight:800;
 }
 
-/* =========================
+/* =====================================
    ONBOARDING
-========================= */
+===================================== */
 
 .onboarding{
     position:fixed;
     inset:0;
     z-index:900;
-    background:#090a0c;
-    color:#fff;
     display:none;
     align-items:center;
     justify-content:center;
-    padding:25px;
+    background:#090a0d;
+    color:#fff;
+    padding:20px;
 }
 
 .onboarding.show{
     display:flex;
 }
 
-.onboarding-inner{
+.onboarding-content{
     width:min(650px,100%);
     text-align:center;
 }
 
-.onboarding-mark{
-    width:60px;
-    height:60px;
-    border-radius:18px;
-    margin:0 auto 25px;
+.onboarding-logo{
+    width:55px;
+    height:55px;
     display:grid;
     place-items:center;
+    margin:0 auto 23px;
+    border-radius:16px;
     background:#fff;
     color:#111;
     font-weight:900;
-    font-size:18px;
 }
 
 .onboarding h1{
-    font-size:42px;
-    letter-spacing:-2px;
+    font-size:38px;
+    letter-spacing:-1.9px;
 }
 
 .onboarding p{
-    color:#8e929b;
-    font-size:12px;
+    color:#858a94;
+    max-width:470px;
+    margin:12px auto 25px;
     line-height:1.8;
-    max-width:450px;
-    margin:12px auto 30px;
-}
-
-.onboarding-steps{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    text-align:left;
-}
-
-.step{
-    padding:17px;
-    border:1px solid rgba(255,255,255,.09);
-    border-radius:15px;
-    background:rgba(255,255,255,.035);
-}
-
-.step-number{
-    font-family:"DM Mono",monospace;
-    font-size:8px;
-    color:#8d7cff;
-}
-
-.step strong{
-    display:block;
     font-size:10px;
-    margin-top:15px;
 }
 
-.step span{
-    display:block;
-    color:#777c86;
-    font-size:8px;
-    line-height:1.6;
-    margin-top:5px;
+.onboarding-actions{
+    display:flex;
+    justify-content:center;
+    gap:9px;
 }
 
-.enter{
-    margin-top:25px;
+.enter-button{
     border:0;
-    padding:12px 22px;
-    border-radius:11px;
     background:white;
     color:#111;
+    padding:11px 19px;
+    border-radius:10px;
+    font-size:9px;
     font-weight:800;
-    font-size:10px;
+}
+
+.skip-button{
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    font-size:9px;
 }
 
 .remember{
     display:flex;
-    align-items:center;
     justify-content:center;
-    gap:7px;
-    color:#747984;
-    font-size:9px;
-    margin-top:14px;
+    align-items:center;
+    gap:6px;
+    color:#686d77;
+    font-size:8px;
+    margin-top:15px;
 }
 
-/* =========================
-   NOTIFICATION
-========================= */
+/* =====================================
+   TOAST
+===================================== */
 
 .toast{
     position:fixed;
+    z-index:1000;
     right:22px;
     bottom:22px;
-    z-index:800;
+    padding:11px 15px;
     background:var(--text);
     color:var(--bg);
-    padding:12px 16px;
-    border-radius:12px;
-    font-size:10px;
+    border-radius:10px;
+    font-size:9px;
     font-weight:700;
     box-shadow:var(--shadow);
-    transform:translateY(100px);
     opacity:0;
-    transition:.35s;
+    transform:translateY(20px);
+    pointer-events:none;
+    transition:.3s;
 }
 
 .toast.show{
-    transform:none;
     opacity:1;
+    transform:none;
 }
 
-/* =========================
+/* =====================================
    MOBILE
-========================= */
+===================================== */
 
 .mobile-nav{
     display:none;
 }
 
-@media(max-width:1100px){
-    .kpi-grid{
+@media(max-width:1200px){
+
+    .stats{
         grid-template-columns:repeat(3,1fr);
     }
 
-    .dashboard-grid{
+    .chart-grid{
         grid-template-columns:1fr;
     }
 
-    .playbook-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
 }
 
-@media(max-width:800px){
-    :root{
-        --sidebar:240px;
-    }
+@media(max-width:850px){
 
     .sidebar{
         transform:translateX(-100%);
@@ -1230,7 +1322,7 @@ a{
 
     .sidebar.open{
         transform:none;
-        box-shadow:30px 0 80px rgba(0,0,0,.2);
+        box-shadow:30px 0 80px rgba(0,0,0,.22);
     }
 
     .main{
@@ -1238,129 +1330,111 @@ a{
         padding:15px 15px 85px;
     }
 
-    .menu-btn{
+    .menu-button{
         display:grid;
     }
 
-    .mobile-logo{
+    .mobile-brand{
         display:block;
     }
 
     .topbar{
-        margin-bottom:15px;
-    }
-
-    .hero{
-        padding:25px;
-        min-height:300px;
-    }
-
-    .hero h1{
-        font-size:30px;
-    }
-
-    .kpi-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .playbook-grid{
-        grid-template-columns:1fr;
-    }
-
-    .settings-grid{
-        grid-template-columns:1fr;
+        margin-bottom:16px;
     }
 
     .mobile-nav{
-        position:fixed;
         display:flex;
-        left:12px;
-        right:12px;
-        bottom:12px;
+        position:fixed;
         z-index:200;
-        background:var(--panel);
+        bottom:11px;
+        left:11px;
+        right:11px;
+        height:57px;
         border:1px solid var(--line);
         border-radius:18px;
+        background:var(--surface);
         backdrop-filter:blur(20px);
-        padding:6px;
-        justify-content:space-around;
         box-shadow:var(--shadow);
+        align-items:center;
+        justify-content:space-around;
+        padding:5px;
     }
 
     .mobile-nav button{
-        width:44px;
-        height:42px;
         border:0;
         background:transparent;
         color:var(--muted);
+        width:43px;
+        height:43px;
         border-radius:12px;
         display:grid;
         place-items:center;
     }
 
     .mobile-nav button.active{
-        background:var(--text);
         color:var(--bg);
+        background:var(--text);
     }
 
     .mobile-nav svg{
-        width:17px;
+        width:16px;
     }
 
-    .onboarding h1{
-        font-size:31px;
-    }
-
-    .onboarding-steps{
+    .analytics-grid,
+    .reflection-grid,
+    .settings-grid{
         grid-template-columns:1fr;
     }
 
-    .step{
-        text-align:center;
-    }
 }
 
-@media(max-width:520px){
-    .kpi-grid{
+@media(max-width:600px){
+
+    .stats{
         grid-template-columns:1fr 1fr;
-        gap:9px;
+        gap:8px;
     }
 
-    .kpi{
-        padding:15px;
+    .stat-card{
         min-height:105px;
+        padding:14px;
     }
 
-    .kpi-value{
-        font-size:20px;
-        margin-top:14px;
+    .stat-value{
+        font-size:18px;
     }
 
-    .hero{
-        border-radius:20px;
+    .dashboard-header{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .dashboard-title h1{
+        font-size:24px;
+    }
+
+    .add-trade{
+        width:100%;
+    }
+
+    .chart-card{
+        padding:15px;
+    }
+
+    .chart{
+        height:220px;
     }
 
     .journal-toolbar{
         flex-direction:column;
+        align-items:stretch;
     }
 
     .search{
         max-width:none;
     }
 
-    .add-btn{
-        height:40px;
-    }
-
-    .table-card{
-        overflow-x:auto;
-    }
-
-    .table{
-        min-width:650px;
-    }
-
-    .form{
+    .form-grid{
         grid-template-columns:1fr;
     }
 
@@ -1368,47 +1442,58 @@ a{
         grid-column:auto;
     }
 
-    .course{
-        grid-template-columns:50px 1fr;
+    .calendar-day{
+        min-height:65px;
+        padding:7px;
     }
 
-    .course .progress{
-        display:none;
+    .calendar-result{
+        margin-top:18px;
     }
+
+    .onboarding h1{
+        font-size:29px;
+    }
+
+    .onboarding-actions{
+        flex-direction:column;
+    }
+
 }
 </style>
 </head>
 
 <body>
 
-<div class="background">
-    <div class="orb one"></div>
-    <div class="orb two"></div>
-</div>
+<div class="bg-orb one"></div>
+<div class="bg-orb two"></div>
 
-<!-- SIDEBAR -->
+<!-- ================================
+     SIDEBAR
+================================ -->
+
 <aside class="sidebar" id="sidebar">
 
-    <div class="logo">
-        <div class="logo-main">NEXT CANDLE</div>
-        <div class="logo-sub">TRADING TERMINAL</div>
+    <div class="brand">
+        <div class="brand-name">NEXT CANDLE</div>
+        <div class="brand-sub">TRADING JOURNAL</div>
     </div>
 
-    <div class="nav-label">Workspace</div>
+    <div class="sidebar-label">Journal</div>
 
     <nav class="nav">
 
-        <button class="nav-btn active" data-page="overview">
+        <button class="nav-button active" data-page="dashboard">
             <svg fill="none" viewBox="0 0 24 24">
                 <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor"/>
                 <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor"/>
                 <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor"/>
                 <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor"/>
             </svg>
-            Overview
+            Dashboard
         </button>
 
-        <button class="nav-btn" data-page="journal">
+        <button class="nav-button" data-page="journal">
             <svg fill="none" viewBox="0 0 24 24">
                 <path d="M5 4h14v16H5z" stroke="currentColor"/>
                 <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor"/>
@@ -1416,7 +1501,7 @@ a{
             Journal
         </button>
 
-        <button class="nav-btn" data-page="analytics">
+        <button class="nav-button" data-page="analytics">
             <svg fill="none" viewBox="0 0 24 24">
                 <path d="M4 19V5M4 19h16" stroke="currentColor"/>
                 <path d="M7 15l3-4 3 2 5-7" stroke="currentColor"/>
@@ -1424,7 +1509,7 @@ a{
             Analytics
         </button>
 
-        <button class="nav-btn" data-page="calendar">
+        <button class="nav-button" data-page="calendar">
             <svg fill="none" viewBox="0 0 24 24">
                 <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor"/>
                 <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor"/>
@@ -1432,19 +1517,7 @@ a{
             Calendar
         </button>
 
-        <div style="height:14px"></div>
-
-        <div class="nav-label">Knowledge</div>
-
-        <button class="nav-btn" data-page="playbook">
-            <svg fill="none" viewBox="0 0 24 24">
-                <path d="M4 5a2 2 0 012-2h13v17H6a2 2 0 01-2-2z" stroke="currentColor"/>
-                <path d="M7 7h8M7 11h8M7 15h5" stroke="currentColor"/>
-            </svg>
-            Playbook
-        </button>
-
-        <button class="nav-btn" data-page="psychology">
+        <button class="nav-button" data-page="psychology">
             <svg fill="none" viewBox="0 0 24 24">
                 <path d="M12 21s-7-4.4-7-10V5l7-3 7 3v6c0 5.6-7 10-7 10z" stroke="currentColor"/>
                 <path d="M9 12l2 2 4-5" stroke="currentColor"/>
@@ -1452,26 +1525,16 @@ a{
             Psychology
         </button>
 
-        <button class="nav-btn" data-page="academy">
-            <svg fill="none" viewBox="0 0 24 24">
-                <path d="M3 9l9-5 9 5-9 5z" stroke="currentColor"/>
-                <path d="M6 11v5c3 3 9 3 12 0v-5M21 9v7" stroke="currentColor"/>
-            </svg>
-            Academy
-        </button>
+    </nav>
 
-        <button class="nav-btn" data-page="community">
-            <svg fill="none" viewBox="0 0 24 24">
-                <path d="M17 20c0-2-2-4-5-4s-5 2-5 4M12 13a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor"/>
-                <path d="M19 9a3 3 0 00-2-2.8M19 14c1.7.5 2.8 1.6 3 3" stroke="currentColor"/>
-            </svg>
-            Community
-        </button>
+    <div class="sidebar-label" style="margin-top:25px">Account</div>
 
-        <button class="nav-btn" data-page="settings">
+    <nav class="nav">
+
+        <button class="nav-button" data-page="settings">
             <svg fill="none" viewBox="0 0 24 24">
-                <path d="M12 15.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7z" stroke="currentColor"/>
-                <path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.6v.2h-2.6V20a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 008 15a1.7 1.7 0 00-1.6-1H6v-2.6h.2A1.7 1.7 0 008 10.4a1.7 1.7 0 00-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 001.9.3 1.7 1.7 0 001-1.6V5h2.6v.2a1.7 1.7 0 001 1.6 1.7 1.7 0 001.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 00-.3 1.9 1.7 1.7 0 001.6 1h.2v2.6h-.2a1.7 1.7 0 00-1.6 1.2z" stroke="currentColor"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor"/>
+                <path d="M19 13.5a7 7 0 000-3M10.5 19a7 7 0 003 0M5 13.5a7 7 0 000-3M10.5 5a7 7 0 003 0" stroke="currentColor"/>
             </svg>
             Settings
         </button>
@@ -1479,260 +1542,346 @@ a{
     </nav>
 
     <div class="sidebar-bottom">
-        <div class="profile-mini">
-            <div class="avatar" id="avatar">NC</div>
+
+        <div class="user-box">
+
+            <div class="user-avatar" id="avatar">NC</div>
+
             <div>
-                <strong id="profileName">Member</strong>
-                <span>Active workspace</span>
+                <div class="user-name" id="userName">Trader</div>
+                <div class="user-status">Journal active</div>
             </div>
+
         </div>
+
     </div>
 
 </aside>
 
-<!-- MAIN -->
+<!-- ================================
+     MAIN
+================================ -->
+
 <main class="main">
 
-    <header class="topbar">
-        <button class="icon-btn menu-btn" id="menuBtn">
-            <svg fill="none" viewBox="0 0 24 24">
-                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor"/>
+<header class="topbar">
+
+    <button class="icon-button menu-button" id="menuButton">
+        <svg fill="none" viewBox="0 0 24 24">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor"/>
+        </svg>
+    </button>
+
+    <div class="mobile-brand">NEXT CANDLE</div>
+
+    <div class="top-right">
+
+        <button class="icon-button" id="themeButton">
+            <svg id="themeIcon" fill="none" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="4" stroke="currentColor"/>
+                <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke="currentColor"/>
             </svg>
         </button>
 
-        <div class="mobile-logo">NEXT CANDLE</div>
+    </div>
 
-        <div class="top-actions">
+</header>
 
-            <button class="icon-btn" id="themeToggle" title="Switch theme">
-                <svg id="themeIcon" fill="none" viewBox="0 0 24 24">
-                    <path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor"/>
-                    <circle cx="12" cy="12" r="4" stroke="currentColor"/>
-                </svg>
-            </button>
+<!-- ================================
+     DASHBOARD
+================================ -->
 
-            <button class="icon-btn" id="commandBtn">
-                <svg fill="none" viewBox="0 0 24 24">
-                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor"/>
-                </svg>
-            </button>
+<section class="page active" id="page-dashboard">
+
+    <div class="dashboard-header">
+
+        <div class="dashboard-title">
+
+            <h1>Performance</h1>
+
+            <p>
+                Track your executions. Measure your process.
+            </p>
 
         </div>
-    </header>
 
-    <!-- OVERVIEW -->
-    <section class="page active" id="page-overview">
+        <button class="add-trade" onclick="openTradeModal()">
+            + Add Trade
+        </button>
 
-        <div class="hero">
+    </div>
 
-            <div class="hero-content">
+    <!-- STATS -->
 
-                <div class="eyebrow">
-                    <span class="status-dot"></span>
-                    Workspace online
+    <div class="stats">
+
+        <div class="stat-card">
+            <div class="stat-label">Total P&L</div>
+            <div class="stat-value" id="totalPnl">$0.00</div>
+            <div class="stat-small">All trades</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Win Rate</div>
+            <div class="stat-value" id="winRate">0%</div>
+            <div class="stat-small">Winning trades</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Risk / Reward</div>
+            <div class="stat-value" id="riskReward">0.00</div>
+            <div class="stat-small">Average R:R</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Month Gain/Loss</div>
+            <div class="stat-value" id="monthPnl">$0.00</div>
+            <div class="stat-small" id="monthLabel">Current month</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Week Gain/Loss</div>
+            <div class="stat-value" id="weekPnl">$0.00</div>
+            <div class="stat-small">Current week</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Daily Gain/Loss</div>
+            <div class="stat-value" id="dayPnl">$0.00</div>
+            <div class="stat-small">Today</div>
+        </div>
+
+    </div>
+
+    <!-- CHARTS -->
+
+    <div class="chart-grid">
+
+        <div class="chart-card">
+
+            <div class="chart-header">
+
+                <div>
+                    <div class="chart-title">Equity</div>
+                    <div class="chart-description">
+                        Cumulative account performance
+                    </div>
                 </div>
 
-                <h1>
-                    Trade with clarity.<br>
-                    <span>Execute with intent.</span>
-                </h1>
+                <div class="chart-badge">LIVE</div>
 
-                <p>
-                    Your private NEXT CANDLE workspace for tracking executions,
-                    reviewing performance and building consistent decision-making.
-                </p>
+            </div>
 
-                <div class="hero-buttons">
-                    <button class="primary-btn" onclick="openTradeModal()">
-                        + Add execution
-                    </button>
+            <div class="chart" id="equityChart">
 
-                    <button class="secondary-btn" onclick="navigate('academy')">
-                        Continue learning →
-                    </button>
-                </div>
+                <svg viewBox="0 0 900 280" preserveAspectRatio="none">
+
+                    <defs>
+                        <linearGradient id="equityGradient" x1="0" x2="0" y1="0" y2="1">
+                            <stop offset="0%" stop-color="#735cff"/>
+                            <stop offset="100%" stop-color="#735cff" stop-opacity="0"/>
+                        </linearGradient>
+                    </defs>
+
+                    <line class="grid-line" x1="0" y1="45" x2="900" y2="45"/>
+                    <line class="grid-line" x1="0" y1="105" x2="900" y2="105"/>
+                    <line class="grid-line" x1="0" y1="165" x2="900" y2="165"/>
+                    <line class="grid-line" x1="0" y1="225" x2="900" y2="225"/>
+
+                    <path
+                        class="chart-area"
+                        id="equityArea"
+                        d="M0 210 L900 210 L900 280 L0 280Z"
+                    />
+
+                    <path
+                        class="chart-line"
+                        id="equityLine"
+                        d="M0 210 L900 210"
+                    />
+
+                </svg>
 
             </div>
 
         </div>
 
-        <div class="grid kpi-grid">
+        <div class="mini-charts">
 
-            <div class="card kpi">
-                <div class="kpi-label">Net P&L</div>
-                <div class="kpi-value positive" id="kpiPnl">€0</div>
-                <div class="kpi-meta">All recorded executions</div>
-            </div>
+            <div class="chart-card mini-chart">
 
-            <div class="card kpi">
-                <div class="kpi-label">Win rate</div>
-                <div class="kpi-value" id="kpiWin">0%</div>
-                <div class="kpi-meta">Winning executions</div>
-            </div>
+                <div class="chart-header">
 
-            <div class="card kpi">
-                <div class="kpi-label">Profit factor</div>
-                <div class="kpi-value" id="kpiPF">0.00</div>
-                <div class="kpi-meta">Gross win / gross loss</div>
-            </div>
-
-            <div class="card kpi">
-                <div class="kpi-label">Avg trade</div>
-                <div class="kpi-value" id="kpiAvg">€0</div>
-                <div class="kpi-meta">Average result</div>
-            </div>
-
-            <div class="card kpi">
-                <div class="kpi-label">Max drawdown</div>
-                <div class="kpi-value negative" id="kpiDD">€0</div>
-                <div class="kpi-meta">Peak-to-trough</div>
-            </div>
-
-        </div>
-
-        <div class="dashboard-grid">
-
-            <div class="card chart-card">
-
-                <div class="card-header">
                     <div>
-                        <div class="card-title">Equity curve</div>
-                        <div class="card-sub">Cumulative performance</div>
+                        <div class="chart-title">Monthly Performance</div>
+                        <div class="chart-description">
+                            Month by month
+                        </div>
                     </div>
 
-                    <span class="tag">LIVE JOURNAL</span>
                 </div>
 
-                <div class="chart-wrap">
-                    <svg class="chart-svg" viewBox="0 0 800 250" preserveAspectRatio="none">
+                <div class="mini-chart-box">
+
+                    <svg viewBox="0 0 500 110" preserveAspectRatio="none">
 
                         <defs>
-                            <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                            <linearGradient id="miniGradient" x1="0" x2="0" y1="0" y2="1">
                                 <stop offset="0%" stop-color="#735cff"/>
                                 <stop offset="100%" stop-color="#735cff" stop-opacity="0"/>
                             </linearGradient>
                         </defs>
 
-                        <line x1="0" y1="40" x2="800" y2="40" class="chart-grid-line"/>
-                        <line x1="0" y1="100" x2="800" y2="100" class="chart-grid-line"/>
-                        <line x1="0" y1="160" x2="800" y2="160" class="chart-grid-line"/>
-                        <line x1="0" y1="220" x2="800" y2="220" class="chart-grid-line"/>
+                        <path
+                            id="monthlyArea"
+                            class="mini-area"
+                            d="M0 90 L500 90 L500 110 L0 110Z"
+                        />
 
-                        <path id="chartArea"
-                            class="chart-area"
-                            d="M0 210 L100 185 L200 192 L300 140 L400 155 L500 110 L600 120 L700 70 L800 45 L800 250 L0 250Z"/>
-
-                        <path id="chartLine"
-                            class="chart-line"
-                            d="M0 210 L100 185 L200 192 L300 140 L400 155 L500 110 L600 120 L700 70 L800 45"/>
+                        <path
+                            id="monthlyLine"
+                            class="mini-line"
+                            d="M0 90 L500 90"
+                        />
 
                     </svg>
+
                 </div>
 
             </div>
 
-            <div class="card session-card">
+            <div class="chart-card mini-chart">
 
-                <div class="card-header">
+                <div class="chart-header">
+
                     <div>
-                        <div class="card-title">Session performance</div>
-                        <div class="card-sub">P&L contribution</div>
+                        <div class="chart-title">Daily Performance</div>
+                        <div class="chart-description">
+                            Recent daily P&L
+                        </div>
                     </div>
+
                 </div>
 
-                <div class="session">
-                    <div class="session-top">
-                        <span class="session-name">London</span>
-                        <span class="session-value positive">+€0</span>
-                    </div>
-                    <div class="bar"><span style="width:72%"></span></div>
-                </div>
+                <div class="mini-chart-box">
 
-                <div class="session">
-                    <div class="session-top">
-                        <span class="session-name">New York</span>
-                        <span class="session-value positive">+€0</span>
-                    </div>
-                    <div class="bar"><span style="width:52%"></span></div>
-                </div>
+                    <svg viewBox="0 0 500 110" preserveAspectRatio="none">
 
-                <div class="session">
-                    <div class="session-top">
-                        <span class="session-name">Asia</span>
-                        <span class="session-value">€0</span>
-                    </div>
-                    <div class="bar"><span style="width:28%"></span></div>
+                        <path
+                            id="dailyLine"
+                            class="mini-line"
+                            d="M0 90 L500 90"
+                        />
+
+                    </svg>
+
                 </div>
 
             </div>
 
         </div>
 
-        <div class="card table-card">
+    </div>
 
-            <div class="card-header">
-                <div>
-                    <div class="card-title">Recent executions</div>
-                    <div class="card-sub">Latest journal activity</div>
+    <!-- RECENT TRADES -->
+
+    <div class="table-card">
+
+        <div class="table-header">
+
+            <div>
+                <div class="table-title">Recent Trades</div>
+                <div class="table-sub">
+                    Your latest recorded executions
                 </div>
-
-                <button class="icon-btn" onclick="navigate('journal')">
-                    →
-                </button>
             </div>
 
-            <table class="table">
+            <button
+                class="icon-button"
+                onclick="navigate('journal')">
+                →
+            </button>
+
+        </div>
+
+        <div class="table-wrapper">
+
+            <table>
 
                 <thead>
                     <tr>
-                        <th>Instrument</th>
-                        <th>Direction</th>
-                        <th>Session</th>
-                        <th>Setup</th>
-                        <th>Result</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Symbol</th>
+                        <th>ROI</th>
                     </tr>
                 </thead>
 
-                <tbody id="recentTrades"></tbody>
+                <tbody id="recentTable"></tbody>
 
             </table>
 
         </div>
 
-    </section>
+        <div class="table-footer">
 
-    <!-- JOURNAL -->
-    <section class="page" id="page-journal">
-
-        <div class="page-heading">
-            <h1>Trading journal</h1>
-            <p>Document the execution. Review the decision. Improve the process.</p>
-        </div>
-
-        <div class="journal-toolbar">
-
-            <div class="search">
-                <input id="searchTrades" placeholder="Search instrument, setup, session...">
+            <div class="rows-label">
+                Showing latest trades
             </div>
 
-            <button class="add-btn" onclick="openTradeModal()">
-                + Add execution
-            </button>
-
         </div>
 
-        <div class="card table-card" style="margin-top:0">
+    </div>
 
-            <table class="table">
+</section>
+
+<!-- ================================
+     JOURNAL
+================================ -->
+
+<section class="page" id="page-journal">
+
+    <div class="page-title">
+
+        <h1>Journal</h1>
+
+        <p>
+            Record and review every execution.
+        </p>
+
+    </div>
+
+    <div class="journal-toolbar">
+
+        <div class="search">
+            <input
+                id="searchInput"
+                placeholder="Search trades..."
+            >
+        </div>
+
+        <button
+            class="add-trade"
+            onclick="openTradeModal()">
+            + Add Trade
+        </button>
+
+    </div>
+
+    <div class="table-card">
+
+        <div class="table-wrapper">
+
+            <table>
 
                 <thead>
                     <tr>
+                        <th>Name</th>
                         <th>Date</th>
-                        <th>Instrument</th>
+                        <th>Symbol</th>
                         <th>Direction</th>
-                        <th>Session</th>
-                        <th>Setup</th>
-                        <th>P&L</th>
+                        <th>Risk</th>
+                        <th>ROI</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -1741,890 +1890,1194 @@ a{
 
             </table>
 
-            <div class="empty" id="journalEmpty" style="display:none">
-                <strong>No executions yet</strong>
-                Start documenting your trading process.
-            </div>
+        </div>
+
+        <div
+            class="empty"
+            id="journalEmpty"
+            style="display:none">
+
+            <strong>No trades found</strong>
+            Add your first execution to start building your journal.
 
         </div>
 
-    </section>
+        <div class="table-footer">
 
-    <!-- ANALYTICS -->
-    <section class="page" id="page-analytics">
+            <div class="rows-label">
 
-        <div class="page-heading">
-            <h1>Analytics</h1>
-            <p>Turn your journal into measurable feedback.</p>
-        </div>
+                Rows per page
 
-        <div class="dashboard-grid">
+                <select
+                    class="rows-select"
+                    id="rowsPerPage">
 
-            <div class="card chart-card">
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">Cumulative P&L</div>
-                        <div class="card-sub">Journal performance over time</div>
-                    </div>
-                </div>
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
 
-                <div class="chart-wrap">
-                    <svg class="chart-svg" viewBox="0 0 800 250" preserveAspectRatio="none">
-
-                        <line x1="0" y1="50" x2="800" y2="50" class="chart-grid-line"/>
-                        <line x1="0" y1="110" x2="800" y2="110" class="chart-grid-line"/>
-                        <line x1="0" y1="170" x2="800" y2="170" class="chart-grid-line"/>
-                        <line x1="0" y1="230" x2="800" y2="230" class="chart-grid-line"/>
-
-                        <path class="chart-line"
-                              d="M0 215 L90 200 L180 190 L270 160 L360 172 L450 130 L540 145 L630 100 L720 78 L800 48"/>
-
-                    </svg>
-                </div>
-            </div>
-
-            <div class="card session-card">
-
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">Setup distribution</div>
-                        <div class="card-sub">Recorded executions</div>
-                    </div>
-                </div>
-
-                <div class="session">
-                    <div class="session-top">
-                        <span class="session-name">Liquidity Sweep</span>
-                        <span class="session-value">0 trades</span>
-                    </div>
-                    <div class="bar"><span style="width:78%"></span></div>
-                </div>
-
-                <div class="session">
-                    <div class="session-top">
-                        <span class="session-name">FVG</span>
-                        <span class="session-value">0 trades</span>
-                    </div>
-                    <div class="bar"><span style="width:58%"></span></div>
-                </div>
-
-                <div class="session">
-                    <div class="session-top">
-                        <span class="session-name">Breakout</span>
-                        <span class="session-value">0 trades</span>
-                    </div>
-                    <div class="bar"><span style="width:38%"></span></div>
-                </div>
+                </select>
 
             </div>
 
-        </div>
-
-    </section>
-
-    <!-- CALENDAR -->
-    <section class="page" id="page-calendar">
-
-        <div class="page-heading">
-            <h1>Calendar</h1>
-            <p>Visualize your trading activity day by day.</p>
-        </div>
-
-        <div class="card" style="padding:25px">
-
-            <div class="card-header">
-                <div>
-                    <div class="card-title">September 2026</div>
-                    <div class="card-sub">Monthly trading overview</div>
-                </div>
-                <span class="tag">MONTHLY</span>
-            </div>
-
-            <div style="
-                display:grid;
-                grid-template-columns:repeat(7,1fr);
-                gap:7px;
-            " id="calendarGrid"></div>
-
-        </div>
-
-    </section>
-
-    <!-- PLAYBOOK -->
-    <section class="page" id="page-playbook">
-
-        <div class="page-heading">
-            <h1>Playbook</h1>
-            <p>Core concepts and execution frameworks.</p>
-        </div>
-
-        <div class="playbook-grid">
-
-            <div class="card lesson">
-                <div class="lesson-number">01 / LIQUIDITY</div>
-                <h3>Liquidity Sweep</h3>
-                <p>
-                    Understand why price can raid obvious highs or lows before
-                    delivering the actual directional move.
-                </p>
-                <div class="lesson-arrow">→</div>
-            </div>
-
-            <div class="card lesson">
-                <div class="lesson-number">02 / IMBALANCE</div>
-                <h3>Fair Value Gap</h3>
-                <p>
-                    Study displacement and inefficient price delivery and how
-                    imbalance can become part of an execution model.
-                </p>
-                <div class="lesson-arrow">→</div>
-            </div>
-
-            <div class="card lesson">
-                <div class="lesson-number">03 / IMBALANCE</div>
-                <h3>Inverse FVG</h3>
-                <p>
-                    Explore how failed imbalances can change context and become
-                    relevant reaction zones.
-                </p>
-                <div class="lesson-arrow">→</div>
-            </div>
-
-            <div class="card lesson">
-                <div class="lesson-number">04 / STRUCTURE</div>
-                <h3>Order Block</h3>
-                <p>
-                    Learn to contextualize institutional-looking price zones
-                    instead of treating every candle as an automatic entry.
-                </p>
-                <div class="lesson-arrow">→</div>
-            </div>
-
-            <div class="card lesson">
-                <div class="lesson-number">05 / SESSION</div>
-                <h3>Session Breakout</h3>
-                <p>
-                    Analyze how major market sessions interact with established
-                    ranges, highs and lows.
-                </p>
-                <div class="lesson-arrow">→</div>
-            </div>
-
-            <div class="card lesson">
-                <div class="lesson-number">06 / EXECUTION</div>
-                <h3>Confirmation</h3>
-                <p>
-                    Build a repeatable sequence for moving from market context
-                    toward a clearly defined execution.
-                </p>
-                <div class="lesson-arrow">→</div>
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- PSYCHOLOGY -->
-    <section class="page" id="page-psychology">
-
-        <div class="page-heading">
-            <h1>Psychology</h1>
-            <p>Track the quality of your decisions, not only the outcome.</p>
-        </div>
-
-        <div class="settings-grid">
-
-            <div class="card settings-card">
-
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">Daily state</div>
-                        <div class="card-sub">Your current mental checklist</div>
-                    </div>
-                </div>
-
-                <div class="setting-row">
-                    <div>
-                        <div class="setting-title">Confidence</div>
-                        <div class="setting-description">Trusting the process</div>
-                    </div>
-                    <span class="tag">—</span>
-                </div>
-
-                <div class="setting-row">
-                    <div>
-                        <div class="setting-title">Discipline</div>
-                        <div class="setting-description">Following predefined rules</div>
-                    </div>
-                    <span class="tag">—</span>
-                </div>
-
-                <div class="setting-row">
-                    <div>
-                        <div class="setting-title">Impulse control</div>
-                        <div class="setting-description">Avoiding emotional entries</div>
-                    </div>
-                    <span class="tag">—</span>
-                </div>
-
-            </div>
-
-            <div class="card settings-card">
-
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">Reflection</div>
-                        <div class="card-sub">Write before the next session</div>
-                    </div>
-                </div>
-
-                <textarea
-                    id="psychologyNote"
-                    style="
-                    width:100%;
-                    min-height:180px;
-                    resize:none;
-                    border:1px solid var(--line);
-                    background:var(--bg);
-                    color:var(--text);
-                    border-radius:14px;
-                    padding:15px;
-                    outline:0;
-                    font-size:10px;
-                    line-height:1.7;
-                    "
-                    placeholder="What did you do well? What should change?"></textarea>
+            <div class="pagination">
 
                 <button
-                    class="add-btn"
-                    style="height:40px;margin-top:10px"
-                    onclick="savePsychology()">
-                    Save reflection
+                    class="page-btn"
+                    id="prevPage">
+                    ←
+                </button>
+
+                <div id="pageNumbers"></div>
+
+                <button
+                    class="page-btn"
+                    id="nextPage">
+                    →
                 </button>
 
             </div>
 
         </div>
 
-    </section>
+    </div>
 
-    <!-- ACADEMY -->
-    <section class="page" id="page-academy">
+</section>
 
-        <div class="page-heading">
-            <h1>Academy</h1>
-            <p>Build the knowledge behind the execution.</p>
-        </div>
+<!-- ================================
+     ANALYTICS
+================================ -->
 
-        <div class="card">
+<section class="page" id="page-analytics">
 
-            <div class="course">
-                <div class="course-num">01</div>
+    <div class="page-title">
+
+        <h1>Analytics</h1>
+
+        <p>
+            Detailed statistics generated from your journal.
+        </p>
+
+    </div>
+
+    <div class="analytics-grid">
+
+        <div class="analytics-card">
+
+            <div class="chart-header">
+
                 <div>
-                    <h3>Market Structure</h3>
-                    <p>Structure, displacement and directional context.</p>
-                </div>
-                <div class="progress"><span style="width:35%"></span></div>
-            </div>
+                    <div class="chart-title">
+                        Equity Curve
+                    </div>
 
-            <div class="course">
-                <div class="course-num">02</div>
-                <div>
-                    <h3>Liquidity</h3>
-                    <p>External and internal liquidity concepts.</p>
-                </div>
-                <div class="progress"><span style="width:18%"></span></div>
-            </div>
-
-            <div class="course">
-                <div class="course-num">03</div>
-                <div>
-                    <h3>Imbalances</h3>
-                    <p>FVG, IFVG and inefficient price delivery.</p>
-                </div>
-                <div class="progress"><span style="width:12%"></span></div>
-            </div>
-
-            <div class="course">
-                <div class="course-num">04</div>
-                <div>
-                    <h3>Risk Architecture</h3>
-                    <p>Position sizing, risk and execution planning.</p>
-                </div>
-                <div class="progress"><span style="width:0%"></span></div>
-            </div>
-
-            <div class="course">
-                <div class="course-num">05</div>
-                <div>
-                    <h3>Psychology</h3>
-                    <p>Emotional control and process discipline.</p>
-                </div>
-                <div class="progress"><span style="width:0%"></span></div>
-            </div>
-
-            <div class="course">
-                <div class="course-num">06</div>
-                <div>
-                    <h3>Execution</h3>
-                    <p>Turning context into a repeatable process.</p>
-                </div>
-                <div class="progress"><span style="width:0%"></span></div>
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- COMMUNITY -->
-    <section class="page" id="page-community">
-
-        <div class="page-heading">
-            <h1>Community</h1>
-            <p>Connect with the NEXT CANDLE trading community.</p>
-        </div>
-
-        <div class="hero">
-
-            <div class="hero-content">
-
-                <div class="eyebrow">
-                    <span class="status-dot"></span>
-                    Private community
-                </div>
-
-                <h1>
-                    The market is competitive.<br>
-                    <span>Your environment matters.</span>
-                </h1>
-
-                <p>
-                    Join the NEXT CANDLE Discord to discuss markets, review
-                    executions, share ideas and continue learning with other members.
-                </p>
-
-                <div class="hero-buttons">
-                    <a
-                        href="https://discord.gg/zwfjxw8v7"
-                        target="_blank"
-                        class="primary-btn">
-                        Join Discord →
-                    </a>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="playbook-grid">
-
-            <div class="card lesson">
-                <div class="lesson-number">COMMUNITY / 01</div>
-                <h3>Trade Reviews</h3>
-                <p>Review executions and identify recurring strengths and mistakes.</p>
-            </div>
-
-            <div class="card lesson">
-                <div class="lesson-number">COMMUNITY / 02</div>
-                <h3>Market Discussion</h3>
-                <p>Discuss structure, sessions and market behaviour with members.</p>
-            </div>
-
-            <div class="card lesson">
-                <div class="lesson-number">COMMUNITY / 03</div>
-                <h3>Resources</h3>
-                <p>Access educational material and workspace resources.</p>
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- SETTINGS -->
-    <section class="page" id="page-settings">
-
-        <div class="page-heading">
-            <h1>Settings</h1>
-            <p>Customize your NEXT CANDLE workspace.</p>
-        </div>
-
-        <div class="settings-grid">
-
-            <div class="card settings-card">
-
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">Appearance</div>
-                        <div class="card-sub">Control how your workspace looks.</div>
+                    <div class="chart-description">
+                        Full journal history
                     </div>
                 </div>
 
-                <div class="setting-row">
-                    <div>
-                        <div class="setting-title">Dark mode</div>
-                        <div class="setting-description">Switch between dark and light mode.</div>
+            </div>
+
+            <div class="chart large-chart">
+
+                <svg viewBox="0 0 900 320" preserveAspectRatio="none">
+
+                    <line class="grid-line" x1="0" y1="55" x2="900" y2="55"/>
+                    <line class="grid-line" x1="0" y1="125" x2="900" y2="125"/>
+                    <line class="grid-line" x1="0" y1="195" x2="900" y2="195"/>
+                    <line class="grid-line" x1="0" y1="265" x2="900" y2="265"/>
+
+                    <path
+                        class="chart-line"
+                        id="analyticsEquity"
+                        d="M0 240 L900 240"
+                    />
+
+                </svg>
+
+            </div>
+
+        </div>
+
+        <div class="analytics-card">
+
+            <div class="chart-header">
+
+                <div>
+                    <div class="chart-title">
+                        Performance Breakdown
                     </div>
 
-                    <button class="toggle" id="darkToggle">
-                        <span></span>
-                    </button>
-                </div>
-
-                <div class="setting-row">
-                    <div>
-                        <div class="setting-title">Interface animations</div>
-                        <div class="setting-description">Keep subtle transitions enabled.</div>
+                    <div class="chart-description">
+                        Profit distribution
                     </div>
-
-                    <button class="toggle on">
-                        <span></span>
-                    </button>
                 </div>
 
             </div>
 
-            <div class="card settings-card">
+            <div
+                class="breakdown"
+                id="breakdown">
 
-                <div class="card-header">
-                    <div>
-                        <div class="card-title">Workspace</div>
-                        <div class="card-sub">Quick actions.</div>
+                <div class="break-row">
+
+                    <div class="break-name">
+                        Winning trades
                     </div>
+
+                    <div class="break-bar">
+                        <span style="width:0%" id="winBar"></span>
+                    </div>
+
+                    <div
+                        class="break-value"
+                        id="winCount">
+                        0
+                    </div>
+
                 </div>
 
-                <div class="setting-row">
-                    <div>
-                        <div class="setting-title">First-time tutorial</div>
-                        <div class="setting-description">Open the workspace introduction again.</div>
+                <div class="break-row">
+
+                    <div class="break-name">
+                        Losing trades
                     </div>
 
-                    <button class="cancel" onclick="showOnboarding()">
-                        Open
-                    </button>
+                    <div class="break-bar">
+                        <span style="width:0%" id="lossBar"></span>
+                    </div>
+
+                    <div
+                        class="break-value"
+                        id="lossCount">
+                        0
+                    </div>
+
                 </div>
 
-                <div class="setting-row">
-                    <div>
-                        <div class="setting-title">Discord</div>
-                        <div class="setting-description">Open the private community.</div>
+                <div class="break-row">
+
+                    <div class="break-name">
+                        Total trades
                     </div>
 
-                    <a
-                        href="https://discord.gg/zwfjxw8v7"
-                        target="_blank"
-                        class="cancel">
-                        Join
-                    </a>
+                    <div class="break-bar">
+                        <span style="width:0%" id="totalBar"></span>
+                    </div>
+
+                    <div
+                        class="break-value"
+                        id="totalCount">
+                        0
+                    </div>
+
+                </div>
+
+                <div class="break-row">
+
+                    <div class="break-name">
+                        Best trade
+                    </div>
+
+                    <div class="break-bar">
+                        <span style="width:0%" id="bestBar"></span>
+                    </div>
+
+                    <div
+                        class="break-value"
+                        id="bestTrade">
+                        $0
+                    </div>
+
+                </div>
+
+                <div class="break-row">
+
+                    <div class="break-name">
+                        Worst trade
+                    </div>
+
+                    <div class="break-bar">
+                        <span style="width:0%" id="worstBar"></span>
+                    </div>
+
+                    <div
+                        class="break-value"
+                        id="worstTrade">
+                        $0
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-    </section>
+    </div>
+
+</section>
+
+<!-- ================================
+     CALENDAR
+================================ -->
+
+<section class="page" id="page-calendar">
+
+    <div class="page-title">
+
+        <h1>Trading Calendar</h1>
+
+        <p>
+            See exactly which days produced profit or loss.
+        </p>
+
+    </div>
+
+    <div class="calendar-card">
+
+        <div class="calendar-head">
+
+            <div class="calendar-month">
+                <span id="calendarMonth">September 2026</span>
+            </div>
+
+            <span class="chart-badge">
+                MONTHLY
+            </span>
+
+        </div>
+
+        <div
+            class="calendar-grid"
+            id="calendarGrid">
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================
+     PSYCHOLOGY
+================================ -->
+
+<section class="page" id="page-psychology">
+
+    <div class="page-title">
+
+        <h1>Psychology</h1>
+
+        <p>
+            Keep notes about your decisions and trading behaviour.
+        </p>
+
+    </div>
+
+    <div class="reflection-grid">
+
+        <div class="reflection-card">
+
+            <div class="chart-header">
+
+                <div>
+                    <div class="chart-title">
+                        Session Reflection
+                    </div>
+
+                    <div class="chart-description">
+                        Write without filtering yourself.
+                    </div>
+                </div>
+
+            </div>
+
+            <textarea
+                id="psychologyText"
+                placeholder="What did you do well today?
+What mistakes repeated?
+Did you follow your process?
+What should change tomorrow?"></textarea>
+
+            <button
+                class="save-button"
+                onclick="savePsychology()">
+                Save Reflection
+            </button>
+
+        </div>
+
+        <div class="reflection-card">
+
+            <div class="chart-header">
+
+                <div>
+                    <div class="chart-title">
+                        Process Checklist
+                    </div>
+
+                    <div class="chart-description">
+                        Quick self-review
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-title">
+                        Followed my plan
+                    </div>
+
+                    <div class="setting-description">
+                        No impulsive entries.
+                    </div>
+                </div>
+
+                <button class="toggle" onclick="toggleCheck(this)">
+                    <span></span>
+                </button>
+
+            </div>
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-title">
+                        Controlled risk
+                    </div>
+
+                    <div class="setting-description">
+                        Risk remained intentional.
+                    </div>
+                </div>
+
+                <button class="toggle" onclick="toggleCheck(this)">
+                    <span></span>
+                </button>
+
+            </div>
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-title">
+                        Accepted the outcome
+                    </div>
+
+                    <div class="setting-description">
+                        No revenge decisions.
+                    </div>
+                </div>
+
+                <button class="toggle" onclick="toggleCheck(this)">
+                    <span></span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================================
+     SETTINGS
+================================ -->
+
+<section class="page" id="page-settings">
+
+    <div class="page-title">
+
+        <h1>Settings</h1>
+
+        <p>
+            Customize your journal.
+        </p>
+
+    </div>
+
+    <div class="settings-grid">
+
+        <div class="settings-card">
+
+            <div class="chart-header">
+
+                <div>
+                    <div class="chart-title">
+                        Appearance
+                    </div>
+
+                    <div class="chart-description">
+                        Control your interface.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-title">
+                        Dark mode
+                    </div>
+
+                    <div class="setting-description">
+                        Switch between light and dark.
+                    </div>
+                </div>
+
+                <button
+                    class="toggle"
+                    id="darkToggle"
+                    onclick="toggleThemeFromSettings()">
+
+                    <span></span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="settings-card">
+
+            <div class="chart-header">
+
+                <div>
+                    <div class="chart-title">
+                        Journal
+                    </div>
+
+                    <div class="chart-description">
+                        Manage your local journal data.
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-title">
+                        Reset journal
+                    </div>
+
+                    <div class="setting-description">
+                        Delete all recorded trades.
+                    </div>
+                </div>
+
+                <button
+                    class="secondary-action"
+                    onclick="resetJournal()">
+                    Reset
+                </button>
+
+            </div>
+
+            <div class="setting">
+
+                <div>
+                    <div class="setting-title">
+                        First-time tutorial
+                    </div>
+
+                    <div class="setting-description">
+                        Show the introduction again.
+                    </div>
+
+                </div>
+
+                <button
+                    class="secondary-action"
+                    onclick="showOnboarding()">
+                    Open
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 </main>
 
-<!-- MOBILE NAV -->
+<!-- ================================
+     MOBILE NAV
+================================ -->
+
 <nav class="mobile-nav">
 
-    <button class="active" data-mobile="overview">
+    <button
+        class="active"
+        data-mobile="dashboard">
+
         <svg fill="none" viewBox="0 0 24 24">
             <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor"/>
             <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor"/>
             <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor"/>
             <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor"/>
         </svg>
+
     </button>
 
     <button data-mobile="journal">
+
         <svg fill="none" viewBox="0 0 24 24">
             <path d="M5 4h14v16H5z" stroke="currentColor"/>
             <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor"/>
         </svg>
+
     </button>
 
     <button data-mobile="analytics">
+
         <svg fill="none" viewBox="0 0 24 24">
             <path d="M4 19V5M4 19h16" stroke="currentColor"/>
             <path d="M7 15l3-4 3 2 5-7" stroke="currentColor"/>
         </svg>
+
     </button>
 
-    <button data-mobile="academy">
+    <button data-mobile="calendar">
+
         <svg fill="none" viewBox="0 0 24 24">
-            <path d="M3 9l9-5 9 5-9 5z" stroke="currentColor"/>
-            <path d="M6 11v5c3 3 9 3 12 0v-5M21 9v7" stroke="currentColor"/>
+            <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor"/>
+            <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor"/>
         </svg>
+
     </button>
 
     <button data-mobile="settings">
+
         <svg fill="none" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="3" stroke="currentColor"/>
             <path d="M19 13.5a7 7 0 000-3M10.5 19a7 7 0 003 0M5 13.5a7 7 0 000-3M10.5 5a7 7 0 003 0" stroke="currentColor"/>
         </svg>
+
     </button>
 
 </nav>
 
-<!-- ADD TRADE MODAL -->
-<div class="modal-bg" id="tradeModal">
+<!-- ================================
+     TRADE MODAL
+================================ -->
+
+<div
+    class="modal-background"
+    id="tradeModal">
 
     <div class="modal">
 
-        <h2>Add execution</h2>
+        <h2>Add Trade</h2>
 
-        <p class="modal-description">
-            Record the trade exactly as it happened. The goal is process clarity,
-            not simply documenting the result.
-        </p>
+        <div class="modal-sub">
+            Keep it simple. Only the trade name and P&L are required.
+            Everything else can be added later or left empty.
+        </div>
 
-        <form class="form" id="tradeForm">
+        <div class="form-grid">
 
             <div class="field">
-                <label>Date</label>
-                <input type="date" id="tradeDate" required>
+
+                <label>
+                    Trade Name *
+                </label>
+
+                <input
+                    id="tradeName"
+                    placeholder="own strat xauusd">
+
             </div>
 
             <div class="field">
-                <label>Time</label>
-                <input type="time" id="tradeTime">
+
+                <label>
+                    P&L / ROI *
+                </label>
+
+                <input
+                    id="tradePnl"
+                    type="number"
+                    step="0.01"
+                    placeholder="1136.10">
+
             </div>
 
             <div class="field">
-                <label>Instrument</label>
-                <input id="tradeInstrument" placeholder="XAUUSD" required>
+
+                <label>
+                    Date
+                </label>
+
+                <input
+                    id="tradeDate"
+                    type="date">
+
             </div>
 
             <div class="field">
-                <label>Direction</label>
+
+                <label>
+                    Time
+                </label>
+
+                <input
+                    id="tradeTime"
+                    type="time">
+
+            </div>
+
+            <div class="field">
+
+                <label>
+                    Symbol
+                </label>
+
+                <input
+                    id="tradeSymbol"
+                    placeholder="XAUUSD">
+
+            </div>
+
+            <div class="field">
+
+                <label>
+                    Direction
+                </label>
+
                 <select id="tradeDirection">
-                    <option>Long</option>
-                    <option>Short</option>
+
+                    <option value="">Not specified</option>
+                    <option value="Long">Long</option>
+                    <option value="Short">Short</option>
+
                 </select>
+
             </div>
 
             <div class="field">
-                <label>Session</label>
+
+                <label>
+                    Risk %
+                </label>
+
+                <input
+                    id="tradeRisk"
+                    type="number"
+                    step="0.01"
+                    placeholder="1">
+
+            </div>
+
+            <div class="field">
+
+                <label>
+                    Risk / Reward
+                </label>
+
+                <input
+                    id="tradeRR"
+                    type="number"
+                    step="0.01"
+                    placeholder="2.5">
+
+            </div>
+
+            <div class="field">
+
+                <label>
+                    Session
+                </label>
+
                 <select id="tradeSession">
+
+                    <option value="">Not specified</option>
+                    <option>Asia</option>
                     <option>London</option>
                     <option>New York</option>
-                    <option>Asia</option>
+                    <option>London / NY</option>
+
                 </select>
+
             </div>
 
             <div class="field">
-                <label>Setup</label>
-                <select id="tradeSetup">
-                    <option>Liquidity Sweep</option>
-                    <option>Fair Value Gap</option>
-                    <option>Inverse FVG</option>
-                    <option>Order Block</option>
-                    <option>Breakout</option>
-                    <option>Other</option>
-                </select>
+
+                <label>
+                    Setup
+                </label>
+
+                <input
+                    id="tradeSetup"
+                    placeholder="Liquidity sweep">
+
             </div>
 
-            <div class="field">
-                <label>Risk %</label>
-                <input type="number" id="tradeRisk" step=".01" placeholder="1">
-            </div>
+        </div>
 
-            <div class="field">
-                <label>P&L €</label>
-                <input type="number" id="tradePnl" step=".01" placeholder="250" required>
-            </div>
-
-            <div class="field full">
-                <label>Notes</label>
-                <textarea id="tradeNotes" placeholder="What happened? What was the context?"></textarea>
-            </div>
-
-        </form>
+        <div class="required-note">
+            <b>* Required:</b> Trade Name and P&L
+        </div>
 
         <div class="modal-actions">
-            <button class="cancel" onclick="closeTradeModal()">Cancel</button>
-            <button class="save" onclick="saveTrade()">Save execution</button>
+
+            <button
+                class="cancel-button"
+                onclick="closeTradeModal()">
+                Cancel
+            </button>
+
+            <button
+                class="save-trade-button"
+                onclick="saveTrade()">
+                Save Trade
+            </button>
+
         </div>
 
     </div>
 
 </div>
 
-<!-- ONBOARDING -->
-<div class="onboarding" id="onboarding">
+<!-- ================================
+     ONBOARDING
+================================ -->
 
-    <div class="onboarding-inner">
+<div
+    class="onboarding"
+    id="onboarding">
 
-        <div class="onboarding-mark">NC</div>
+    <div class="onboarding-content">
 
-        <h1>Welcome to NEXT CANDLE.</h1>
+        <div class="onboarding-logo">
+            NC
+        </div>
+
+        <h1>Your journal starts here.</h1>
 
         <p>
-            Your private workspace is ready. Use it to document executions,
-            understand your statistics and build a more consistent process.
+            NEXT CANDLE is built around one thing:
+            turning your trading history into useful performance data.
+            Add trades, watch your statistics change and review your execution.
         </p>
 
-        <div class="onboarding-steps">
+        <div class="onboarding-actions">
 
-            <div class="step">
-                <div class="step-number">01</div>
-                <strong>Journal</strong>
-                <span>Document every meaningful execution.</span>
-            </div>
+            <button
+                class="enter-button"
+                onclick="finishOnboarding()">
+                Enter Journal →
+            </button>
 
-            <div class="step">
-                <div class="step-number">02</div>
-                <strong>Review</strong>
-                <span>Study patterns in your performance.</span>
-            </div>
-
-            <div class="step">
-                <div class="step-number">03</div>
-                <strong>Learn</strong>
-                <span>Build knowledge around your process.</span>
-            </div>
+            <button
+                class="skip-button"
+                onclick="skipOnboarding()">
+                Skip
+            </button>
 
         </div>
 
-        <button class="enter" onclick="finishOnboarding()">
-            Enter workspace →
-        </button>
-
         <label class="remember">
-            <input type="checkbox" id="dontShow">
+
+            <input
+                type="checkbox"
+                id="rememberOnboarding">
+
             Don't show this again
+
         </label>
 
     </div>
 
 </div>
 
-<!-- COMMAND -->
-<div class="modal-bg" id="commandModal">
-
-    <div class="modal">
-
-        <h2>Quick navigation</h2>
-
-        <p class="modal-description">
-            Move around your workspace quickly.
-        </p>
-
-        <div style="display:grid;gap:7px;margin-top:20px">
-
-            <button class="setting-row" onclick="quick('overview')">
-                <span>Overview</span><span>→</span>
-            </button>
-
-            <button class="setting-row" onclick="quick('journal')">
-                <span>Trading journal</span><span>→</span>
-            </button>
-
-            <button class="setting-row" onclick="quick('analytics')">
-                <span>Analytics</span><span>→</span>
-            </button>
-
-            <button class="setting-row" onclick="quick('academy')">
-                <span>Academy</span><span>→</span>
-            </button>
-
-            <button class="setting-row" onclick="quick('community')">
-                <span>Community</span><span>→</span>
-            </button>
-
-        </div>
-
-    </div>
-
+<div
+    class="toast"
+    id="toast">
+    Saved
 </div>
-
-<div class="toast" id="toast">Saved</div>
 
 <script>
 
-/* =========================================
-   NEXT CANDLE CORE
-========================================= */
+/* =========================================================
+   NEXT CANDLE JOURNAL ENGINE
+========================================================= */
 
-const STORAGE_KEY = "next_candle_trades_v3";
-const THEME_KEY = "next_candle_theme_v3";
-const ONBOARD_KEY = "next_candle_onboarding_v3";
-const PSYCH_KEY = "next_candle_psychology_v3";
+const STORAGE_KEY = "next_candle_journal_v5";
+const THEME_KEY = "next_candle_theme_v5";
+const ONBOARDING_KEY = "next_candle_onboarding_v5";
+const PSYCHOLOGY_KEY = "next_candle_psychology_v5";
 
-let trades = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+let trades =
+    JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || "[]"
+    );
 
-/* =========================================
+let currentPage = 1;
+let rowsPerPage = 10;
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function money(value){
+
+    const number = Number(value) || 0;
+
+    const sign =
+        number >= 0 ? "+" : "-";
+
+    return (
+        sign +
+        "$" +
+        Math.abs(number).toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        )
+    );
+}
+
+function plainMoney(value){
+
+    const number = Number(value) || 0;
+
+    return (
+        "$" +
+        Math.abs(number).toLocaleString(
+            "en-US",
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        )
+    );
+}
+
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+function todayISO(){
+
+    return new Date()
+        .toISOString()
+        .slice(0,10);
+}
+
+function formatTradeDate(trade){
+
+    if(!trade.date){
+        return "—";
+    }
+
+    const date =
+        new Date(
+            trade.date +
+            (
+                trade.time
+                ? "T" + trade.time
+                : "T00:00:00"
+            )
+        );
+
+    return date.toLocaleString(
+        "en-GB",
+        {
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric",
+            hour:trade.time ? "2-digit" : undefined,
+            minute:trade.time ? "2-digit" : undefined
+        }
+    );
+}
+
+function getTradeDate(trade){
+
+    if(trade.date){
+
+        return new Date(
+            trade.date +
+            (
+                trade.time
+                ? "T"+trade.time
+                : "T00:00:00"
+            )
+        );
+
+    }
+
+    return new Date(
+        trade.createdAt || Date.now()
+    );
+}
+
+function saveTrades(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(trades)
+    );
+}
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer =
+        setTimeout(
+            ()=>{
+                toast.classList.remove("show");
+            },
+            2200
+        );
+}
+
+/* =========================================================
    NAVIGATION
-========================================= */
+========================================================= */
 
 function navigate(page){
 
-    document.querySelectorAll(".page").forEach(p=>{
-        p.classList.remove("active");
-    });
+    document
+        .querySelectorAll(".page")
+        .forEach(element=>{
+            element.classList.remove("active");
+        });
 
-    const target = document.getElementById("page-" + page);
+    const target =
+        document.getElementById(
+            "page-"+page
+        );
 
     if(target){
         target.classList.add("active");
     }
 
-    document.querySelectorAll(".nav-btn").forEach(btn=>{
-        btn.classList.toggle(
-            "active",
-            btn.dataset.page === page
-        );
-    });
+    document
+        .querySelectorAll(".nav-button")
+        .forEach(button=>{
+            button.classList.toggle(
+                "active",
+                button.dataset.page === page
+            );
+        });
 
-    document.querySelectorAll(".mobile-nav button").forEach(btn=>{
-        btn.classList.toggle(
-            "active",
-            btn.dataset.mobile === page
-        );
-    });
+    document
+        .querySelectorAll(".mobile-nav button")
+        .forEach(button=>{
+            button.classList.toggle(
+                "active",
+                button.dataset.mobile === page
+            );
+        });
 
-    document.getElementById("sidebar").classList.remove("open");
+    document
+        .getElementById("sidebar")
+        .classList.remove("open");
 
     window.scrollTo({
         top:0,
         behavior:"smooth"
     });
 
-    if(page === "calendar"){
-        renderCalendar();
+    if(page==="dashboard"){
+        updateEverything();
     }
 
-    if(page === "journal"){
+    if(page==="journal"){
         renderJournal();
     }
 
-    if(page === "overview"){
-        updateDashboard();
+    if(page==="analytics"){
+        renderAnalytics();
+    }
+
+    if(page==="calendar"){
+        renderCalendar();
     }
 }
 
-document.querySelectorAll(".nav-btn").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-        navigate(btn.dataset.page);
+document
+    .querySelectorAll(".nav-button")
+    .forEach(button=>{
+
+        button.addEventListener(
+            "click",
+            ()=>{
+                navigate(
+                    button.dataset.page
+                );
+            }
+        );
+
     });
-});
 
-document.querySelectorAll(".mobile-nav button").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-        navigate(btn.dataset.mobile);
+document
+    .querySelectorAll(".mobile-nav button")
+    .forEach(button=>{
+
+        button.addEventListener(
+            "click",
+            ()=>{
+                navigate(
+                    button.dataset.mobile
+                );
+            }
+        );
+
     });
-});
 
-/* =========================================
-   MOBILE SIDEBAR
-========================================= */
+document
+    .getElementById("menuButton")
+    .addEventListener(
+        "click",
+        ()=>{
+            document
+                .getElementById("sidebar")
+                .classList.toggle("open");
+        }
+    );
 
-document.getElementById("menuBtn").addEventListener("click",()=>{
-    document.getElementById("sidebar").classList.toggle("open");
-});
-
-/* =========================================
+/* =========================================================
    THEME
-========================================= */
+========================================================= */
 
 function applyTheme(theme){
 
-    document.documentElement.dataset.theme = theme;
+    document.documentElement.dataset.theme =
+        theme;
 
-    localStorage.setItem(THEME_KEY,theme);
+    localStorage.setItem(
+        THEME_KEY,
+        theme
+    );
 
-    const toggle = document.getElementById("darkToggle");
+    const toggle =
+        document.getElementById("darkToggle");
 
     if(toggle){
-        toggle.classList.toggle("on",theme==="dark");
+
+        toggle.classList.toggle(
+            "on",
+            theme==="dark"
+        );
+
     }
 
-    const icon = document.getElementById("themeIcon");
+    const icon =
+        document.getElementById("themeIcon");
 
-    if(icon){
-        icon.innerHTML = theme==="dark"
-        ?
-        `<path d="M20 15.2A8.5 8.5 0 018.8 4a8.5 8.5 0 1011.2 11.2z" stroke="currentColor"/>`
-        :
-        `<path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor"/><circle cx="12" cy="12" r="4" stroke="currentColor"/>`;
+    if(theme==="dark"){
+
+        icon.innerHTML = `
+            <path
+                d="M20 15.2A8.5 8.5 0 018.8 4
+                a8.5 8.5 0 1011.2 11.2z"
+                stroke="currentColor"/>
+        `;
+
+    }else{
+
+        icon.innerHTML = `
+            <circle
+                cx="12"
+                cy="12"
+                r="4"
+                stroke="currentColor"/>
+
+            <path
+                d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4
+                M17.7 17.7l1.4 1.4M2 12h2M20 12h2
+                M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+                stroke="currentColor"/>
+        `;
+
     }
 }
 
-let savedTheme = localStorage.getItem(THEME_KEY);
+let theme =
+    localStorage.getItem(THEME_KEY);
 
-if(!savedTheme){
+if(!theme){
 
-    savedTheme =
+    theme =
         window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
+        window.matchMedia(
+            "(prefers-color-scheme:dark)"
+        ).matches
         ? "dark"
         : "light";
 }
 
-applyTheme(savedTheme);
+applyTheme(theme);
 
-document.getElementById("themeToggle").addEventListener("click",()=>{
+function toggleTheme(){
 
     const current =
-        document.documentElement.dataset.theme === "dark"
-        ? "light"
-        : "dark";
+        document.documentElement
+        .dataset
+        .theme;
 
-    applyTheme(current);
+    applyTheme(
+        current==="dark"
+        ? "light"
+        : "dark"
+    );
 
     showToast(
-        current === "dark"
-        ? "Dark mode enabled"
-        : "Light mode enabled"
+        current==="dark"
+        ? "Light mode enabled"
+        : "Dark mode enabled"
     );
-});
+}
 
-document.getElementById("darkToggle").addEventListener("click",()=>{
+document
+    .getElementById("themeButton")
+    .addEventListener(
+        "click",
+        toggleTheme
+    );
+
+function toggleThemeFromSettings(){
 
     const current =
-        document.documentElement.dataset.theme === "dark"
+        document.documentElement
+        .dataset
+        .theme;
+
+    applyTheme(
+        current==="dark"
         ? "light"
-        : "dark";
-
-    applyTheme(current);
-});
-
-/* =========================================
-   ONBOARDING
-========================================= */
-
-function showOnboarding(){
-
-    document.getElementById("onboarding").classList.add("show");
+        : "dark"
+    );
 
 }
 
-function finishOnboarding(){
-
-    const dontShow =
-        document.getElementById("dontShow").checked;
-
-    if(dontShow){
-        localStorage.setItem(
-            ONBOARD_KEY,
-            "true"
-        );
-    }
-
-    document
-        .getElementById("onboarding")
-        .classList.remove("show");
-
-}
-
-if(!localStorage.getItem(ONBOARD_KEY)){
-    setTimeout(showOnboarding,500);
-}
-
-/* =========================================
-   MODALS
-========================================= */
+/* =========================================================
+   TRADE MODAL
+========================================================= */
 
 function openTradeModal(){
 
@@ -2636,12 +3089,17 @@ function openTradeModal(){
         document.getElementById("tradeDate");
 
     if(!date.value){
-        date.value =
-            new Date()
-            .toISOString()
-            .slice(0,10);
+        date.value = todayISO();
     }
 
+    setTimeout(
+        ()=>{
+            document
+                .getElementById("tradeName")
+                .focus();
+        },
+        100
+    );
 }
 
 function closeTradeModal(){
@@ -2652,174 +3110,980 @@ function closeTradeModal(){
 
 }
 
-document.getElementById("tradeModal")
-.addEventListener("click",e=>{
+document
+    .getElementById("tradeModal")
+    .addEventListener(
+        "click",
+        event=>{
 
-    if(e.target.id==="tradeModal"){
-        closeTradeModal();
-    }
+            if(
+                event.target.id ===
+                "tradeModal"
+            ){
 
-});
+                closeTradeModal();
 
-/* =========================================
-   TRADES
-========================================= */
+            }
+
+        }
+    );
+
+/* =========================================================
+   SAVE TRADE
+========================================================= */
 
 function saveTrade(){
 
-    const instrument =
+    const name =
         document
-        .getElementById("tradeInstrument")
-        .value
-        .trim();
+            .getElementById("tradeName")
+            .value
+            .trim();
 
-    const pnl =
-        Number(
-            document
+    const pnlRaw =
+        document
             .getElementById("tradePnl")
             .value
+            .trim();
+
+    /*
+       ONLY THESE TWO ARE REQUIRED.
+    */
+
+    if(!name){
+
+        showToast(
+            "Enter a trade name"
         );
 
-    if(!instrument || Number.isNaN(pnl)){
-        showToast("Complete the required fields");
+        return;
+    }
+
+    if(
+        pnlRaw === "" ||
+        Number.isNaN(Number(pnlRaw))
+    ){
+
+        showToast(
+            "Enter the P&L"
+        );
+
         return;
     }
 
     const trade = {
 
-        id:Date.now(),
+        id:
+            Date.now() +
+            Math.random(),
+
+        createdAt:
+            Date.now(),
+
+        name,
+
+        pnl:
+            Number(pnlRaw),
 
         date:
             document
-            .getElementById("tradeDate")
-            .value,
+                .getElementById("tradeDate")
+                .value,
 
         time:
             document
-            .getElementById("tradeTime")
-            .value,
+                .getElementById("tradeTime")
+                .value,
 
-        instrument,
+        symbol:
+            document
+                .getElementById("tradeSymbol")
+                .value
+                .trim(),
 
         direction:
             document
-            .getElementById("tradeDirection")
-            .value,
-
-        session:
-            document
-            .getElementById("tradeSession")
-            .value,
-
-        setup:
-            document
-            .getElementById("tradeSetup")
-            .value,
+                .getElementById("tradeDirection")
+                .value,
 
         risk:
             Number(
                 document
-                .getElementById("tradeRisk")
-                .value
+                    .getElementById("tradeRisk")
+                    .value
             ) || 0,
 
-        pnl,
+        rr:
+            Number(
+                document
+                    .getElementById("tradeRR")
+                    .value
+            ) || 0,
 
-        notes:
+        session:
             document
-            .getElementById("tradeNotes")
-            .value
-            .trim()
+                .getElementById("tradeSession")
+                .value,
+
+        setup:
+            document
+                .getElementById("tradeSetup")
+                .value
+                .trim()
 
     };
 
     trades.unshift(trade);
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(trades)
-    );
-
-    document.getElementById("tradeForm").reset();
+    saveTrades();
 
     closeTradeModal();
 
-    updateDashboard();
-    renderJournal();
+    clearTradeForm();
 
-    showToast("Execution saved");
+    updateEverything();
+
+    showToast(
+        trade.pnl >= 0
+        ? "Profit added"
+        : "Loss added"
+    );
 
 }
+
+function clearTradeForm(){
+
+    document
+        .getElementById("tradeName")
+        .value = "";
+
+    document
+        .getElementById("tradePnl")
+        .value = "";
+
+    document
+        .getElementById("tradeDate")
+        .value = todayISO();
+
+    document
+        .getElementById("tradeTime")
+        .value = "";
+
+    document
+        .getElementById("tradeSymbol")
+        .value = "";
+
+    document
+        .getElementById("tradeDirection")
+        .value = "";
+
+    document
+        .getElementById("tradeRisk")
+        .value = "";
+
+    document
+        .getElementById("tradeRR")
+        .value = "";
+
+    document
+        .getElementById("tradeSession")
+        .value = "";
+
+    document
+        .getElementById("tradeSetup")
+        .value = "";
+
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
 
 function deleteTrade(id){
 
     trades =
         trades.filter(
-            trade=>trade.id!==id
+            trade=>String(trade.id)!==String(id)
         );
 
-    localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(trades)
+    saveTrades();
+
+    updateEverything();
+
+    showToast(
+        "Trade deleted"
     );
-
-    renderJournal();
-    updateDashboard();
-
-    showToast("Execution removed");
 
 }
 
-/* =========================================
-   JOURNAL
-========================================= */
+/* =========================================================
+   STATISTICS
+========================================================= */
 
-function renderJournal(){
+function getStatistics(){
+
+    const totalPnl =
+        trades.reduce(
+            (sum,t)=>sum+Number(t.pnl||0),
+            0
+        );
+
+    const wins =
+        trades.filter(
+            t=>Number(t.pnl)>0
+        );
+
+    const losses =
+        trades.filter(
+            t=>Number(t.pnl)<0
+        );
+
+    const winRate =
+        trades.length
+        ? wins.length/trades.length*100
+        : 0;
+
+    const grossProfit =
+        wins.reduce(
+            (sum,t)=>sum+Number(t.pnl),
+            0
+        );
+
+    const grossLoss =
+        Math.abs(
+            losses.reduce(
+                (sum,t)=>sum+Number(t.pnl),
+                0
+            )
+        );
+
+    let rrTrades =
+        trades
+            .map(t=>Number(t.rr))
+            .filter(v=>v>0);
+
+    const averageRR =
+        rrTrades.length
+        ? rrTrades.reduce(
+            (sum,v)=>sum+v,
+            0
+        )/rrTrades.length
+        : 0;
+
+    const now =
+        new Date();
+
+    const todayStart =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate()
+        );
+
+    const tomorrow =
+        new Date(todayStart);
+
+    tomorrow.setDate(
+        tomorrow.getDate()+1
+    );
+
+    const monthStart =
+        new Date(
+            now.getFullYear(),
+            now.getMonth(),
+            1
+        );
+
+    const nextMonth =
+        new Date(
+            now.getFullYear(),
+            now.getMonth()+1,
+            1
+        );
+
+    const weekStart =
+        new Date(todayStart);
+
+    const day =
+        weekStart.getDay();
+
+    const difference =
+        day===0 ? 6 : day-1;
+
+    weekStart.setDate(
+        weekStart.getDate()-difference
+    );
+
+    function sumBetween(start,end){
+
+        return trades.reduce(
+            (sum,t)=>{
+
+                const date =
+                    getTradeDate(t);
+
+                if(
+                    date>=start &&
+                    date<end
+                ){
+
+                    return sum+
+                        Number(t.pnl||0);
+
+                }
+
+                return sum;
+
+            },
+            0
+        );
+
+    }
+
+    return {
+
+        totalPnl,
+
+        wins:wins.length,
+
+        losses:losses.length,
+
+        total:trades.length,
+
+        winRate,
+
+        grossProfit,
+
+        grossLoss,
+
+        averageRR,
+
+        monthPnl:
+            sumBetween(
+                monthStart,
+                nextMonth
+            ),
+
+        weekPnl:
+            sumBetween(
+                weekStart,
+                tomorrow
+            ),
+
+        dayPnl:
+            sumBetween(
+                todayStart,
+                tomorrow
+            )
+
+    };
+
+}
+
+/* =========================================================
+   UPDATE EVERYTHING
+========================================================= */
+
+function updateEverything(){
+
+    const stats =
+        getStatistics();
+
+    setStat(
+        "totalPnl",
+        stats.totalPnl
+    );
+
+    setStat(
+        "monthPnl",
+        stats.monthPnl
+    );
+
+    setStat(
+        "weekPnl",
+        stats.weekPnl
+    );
+
+    setStat(
+        "dayPnl",
+        stats.dayPnl
+    );
+
+    const winElement =
+        document.getElementById(
+            "winRate"
+        );
+
+    winElement.textContent =
+        stats.winRate.toFixed(1)+"%";
+
+    winElement.className =
+        "stat-value "+
+        (
+            stats.winRate>=50
+            ? "green"
+            : ""
+        );
+
+    const rr =
+        document.getElementById(
+            "riskReward"
+        );
+
+    rr.textContent =
+        stats.averageRR
+        ? stats.averageRR.toFixed(2)
+        : "0.00";
+
+    updateEquityChart();
+    updateMonthlyChart();
+    updateDailyChart();
+    updateAnalyticsChart();
+    updateBreakdown();
+    renderRecent();
+    renderJournal();
+    renderCalendar();
+
+}
+
+function setStat(id,value){
+
+    const element =
+        document.getElementById(id);
+
+    element.textContent =
+        money(value);
+
+    element.classList.remove(
+        "green",
+        "red"
+    );
+
+    if(value>0){
+        element.classList.add("green");
+    }
+
+    if(value<0){
+        element.classList.add("red");
+    }
+
+}
+
+/* =========================================================
+   EQUITY DATA
+========================================================= */
+
+function getEquityValues(){
+
+    const ordered =
+        trades
+            .slice()
+            .sort(
+                (a,b)=>
+                    getTradeDate(a) -
+                    getTradeDate(b)
+            );
+
+    let equity = 0;
+
+    return ordered.map(
+        trade=>{
+            equity +=
+                Number(trade.pnl||0);
+
+            return {
+                trade,
+                value:equity
+            };
+        }
+    );
+
+}
+
+/* =========================================================
+   EQUITY CHART
+========================================================= */
+
+function makeChartPath(
+    values,
+    width,
+    height,
+    padding=15
+){
+
+    if(!values.length){
+
+        return {
+            line:
+                `M${padding} ${height/2}
+                 L${width-padding} ${height/2}`,
+
+            area:
+                `M${padding} ${height/2}
+                 L${width-padding} ${height/2}
+                 L${width-padding} ${height}
+                 L${padding} ${height}Z`
+        };
+
+    }
+
+    const numbers =
+        values.map(
+            item=>
+                typeof item==="number"
+                ? item
+                : item.value
+        );
+
+    let min =
+        Math.min(...numbers,0);
+
+    let max =
+        Math.max(...numbers,0);
+
+    if(max===min){
+        max += 1;
+        min -= 1;
+    }
+
+    const range =
+        max-min;
+
+    const points =
+        numbers.map(
+            (value,index)=>{
+
+                const x =
+                    values.length===1
+                    ? width/2
+                    : padding +
+                        (
+                            index/
+                            (values.length-1)
+                        )*
+                        (
+                            width-padding*2
+                        );
+
+                const y =
+                    height-padding -
+                    (
+                        (value-min)/
+                        range
+                    )*
+                    (
+                        height-padding*2
+                    );
+
+                return {
+                    x,
+                    y
+                };
+
+            }
+        );
+
+    const line =
+        points
+            .map(
+                (point,index)=>
+                    `${
+                        index===0
+                        ? "M"
+                        : "L"
+                    }${point.x.toFixed(2)}
+                     ${point.y.toFixed(2)}`
+            )
+            .join(" ");
+
+    const area =
+        line+
+        ` L${points[points.length-1].x}
+            ${height}
+          L${points[0].x}
+            ${height} Z`;
+
+    return {
+        line,
+        area
+    };
+
+}
+
+function updateEquityChart(){
+
+    const values =
+        getEquityValues();
+
+    const data =
+        makeChartPath(
+            values,
+            900,
+            280,
+            15
+        );
+
+    document
+        .getElementById(
+            "equityLine"
+        )
+        .setAttribute(
+            "d",
+            data.line
+        );
+
+    document
+        .getElementById(
+            "equityArea"
+        )
+        .setAttribute(
+            "d",
+            data.area
+        );
+
+}
+
+/* =========================================================
+   MONTHLY PERFORMANCE
+========================================================= */
+
+function getMonthlyValues(){
+
+    const map = {};
+
+    trades.forEach(trade=>{
+
+        const date =
+            getTradeDate(trade);
+
+        const key =
+            date.getFullYear()+
+            "-" +
+            String(
+                date.getMonth()+1
+            ).padStart(2,"0");
+
+        map[key] =
+            (map[key]||0)+
+            Number(trade.pnl||0);
+
+    });
+
+    return Object
+        .keys(map)
+        .sort()
+        .map(
+            key=>map[key]
+        );
+
+}
+
+function updateMonthlyChart(){
+
+    const values =
+        getMonthlyValues();
+
+    const data =
+        makeChartPath(
+            values,
+            500,
+            110,
+            4
+        );
+
+    document
+        .getElementById(
+            "monthlyLine"
+        )
+        .setAttribute(
+            "d",
+            data.line
+        );
+
+    document
+        .getElementById(
+            "monthlyArea"
+        )
+        .setAttribute(
+            "d",
+            data.area
+        );
+
+}
+
+/* =========================================================
+   DAILY PERFORMANCE
+========================================================= */
+
+function getDailyValues(){
+
+    const map = {};
+
+    trades.forEach(trade=>{
+
+        const date =
+            getTradeDate(trade);
+
+        const key =
+            date.toISOString()
+            .slice(0,10);
+
+        map[key] =
+            (map[key]||0)+
+            Number(trade.pnl||0);
+
+    });
+
+    return Object
+        .keys(map)
+        .sort()
+        .slice(-30)
+        .map(
+            key=>map[key]
+        );
+
+}
+
+function updateDailyChart(){
+
+    const values =
+        getDailyValues();
+
+    const data =
+        makeChartPath(
+            values,
+            500,
+            110,
+            4
+        );
+
+    document
+        .getElementById(
+            "dailyLine"
+        )
+        .setAttribute(
+            "d",
+            data.line
+        );
+
+}
+
+/* =========================================================
+   ANALYTICS CHART
+========================================================= */
+
+function updateAnalyticsChart(){
+
+    const values =
+        getEquityValues();
+
+    const data =
+        makeChartPath(
+            values,
+            900,
+            320,
+            15
+        );
+
+    document
+        .getElementById(
+            "analyticsEquity"
+        )
+        .setAttribute(
+            "d",
+            data.line
+        );
+
+}
+
+/* =========================================================
+   BREAKDOWN
+========================================================= */
+
+function updateBreakdown(){
+
+    const stats =
+        getStatistics();
+
+    const total =
+        Math.max(
+            stats.total,
+            1
+        );
+
+    const winPercent =
+        stats.wins/
+        total*
+        100;
+
+    const lossPercent =
+        stats.losses/
+        total*
+        100;
+
+    document
+        .getElementById(
+            "winBar"
+        )
+        .style.width =
+            winPercent+"%";
+
+    document
+        .getElementById(
+            "lossBar"
+        )
+        .style.width =
+            lossPercent+"%";
+
+    document
+        .getElementById(
+            "totalBar"
+        )
+        .style.width =
+            stats.total
+            ? "100%"
+            : "0%";
+
+    document
+        .getElementById(
+            "winCount"
+        )
+        .textContent =
+            stats.wins;
+
+    document
+        .getElementById(
+            "lossCount"
+        )
+        .textContent =
+            stats.losses;
+
+    document
+        .getElementById(
+            "totalCount"
+        )
+        .textContent =
+            stats.total;
+
+    if(trades.length){
+
+        const best =
+            Math.max(
+                ...trades.map(
+                    t=>Number(t.pnl)
+                )
+            );
+
+        const worst =
+            Math.min(
+                ...trades.map(
+                    t=>Number(t.pnl)
+                )
+            );
+
+        document
+            .getElementById(
+                "bestTrade"
+            )
+            .textContent =
+                money(best);
+
+        document
+            .getElementById(
+                "worstTrade"
+            )
+            .textContent =
+                money(worst);
+
+        const maxAbs =
+            Math.max(
+                Math.abs(best),
+                Math.abs(worst),
+                1
+            );
+
+        document
+            .getElementById(
+                "bestBar"
+            )
+            .style.width =
+                Math.max(
+                    4,
+                    Math.abs(best)/
+                    maxAbs*100
+                )+"%";
+
+        document
+            .getElementById(
+                "worstBar"
+            )
+            .style.width =
+                Math.max(
+                    4,
+                    Math.abs(worst)/
+                    maxAbs*100
+                )+"%";
+
+    }else{
+
+        document
+            .getElementById(
+                "bestTrade"
+            )
+            .textContent =
+                "$0";
+
+        document
+            .getElementById(
+                "worstTrade"
+            )
+            .textContent =
+                "$0";
+
+    }
+
+}
+
+/* =========================================================
+   RECENT TRADES
+========================================================= */
+
+function renderRecent(){
 
     const tbody =
-        document.getElementById("journalTable");
-
-    const empty =
-        document.getElementById("journalEmpty");
-
-    const search =
-        (
-            document
-            .getElementById("searchTrades")
-            .value || ""
-        )
-        .toLowerCase();
-
-    const filtered =
-        trades.filter(t=>
-
-            (
-                t.instrument+
-                " "+
-                t.setup+
-                " "+
-                t.session+
-                " "+
-                t.direction
-            )
-            .toLowerCase()
-            .includes(search)
-
+        document.getElementById(
+            "recentTable"
         );
 
     tbody.innerHTML = "";
 
-    if(!filtered.length){
+    const recent =
+        trades
+            .slice()
+            .sort(
+                (a,b)=>
+                    getTradeDate(b) -
+                    getTradeDate(a)
+            )
+            .slice(0,5);
 
-        empty.style.display = "block";
+    if(!recent.length){
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    <span style="color:var(--muted)">
+                        No trades recorded yet.
+                    </span>
+                </td>
+            </tr>
+        `;
 
         return;
 
     }
 
-    empty.style.display = "none";
-
-    filtered.forEach(t=>{
+    recent.forEach(trade=>{
 
         const row =
             document.createElement("tr");
@@ -2827,42 +4091,44 @@ function renderJournal(){
         row.innerHTML = `
 
             <td>
-                ${formatDate(t.date)}
+                <div class="trade-name">
+                    ${escapeHTML(trade.name)}
+                </div>
             </td>
 
             <td>
-                <span class="instrument">
-                    ${escapeHtml(t.instrument)}
-                </span>
+                <div class="trade-date">
+                    ${escapeHTML(
+                        formatTradeDate(trade)
+                    )}
+                </div>
             </td>
 
             <td>
-                <span class="tag">
-                    ${escapeHtml(t.direction)}
-                </span>
+                <div class="trade-symbol">
+                    ${
+                        escapeHTML(
+                            trade.symbol || "—"
+                        )
+                    }
+                </div>
             </td>
 
             <td>
-                ${escapeHtml(t.session)}
-            </td>
-
-            <td>
-                ${escapeHtml(t.setup)}
-            </td>
-
-            <td class="${t.pnl >= 0 ? "positive" : "negative"}">
-                <strong>
-                    ${t.pnl >= 0 ? "+" : ""}
-                    €${formatNumber(t.pnl)}
-                </strong>
-            </td>
-
-            <td>
-                <button
-                    class="icon-btn"
-                    onclick="deleteTrade(${t.id})">
-                    ×
-                </button>
+                <div class="
+                    result
+                    ${
+                        Number(trade.pnl)>=0
+                        ? "green"
+                        : "red"
+                    }
+                ">
+                    ${
+                        money(
+                            Number(trade.pnl)
+                        )
+                    }
+                </div>
             </td>
 
         `;
@@ -2873,380 +4139,495 @@ function renderJournal(){
 
 }
 
-document
-.getElementById("searchTrades")
-.addEventListener("input",renderJournal);
+/* =========================================================
+   JOURNAL PAGINATION
+========================================================= */
 
-/* =========================================
-   DASHBOARD
-========================================= */
+function getFilteredTrades(){
 
-function updateDashboard(){
-
-    const total =
-        trades.reduce(
-            (sum,t)=>sum + t.pnl,
-            0
-        );
-
-    const wins =
-        trades.filter(t=>t.pnl>0);
-
-    const losses =
-        trades.filter(t=>t.pnl<0);
-
-    const winRate =
-        trades.length
-        ? (wins.length / trades.length) * 100
-        : 0;
-
-    const grossWin =
-        wins.reduce(
-            (sum,t)=>sum+t.pnl,
-            0
-        );
-
-    const grossLoss =
-        Math.abs(
-            losses.reduce(
-                (sum,t)=>sum+t.pnl,
-                0
-            )
-        );
-
-    const pf =
-        grossLoss
-        ? grossWin/grossLoss
-        : 0;
-
-    const avg =
-        trades.length
-        ? total/trades.length
-        : 0;
-
-    let equity = 0;
-    let peak = 0;
-    let maxDD = 0;
-
-    trades
-        .slice()
-        .reverse()
-        .forEach(t=>{
-
-            equity += t.pnl;
-
-            peak =
-                Math.max(
-                    peak,
-                    equity
-                );
-
-            maxDD =
-                Math.min(
-                    maxDD,
-                    equity-peak
-                );
-
-        });
-
-    document.getElementById("kpiPnl").textContent =
-        formatEuro(total);
-
-    document.getElementById("kpiWin").textContent =
-        winRate.toFixed(1)+"%";
-
-    document.getElementById("kpiPF").textContent =
-        pf.toFixed(2);
-
-    document.getElementById("kpiAvg").textContent =
-        formatEuro(avg);
-
-    document.getElementById("kpiDD").textContent =
-        formatEuro(maxDD);
-
-    updateChart();
-    renderRecent();
-
-}
-
-/* =========================================
-   RECENT
-========================================= */
-
-function renderRecent(){
-
-    const tbody =
-        document.getElementById("recentTrades");
-
-    tbody.innerHTML = "";
-
-    trades
-        .slice(0,5)
-        .forEach(t=>{
-
-            const row =
-                document.createElement("tr");
-
-            row.innerHTML = `
-
-                <td>
-                    <span class="instrument">
-                        ${escapeHtml(t.instrument)}
-                    </span>
-                </td>
-
-                <td>
-                    <span class="tag">
-                        ${escapeHtml(t.direction)}
-                    </span>
-                </td>
-
-                <td>
-                    ${escapeHtml(t.session)}
-                </td>
-
-                <td>
-                    ${escapeHtml(t.setup)}
-                </td>
-
-                <td class="${t.pnl>=0?"positive":"negative"}">
-                    <strong>
-                        ${t.pnl>=0?"+":""}€${formatNumber(t.pnl)}
-                    </strong>
-                </td>
-
-            `;
-
-            tbody.appendChild(row);
-
-        });
-
-    if(!trades.length){
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="5">
-                    <span style="color:var(--muted)">
-                        No executions recorded yet.
-                    </span>
-                </td>
-            </tr>
-        `;
-
-    }
-
-}
-
-/* =========================================
-   CHART
-========================================= */
-
-function updateChart(){
-
-    const line =
-        document.getElementById("chartLine");
-
-    const area =
-        document.getElementById("chartArea");
-
-    if(!line) return;
-
-    if(!trades.length){
-
-        line.setAttribute(
-            "d",
-            "M0 210 L100 205 L200 210 L300 205 L400 210 L500 205 L600 210 L700 205 L800 210"
-        );
-
-        area.setAttribute(
-            "d",
-            "M0 210 L100 205 L200 210 L300 205 L400 210 L500 205 L600 210 L700 205 L800 210 L800 250 L0 250Z"
-        );
-
-        return;
-    }
-
-    const reversed =
-        trades
-        .slice()
-        .reverse();
-
-    let equity = 0;
-
-    const values =
-        reversed.map(t=>{
-            equity += t.pnl;
-            return equity;
-        });
-
-    const min =
-        Math.min(...values,0);
-
-    const max =
-        Math.max(...values,0);
-
-    const range =
-        Math.max(max-min,1);
-
-    const points =
-        values.map((value,i)=>{
-
-            const x =
-                values.length===1
-                ? 400
-                : (i/(values.length-1))*800;
-
-            const y =
-                220 -
-                ((value-min)/range)*175;
-
-            return [
-                x.toFixed(1),
-                y.toFixed(1)
-            ];
-
-        });
-
-    const d =
-        points
-        .map((p,i)=>
-            `${i===0?"M":"L"}${p[0]} ${p[1]}`
+    const search =
+        (
+            document
+                .getElementById(
+                    "searchInput"
+                )
+                .value ||
+            ""
         )
-        .join(" ");
+        .toLowerCase()
+        .trim();
 
-    line.setAttribute("d",d);
+    if(!search){
+        return trades;
+    }
 
-    area.setAttribute(
-        "d",
-        d+" L800 250 L0 250Z"
+    return trades.filter(
+        trade=>
+            (
+                trade.name+
+                " "+
+                trade.symbol+
+                " "+
+                trade.direction+
+                " "+
+                trade.session+
+                " "+
+                trade.setup
+            )
+            .toLowerCase()
+            .includes(search)
     );
 
 }
 
-/* =========================================
+function renderJournal(){
+
+    const tbody =
+        document.getElementById(
+            "journalTable"
+        );
+
+    const empty =
+        document.getElementById(
+            "journalEmpty"
+        );
+
+    const filtered =
+        getFilteredTrades();
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                filtered.length/
+                rowsPerPage
+            )
+        );
+
+    if(currentPage>totalPages){
+        currentPage =
+            totalPages;
+    }
+
+    const start =
+        (
+            currentPage-1
+        )*
+        rowsPerPage;
+
+    const visible =
+        filtered.slice(
+            start,
+            start+rowsPerPage
+        );
+
+    tbody.innerHTML = "";
+
+    if(!filtered.length){
+
+        empty.style.display =
+            "block";
+
+    }else{
+
+        empty.style.display =
+            "none";
+
+    }
+
+    visible.forEach(trade=>{
+
+        const row =
+            document.createElement("tr");
+
+        row.innerHTML = `
+
+            <td>
+                <div class="trade-name">
+                    ${escapeHTML(trade.name)}
+                </div>
+            </td>
+
+            <td>
+                <div class="trade-date">
+                    ${escapeHTML(
+                        formatTradeDate(trade)
+                    )}
+                </div>
+            </td>
+
+            <td>
+                <span class="trade-symbol">
+                    ${
+                        escapeHTML(
+                            trade.symbol || "—"
+                        )
+                    }
+                </span>
+            </td>
+
+            <td>
+                ${
+                    trade.direction
+                    ?
+                    `
+                    <span class="direction-tag">
+                        ${escapeHTML(
+                            trade.direction
+                        )}
+                    </span>
+                    `
+                    :
+                    "—"
+                }
+            </td>
+
+            <td>
+                ${
+                    trade.risk
+                    ? trade.risk+"%"
+                    : "—"
+                }
+            </td>
+
+            <td>
+
+                <span class="
+                    result
+                    ${
+                        Number(trade.pnl)>=0
+                        ? "green"
+                        : "red"
+                    }
+                ">
+                    ${
+                        money(
+                            Number(trade.pnl)
+                        )
+                    }
+                </span>
+
+            </td>
+
+            <td>
+
+                <button
+                    class="delete-small"
+                    onclick="deleteTrade('${trade.id}')">
+                    ×
+                </button>
+
+            </td>
+
+        `;
+
+        tbody.appendChild(row);
+
+    });
+
+    renderPagination(
+        totalPages
+    );
+
+}
+
+function renderPagination(totalPages){
+
+    const container =
+        document.getElementById(
+            "pageNumbers"
+        );
+
+    container.innerHTML = "";
+
+    const maxButtons =
+        Math.min(
+            totalPages,
+            5
+        );
+
+    for(
+        let i=1;
+        i<=maxButtons;
+        i++
+    ){
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "page-btn "+
+            (
+                i===currentPage
+                ? "active"
+                : ""
+            );
+
+        button.textContent = i;
+
+        button.onclick =
+            ()=>{
+                currentPage=i;
+                renderJournal();
+            };
+
+        container.appendChild(button);
+
+    }
+
+    document
+        .getElementById("prevPage")
+        .disabled =
+            currentPage<=1;
+
+    document
+        .getElementById("nextPage")
+        .disabled =
+            currentPage>=totalPages;
+
+}
+
+document
+    .getElementById("prevPage")
+    .addEventListener(
+        "click",
+        ()=>{
+            if(currentPage>1){
+                currentPage--;
+                renderJournal();
+            }
+        }
+    );
+
+document
+    .getElementById("nextPage")
+    .addEventListener(
+        "click",
+        ()=>{
+            const totalPages =
+                Math.max(
+                    1,
+                    Math.ceil(
+                        getFilteredTrades().length/
+                        rowsPerPage
+                    )
+                );
+
+            if(currentPage<totalPages){
+                currentPage++;
+                renderJournal();
+            }
+        }
+    );
+
+document
+    .getElementById("rowsPerPage")
+    .addEventListener(
+        "change",
+        event=>{
+            rowsPerPage =
+                Number(
+                    event.target.value
+                );
+
+            currentPage=1;
+
+            renderJournal();
+        }
+    );
+
+document
+    .getElementById("searchInput")
+    .addEventListener(
+        "input",
+        ()=>{
+            currentPage=1;
+            renderJournal();
+        }
+    );
+
+/* =========================================================
    CALENDAR
-========================================= */
+========================================================= */
 
 function renderCalendar(){
 
     const grid =
-        document.getElementById("calendarGrid");
+        document.getElementById(
+            "calendarGrid"
+        );
+
+    if(!grid) return;
 
     grid.innerHTML = "";
 
-    const days =
-        ["MON","TUE","WED","THU","FRI","SAT","SUN"];
+    [
+        "MON",
+        "TUE",
+        "WED",
+        "THU",
+        "FRI",
+        "SAT",
+        "SUN"
+    ].forEach(day=>{
 
-    days.forEach(day=>{
-
-        const el =
+        const element =
             document.createElement("div");
 
-        el.textContent = day;
+        element.className =
+            "weekday";
 
-        el.style.cssText = `
-            text-align:center;
-            color:var(--muted);
-            font-size:8px;
-            font-weight:700;
-            padding:7px;
-        `;
+        element.textContent =
+            day;
 
-        grid.appendChild(el);
+        grid.appendChild(
+            element
+        );
 
     });
 
-    const first =
-        new Date(2026,8,1);
+    const now =
+        new Date();
 
-    let offset =
-        first.getDay()-1;
+    const year =
+        now.getFullYear();
 
-    if(offset<0) offset=6;
+    const month =
+        now.getMonth();
 
-    for(let i=0;i<offset;i++){
+    document
+        .getElementById(
+            "calendarMonth"
+        )
+        .textContent =
+            new Date(
+                year,
+                month,
+                1
+            ).toLocaleDateString(
+                "en-US",
+                {
+                    month:"long",
+                    year:"numeric"
+                }
+            );
 
-        const empty =
+    let first =
+        new Date(
+            year,
+            month,
+            1
+        ).getDay();
+
+    first =
+        first===0
+        ? 6
+        : first-1;
+
+    for(
+        let i=0;
+        i<first;
+        i++
+    ){
+
+        const blank =
             document.createElement("div");
 
-        grid.appendChild(empty);
+        grid.appendChild(blank);
 
     }
 
-    for(let day=1;day<=30;day++){
+    const days =
+        new Date(
+            year,
+            month+1,
+            0
+        ).getDate();
+
+    for(
+        let day=1;
+        day<=days;
+        day++
+    ){
 
         const cell =
             document.createElement("div");
 
-        const dayTrades =
-            trades.filter(t=>{
+        cell.className =
+            "calendar-day";
 
-                if(!t.date) return false;
+        const dailyTrades =
+            trades.filter(
+                trade=>{
 
-                const d =
-                    new Date(t.date+"T00:00:00");
+                    const date =
+                        getTradeDate(trade);
 
-                return (
-                    d.getFullYear()===2026 &&
-                    d.getMonth()===8 &&
-                    d.getDate()===day
-                );
+                    return (
+                        date.getFullYear()===year &&
+                        date.getMonth()===month &&
+                        date.getDate()===day
+                    );
 
-            });
+                }
+            );
 
         const pnl =
-            dayTrades.reduce(
-                (sum,t)=>sum+t.pnl,
+            dailyTrades.reduce(
+                (sum,t)=>
+                    sum+
+                    Number(t.pnl||0),
                 0
             );
 
-        let background =
-            "rgba(127,127,127,.045)";
-
         if(pnl>0){
-            background =
-                "rgba(22,163,106,.15)";
+
+            cell.style.background =
+                "var(--green-soft)";
+
+            cell.style.borderColor =
+                "rgba(21,155,103,.2)";
+
         }
 
         if(pnl<0){
-            background =
-                "rgba(224,82,82,.15)";
+
+            cell.style.background =
+                "var(--red-soft)";
+
+            cell.style.borderColor =
+                "rgba(223,85,85,.2)";
+
         }
 
-        cell.style.cssText = `
-            min-height:85px;
-            padding:10px;
-            border:1px solid var(--line);
-            border-radius:12px;
-            background:${background};
-            transition:.2s;
-        `;
-
         cell.innerHTML = `
-            <div style="
-                font-family:'DM Mono';
-                font-size:9px;
-                color:var(--muted);
-            ">
+
+            <div class="calendar-number">
                 ${day}
             </div>
 
             ${
-                dayTrades.length
+                dailyTrades.length
                 ?
                 `
-                <div style="
-                    margin-top:24px;
-                    font-size:9px;
-                    font-weight:800;
-                    color:${pnl>=0?"var(--green)":"var(--red)"};
-                ">
-                    ${pnl>=0?"+":""}€${formatNumber(pnl)}
+                <div
+                    class="
+                        calendar-result
+                        ${
+                            pnl>=0
+                            ? "green"
+                            : "red"
+                        }
+                    ">
+                    ${
+                        money(pnl)
+                    }
                 </div>
                 `
                 :
                 ""
             }
+
         `;
 
         grid.appendChild(cell);
@@ -3255,239 +4636,274 @@ function renderCalendar(){
 
 }
 
-/* =========================================
+/* =========================================================
+   ANALYTICS
+========================================================= */
+
+function renderAnalytics(){
+
+    updateAnalyticsChart();
+    updateBreakdown();
+
+}
+
+/* =========================================================
    PSYCHOLOGY
-========================================= */
+========================================================= */
 
-const psych =
-    localStorage.getItem(PSYCH_KEY) || "";
+const savedPsychology =
+    localStorage.getItem(
+        PSYCHOLOGY_KEY
+    ) || "";
 
-document.getElementById("psychologyNote").value =
-    psych;
+document
+    .getElementById(
+        "psychologyText"
+    )
+    .value =
+        savedPsychology;
 
 function savePsychology(){
 
     const value =
         document
-        .getElementById("psychologyNote")
-        .value;
+            .getElementById(
+                "psychologyText"
+            )
+            .value;
 
     localStorage.setItem(
-        PSYCH_KEY,
+        PSYCHOLOGY_KEY,
         value
     );
 
-    showToast("Reflection saved");
-
-}
-
-/* =========================================
-   COMMAND
-========================================= */
-
-document.getElementById("commandBtn")
-.addEventListener("click",()=>{
-
-    document
-        .getElementById("commandModal")
-        .classList.add("show");
-
-});
-
-document.getElementById("commandModal")
-.addEventListener("click",e=>{
-
-    if(e.target.id==="commandModal"){
-        e.target.classList.remove("show");
-    }
-
-});
-
-function quick(page){
-
-    document
-        .getElementById("commandModal")
-        .classList.remove("show");
-
-    navigate(page);
-
-}
-
-/* =========================================
-   KEYBOARD
-========================================= */
-
-document.addEventListener("keydown",e=>{
-
-    if(
-        (e.ctrlKey || e.metaKey) &&
-        e.key.toLowerCase()==="k"
-    ){
-
-        e.preventDefault();
-
-        document
-            .getElementById("commandModal")
-            .classList.add("show");
-
-    }
-
-    if(e.key==="Escape"){
-
-        document
-            .querySelectorAll(".modal-bg")
-            .forEach(m=>m.classList.remove("show"));
-
-        document
-            .getElementById("onboarding")
-            .classList.remove("show");
-
-    }
-
-});
-
-/* =========================================
-   HELPERS
-========================================= */
-
-function formatEuro(number){
-
-    return (
-        number>=0 ? "+" : ""
-    )+
-    "€"+
-    formatNumber(
-        Math.abs(number)
+    showToast(
+        "Reflection saved"
     );
 
 }
 
-function formatNumber(number){
+function toggleCheck(button){
 
-    return Number(number)
-        .toLocaleString(
-            "en-US",
-            {
-                minimumFractionDigits:2,
-                maximumFractionDigits:2
-            }
+    button.classList.toggle(
+        "on"
+    );
+
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function resetJournal(){
+
+    if(!trades.length){
+
+        showToast(
+            "Journal is already empty"
+        );
+
+        return;
+    }
+
+    const confirmed =
+        confirm(
+            "Delete every recorded trade?"
+        );
+
+    if(!confirmed){
+        return;
+    }
+
+    trades=[];
+
+    saveTrades();
+
+    currentPage=1;
+
+    updateEverything();
+
+    showToast(
+        "Journal reset"
+    );
+
+}
+
+/* =========================================================
+   ONBOARDING
+========================================================= */
+
+function showOnboarding(){
+
+    document
+        .getElementById(
+            "onboarding"
+        )
+        .classList.add("show");
+
+}
+
+function finishOnboarding(){
+
+    const remember =
+        document
+            .getElementById(
+                "rememberOnboarding"
+            )
+            .checked;
+
+    if(remember){
+
+        localStorage.setItem(
+            ONBOARDING_KEY,
+            "true"
+        );
+
+    }
+
+    document
+        .getElementById(
+            "onboarding"
+        )
+        .classList.remove(
+            "show"
         );
 
 }
 
-function formatDate(date){
+function skipOnboarding(){
 
-    if(!date) return "—";
+    document
+        .getElementById(
+            "onboarding"
+        )
+        .classList.remove(
+            "show"
+        );
 
-    const d =
-        new Date(date+"T00:00:00");
+}
 
-    return d.toLocaleDateString(
-        "en-GB",
-        {
-            day:"2-digit",
-            month:"short",
-            year:"numeric"
-        }
+/* =========================================================
+   INITIAL ONBOARDING
+========================================================= */
+
+if(
+    !localStorage.getItem(
+        ONBOARDING_KEY
+    )
+){
+
+    setTimeout(
+        showOnboarding,
+        450
     );
 
 }
 
-function escapeHtml(value){
+/* =========================================================
+   KEYBOARD
+========================================================= */
 
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+document.addEventListener(
+    "keydown",
+    event=>{
 
-}
+        if(
+            (event.ctrlKey ||
+             event.metaKey) &&
+            event.key.toLowerCase()==="j"
+        ){
 
-let toastTimer;
+            event.preventDefault();
 
-function showToast(message){
+            openTradeModal();
 
-    const toast =
-        document.getElementById("toast");
+        }
 
-    toast.textContent = message;
+        if(
+            event.key==="Escape"
+        ){
 
-    toast.classList.add("show");
+            closeTradeModal();
 
-    clearTimeout(toastTimer);
+            document
+                .getElementById(
+                    "onboarding"
+                )
+                .classList.remove(
+                    "show"
+                );
 
-    toastTimer =
-        setTimeout(()=>{
-            toast.classList.remove("show");
-        },2200);
+        }
 
-}
+    }
+);
 
-/* =========================================
-   INITIALIZE
-========================================= */
+/* =========================================================
+   ENTER IN TRADE FORM
+========================================================= */
 
-document.getElementById("profileName")
-    .textContent =
-        localStorage.getItem("next_candle_name")
-        || "Member";
+document.addEventListener(
+    "keydown",
+    event=>{
 
-document.getElementById("avatar")
-    .textContent =
-        (
-            localStorage.getItem("next_candle_name")
-            || "NC"
-        )
-        .slice(0,2)
-        .toUpperCase();
+        if(
+            event.key==="Enter" &&
+            document
+                .getElementById(
+                    "tradeModal"
+                )
+                .classList.contains(
+                    "show"
+                )
+        ){
 
-updateDashboard();
-renderJournal();
-renderCalendar();
+            if(
+                event.target.tagName!=="SELECT"
+            ){
 
-/* =========================================
-   PREMIUM MICRO INTERACTIONS
-========================================= */
+                event.preventDefault();
 
-document.querySelectorAll(".card").forEach(card=>{
+                saveTrade();
 
-    card.addEventListener("mousemove",e=>{
+            }
 
-        if(window.innerWidth < 900) return;
+        }
 
-        const rect =
-            card.getBoundingClientRect();
+    }
+);
 
-        const x =
-            ((e.clientX-rect.left)/rect.width-.5)*2;
+/* =========================================================
+   NAME / PROFILE
+========================================================= */
 
-        const y =
-            ((e.clientY-rect.top)/rect.height-.5)*2;
-
-        card.style.transform =
-            `translateY(-3px) perspective(900px)
-             rotateX(${y*-0.4}deg)
-             rotateY(${x*0.4}deg)`;
-
-    });
-
-    card.addEventListener("mouseleave",()=>{
-
-        card.style.transform = "";
-
-    });
-
-});
-
-/* prevent accidental form reload */
+const storedName =
+    localStorage.getItem(
+        "next_candle_name"
+    ) ||
+    "Trader";
 
 document
-.getElementById("tradeForm")
-.addEventListener("submit",e=>{
-    e.preventDefault();
-    saveTrade();
-});
+    .getElementById(
+        "userName"
+    )
+    .textContent =
+        storedName;
+
+document
+    .getElementById(
+        "avatar"
+    )
+    .textContent =
+        storedName
+            .slice(0,2)
+            .toUpperCase();
+
+/* =========================================================
+   INITIAL RENDER
+========================================================= */
+
+updateEverything();
 
 </script>
 
