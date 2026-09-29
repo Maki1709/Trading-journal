@@ -2,44 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NEXT CANDLE — Terminal</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#080808">
+<title>NEXT CANDLE — Member Terminal</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap');
-
 :root{
-  --bg:#07090b;
-  --sidebar:#090b0d;
-  --panel:#0c0f12;
-  --panel2:#101419;
-  --panel3:#14191e;
-  --border:#1b2228;
-  --border2:#252e35;
-
-  --text:#edf2ef;
-  --text2:#b8c0bd;
-  --muted:#687177;
-  --muted2:#464f55;
-
-  --green:#78f2ad;
-  --green2:#41d88b;
-  --green-bg:rgba(120,242,173,.08);
-
-  --red:#ff747c;
-  --red-bg:rgba(255,116,124,.08);
-
-  --blue:#7fa7ff;
-  --yellow:#e9ca7b;
-  --purple:#ad91ff;
-
-  --radius:16px;
+  --bg:#070707;
+  --bg2:#0a0a0a;
+  --panel:#0d0d0d;
+  --panel2:#111111;
+  --panel3:#151515;
+  --line:#202020;
+  --line2:#2a2a2a;
+  --text:#f5f5f5;
+  --text2:#a2a2a2;
+  --text3:#666;
+  --white:#fff;
+  --black:#000;
+  --good:#d8d8d8;
+  --danger:#8e8e8e;
+  --radius:18px;
+  --sidebar:248px;
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
 
 *{
-  box-sizing:border-box;
   margin:0;
   padding:0;
+  box-sizing:border-box;
 }
 
 html{
@@ -48,12 +43,26 @@ html{
 
 body{
   background:
-    radial-gradient(circle at 60% -20%,rgba(120,242,173,.035),transparent 30%),
+    radial-gradient(circle at 80% -10%,rgba(255,255,255,.055),transparent 30%),
+    radial-gradient(circle at 10% 30%,rgba(255,255,255,.025),transparent 25%),
     var(--bg);
   color:var(--text);
-  font-family:Inter,Arial,sans-serif;
+  font-family:Inter,sans-serif;
   min-height:100vh;
   overflow-x:hidden;
+}
+
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.035;
+  background-image:
+    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
+  background-size:50px 50px;
+  mask-image:linear-gradient(to bottom,black,transparent 80%);
 }
 
 button,
@@ -64,214 +73,270 @@ select{
 }
 
 button{
+  border:0;
   cursor:pointer;
 }
 
-a{
-  text-decoration:none;
-  color:inherit;
+::-webkit-scrollbar{
+  width:7px;
 }
 
-/* =========================================================
-   APP
-========================================================= */
-
-.app{
-  min-height:100vh;
-  display:flex;
+::-webkit-scrollbar-track{
+  background:#080808;
 }
 
-/* =========================================================
+::-webkit-scrollbar-thumb{
+  background:#292929;
+  border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:#3a3a3a;
+}
+
+/* =========================
    SIDEBAR
-========================================================= */
+========================= */
 
 .sidebar{
   position:fixed;
   left:0;
   top:0;
   bottom:0;
-  width:245px;
-  background:rgba(7,9,11,.96);
-  border-right:1px solid var(--border);
-  padding:20px 14px;
+  width:var(--sidebar);
+  background:rgba(8,8,8,.92);
+  border-right:1px solid var(--line);
+  backdrop-filter:blur(24px);
   z-index:100;
   display:flex;
   flex-direction:column;
+  transition:.45s var(--ease);
 }
 
-.brand{
-  height:52px;
+.logo{
+  height:82px;
   display:flex;
   align-items:center;
-  gap:11px;
-  padding:0 10px;
-  margin-bottom:25px;
+  padding:0 25px;
+  border-bottom:1px solid var(--line);
 }
 
-.brand-icon{
-  width:34px;
-  height:34px;
-  border-radius:10px;
+.logo-mark{
+  width:31px;
+  height:31px;
+  border:1px solid #555;
+  position:relative;
   display:grid;
   place-items:center;
-  color:#07100b;
+  margin-right:11px;
+  overflow:hidden;
+}
+
+.logo-mark:before,
+.logo-mark:after{
+  content:"";
+  position:absolute;
+  background:#fff;
+  transform:rotate(45deg);
+}
+
+.logo-mark:before{
+  width:1px;
+  height:42px;
+}
+
+.logo-mark:after{
+  width:42px;
+  height:1px;
+}
+
+.logo-text{
+  font-family:Manrope,sans-serif;
   font-size:14px;
-  font-weight:900;
-  background:linear-gradient(145deg,#dffff0,#5be69a);
-  box-shadow:0 0 25px rgba(91,230,154,.1);
-}
-
-.brand-name{
-  font-size:13px;
   font-weight:800;
-  letter-spacing:.12em;
+  letter-spacing:.18em;
 }
 
-.brand-version{
-  display:block;
+.logo-sub{
+  font-family:DM Mono,monospace;
+  color:#666;
   font-size:8px;
-  color:var(--muted);
-  margin-top:3px;
-  letter-spacing:.08em;
-}
-
-.nav-section{
-  margin:18px 9px 8px;
-  color:#424a50;
-  font-size:8px;
-  font-weight:700;
   letter-spacing:.15em;
+  margin-top:2px;
+}
+
+.nav-wrap{
+  padding:24px 13px;
+  flex:1;
+  overflow-y:auto;
+}
+
+.nav-label{
+  padding:0 13px 9px;
+  font-family:DM Mono,monospace;
+  font-size:9px;
+  color:#555;
+  letter-spacing:.18em;
   text-transform:uppercase;
 }
 
 .nav{
-  display:grid;
+  display:flex;
+  flex-direction:column;
   gap:3px;
+  margin-bottom:27px;
 }
 
 .nav-btn{
   width:100%;
-  height:42px;
-  border:1px solid transparent;
-  border-radius:10px;
-  background:transparent;
-  color:#737c82;
+  height:44px;
+  padding:0 13px;
   display:flex;
   align-items:center;
   gap:12px;
-  padding:0 12px;
+  color:#737373;
+  background:transparent;
+  border-radius:10px;
+  transition:.25s ease;
   text-align:left;
-  font-size:11px;
-  font-weight:600;
-  transition:.2s;
+  position:relative;
 }
 
 .nav-btn:hover{
-  color:#dbe1de;
-  background:rgba(255,255,255,.025);
+  color:#ddd;
+  background:#111;
 }
 
 .nav-btn.active{
-  color:#eaf1ed;
-  background:rgba(120,242,173,.065);
-  border-color:rgba(120,242,173,.09);
+  color:#fff;
+  background:#151515;
+  box-shadow:inset 0 0 0 1px #242424;
+}
+
+.nav-btn.active:before{
+  content:"";
+  position:absolute;
+  left:-13px;
+  width:2px;
+  height:18px;
+  background:#fff;
+  box-shadow:0 0 18px rgba(255,255,255,.4);
 }
 
 .nav-icon{
-  width:17px;
-  text-align:center;
-  font-size:13px;
-  color:#5e686e;
+  width:18px;
+  height:18px;
+  display:grid;
+  place-items:center;
+  font-size:15px;
+  opacity:.8;
 }
 
-.nav-btn.active .nav-icon{
-  color:var(--green);
+.nav-name{
+  font-size:12px;
+  font-weight:500;
+  flex:1;
+}
+
+.nav-shortcut{
+  color:#444;
+  font-family:DM Mono,monospace;
+  font-size:9px;
 }
 
 .sidebar-bottom{
-  margin-top:auto;
+  padding:15px;
+  border-top:1px solid var(--line);
 }
 
-.account{
-  padding:13px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:#0c0f11;
-}
-
-.account-top{
+.profile{
+  padding:12px;
+  border:1px solid var(--line);
+  background:#0d0d0d;
+  border-radius:12px;
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:11px;
 }
 
 .avatar{
   width:32px;
   height:32px;
   border-radius:50%;
+  background:linear-gradient(145deg,#333,#0c0c0c);
+  border:1px solid #444;
   display:grid;
   place-items:center;
-  background:linear-gradient(135deg,#d8ffe9,#45d58a);
-  color:#08100b;
-  font-size:11px;
-  font-weight:900;
-}
-
-.account-name{
   font-size:10px;
   font-weight:700;
 }
 
-.account-status{
-  margin-top:3px;
-  color:var(--green);
+.profile-info{
+  flex:1;
+  min-width:0;
+}
+
+.profile-name{
+  font-size:11px;
+  font-weight:600;
+}
+
+.profile-role{
+  color:#555;
+  font-family:DM Mono,monospace;
   font-size:8px;
+  margin-top:3px;
 }
 
-.logout{
-  width:100%;
-  margin-top:12px;
-  height:31px;
-  border:1px solid var(--border);
-  border-radius:8px;
-  background:transparent;
-  color:#687177;
-  font-size:9px;
+.profile-more{
+  color:#555;
 }
 
-/* =========================================================
+/* =========================
    MAIN
-========================================================= */
+========================= */
 
 .main{
-  margin-left:245px;
-  width:calc(100% - 245px);
+  margin-left:var(--sidebar);
   min-height:100vh;
+  transition:.45s var(--ease);
 }
 
 .topbar{
-  height:70px;
-  position:sticky;
-  top:0;
-  z-index:50;
-  background:rgba(7,9,11,.82);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
+  height:82px;
+  border-bottom:1px solid var(--line);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 30px;
+  padding:0 34px;
+  position:sticky;
+  top:0;
+  z-index:80;
+  background:rgba(7,7,7,.75);
+  backdrop-filter:blur(25px);
 }
 
-.page-title{
-  font-size:13px;
-  font-weight:700;
+.page-context{
+  display:flex;
+  align-items:center;
+  gap:11px;
 }
 
-.page-sub{
-  color:var(--muted);
+.context-small{
+  color:#555;
+  font-family:DM Mono,monospace;
   font-size:9px;
-  margin-top:4px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.context-arrow{
+  color:#333;
+}
+
+.context-current{
+  font-size:12px;
+  color:#ddd;
 }
 
 .top-actions{
@@ -280,497 +345,614 @@ a{
   gap:8px;
 }
 
-.top-btn{
-  height:35px;
-  padding:0 12px;
-  border:1px solid var(--border);
+.icon-btn{
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:#0d0d0d;
+  color:#888;
   border-radius:9px;
-  background:#0c0f12;
-  color:#889196;
-  font-size:9px;
+  display:grid;
+  place-items:center;
+  transition:.25s;
 }
 
-.top-btn:hover{
-  border-color:var(--border2);
+.icon-btn:hover{
   color:#fff;
+  border-color:#444;
+  background:#151515;
+  transform:translateY(-1px);
 }
 
-.top-btn.primary{
-  background:var(--green);
-  color:#07100b;
-  border-color:var(--green);
-  font-weight:800;
+.member-pill{
+  height:38px;
+  border:1px solid #292929;
+  border-radius:9px;
+  padding:0 13px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:#0d0d0d;
+  font-size:10px;
+  color:#aaa;
 }
 
-/* =========================================================
+.status-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#aaa;
+  box-shadow:0 0 8px rgba(255,255,255,.4);
+}
+
+/* =========================
    CONTENT
-========================================================= */
+========================= */
 
 .content{
-  padding:28px 30px 70px;
-  max-width:1600px;
+  padding:38px;
+  max-width:1700px;
   margin:auto;
 }
 
-.view{
+.section{
   display:none;
-  animation:fadeIn .35s ease;
+  animation:sectionIn .5s var(--ease);
 }
 
-.view.active{
+.section.active{
   display:block;
 }
 
-@keyframes fadeIn{
+@keyframes sectionIn{
   from{
     opacity:0;
-    transform:translateY(6px);
+    transform:translateY(12px);
   }
   to{
     opacity:1;
-    transform:translateY(0);
+    transform:none;
   }
 }
 
-/* =========================================================
-   GENERAL
-========================================================= */
-
-.section-title{
-  font-size:18px;
-  font-weight:700;
-  letter-spacing:-.03em;
-}
-
-.section-sub{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:5px;
-}
-
-.panel{
-  background:linear-gradient(145deg,#0d1013,#0b0e10);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  overflow:hidden;
-}
-
-.panel-head{
-  min-height:57px;
-  padding:0 18px;
+.hero-row{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  border-bottom:1px solid var(--border);
-}
-
-.panel-head strong{
-  font-size:11px;
-}
-
-.panel-head span{
-  font-size:8px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.1em;
-}
-
-.grid{
-  display:grid;
-}
-
-.green{
-  color:var(--green)!important;
-}
-
-.red{
-  color:var(--red)!important;
-}
-
-.blue{
-  color:var(--blue)!important;
-}
-
-.muted{
-  color:var(--muted);
-}
-
-.mono{
-  font-family:"DM Mono",monospace;
-}
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-.welcome{
-  display:flex;
   align-items:flex-end;
-  justify-content:space-between;
-  margin-bottom:24px;
+  margin-bottom:30px;
 }
 
-.welcome h1{
-  font-size:25px;
-  letter-spacing:-.05em;
-}
-
-.welcome p{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:7px;
-}
-
-.date{
-  color:#555e64;
-  font-family:"DM Mono",monospace;
+.eyebrow{
+  color:#555;
+  font-family:DM Mono,monospace;
   font-size:9px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  margin-bottom:9px;
 }
+
+.title{
+  font-family:Manrope,sans-serif;
+  font-size:31px;
+  font-weight:700;
+  letter-spacing:-.045em;
+}
+
+.subtitle{
+  margin-top:8px;
+  color:#666;
+  font-size:12px;
+}
+
+.primary-btn{
+  background:#f2f2f2;
+  color:#080808;
+  border-radius:9px;
+  height:42px;
+  padding:0 16px;
+  font-size:11px;
+  font-weight:700;
+  transition:.25s;
+  box-shadow:0 0 0 1px rgba(255,255,255,.1);
+}
+
+.primary-btn:hover{
+  background:#fff;
+  transform:translateY(-2px);
+  box-shadow:0 8px 25px rgba(255,255,255,.08);
+}
+
+.secondary-btn{
+  background:#111;
+  color:#bbb;
+  border:1px solid #272727;
+  border-radius:9px;
+  height:42px;
+  padding:0 15px;
+  font-size:11px;
+  transition:.25s;
+}
+
+.secondary-btn:hover{
+  border-color:#444;
+  color:#fff;
+}
+
+/* =========================
+   STAT CARDS
+========================= */
 
 .stats{
+  display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:10px;
   margin-bottom:10px;
 }
 
-.stat-card{
-  padding:17px;
-  min-height:110px;
-  background:#0c0f12;
-  border:1px solid var(--border);
+.stat{
+  min-height:123px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.035),transparent 65%),
+    #0c0c0c;
+  border:1px solid var(--line);
   border-radius:14px;
+  padding:19px;
   position:relative;
   overflow:hidden;
+  transition:.35s var(--ease);
 }
 
-.stat-card:after{
+.stat:after{
   content:"";
   position:absolute;
-  width:100px;
-  height:100px;
-  right:-60px;
-  bottom:-60px;
+  width:130px;
+  height:130px;
+  right:-80px;
+  bottom:-90px;
   border-radius:50%;
-  background:radial-gradient(circle,rgba(120,242,173,.07),transparent 70%);
+  background:#fff;
+  opacity:.025;
+  filter:blur(20px);
+}
+
+.stat:hover{
+  transform:translateY(-3px);
+  border-color:#333;
+  background:#101010;
 }
 
 .stat-label{
-  color:#60696f;
-  font-size:8px;
-  font-weight:700;
+  color:#5c5c5c;
+  font-size:9px;
+  font-family:DM Mono,monospace;
   text-transform:uppercase;
   letter-spacing:.12em;
 }
 
 .stat-value{
-  margin-top:11px;
-  font-size:22px;
-  font-weight:800;
-  letter-spacing:-.05em;
+  font-family:Manrope,sans-serif;
+  font-size:25px;
+  font-weight:600;
+  letter-spacing:-.04em;
+  margin-top:15px;
 }
 
 .stat-change{
-  margin-top:5px;
-  font-size:8px;
-  color:#586167;
+  margin-top:8px;
+  font-family:DM Mono,monospace;
+  font-size:9px;
+  color:#777;
 }
 
-.dashboard-grid{
-  grid-template-columns:1.55fr .75fr;
-  gap:10px;
+.stat-change.positive{
+  color:#cfcfcf;
 }
 
-.chart-panel{
-  min-height:410px;
+.stat-change.negative{
+  color:#777;
 }
 
-.chart-area{
-  height:350px;
-  position:relative;
-  padding:20px;
-}
+/* =========================
+   PANELS
+========================= */
 
-.chart-grid-bg{
-  position:absolute;
-  inset:20px;
-  background:
-    linear-gradient(rgba(255,255,255,.027) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);
-  background-size:100% 20%,10% 100%;
-}
-
-.equity-svg{
-  width:100%;
-  height:100%;
-  position:relative;
-  z-index:2;
-}
-
-.equity-line{
-  fill:none;
-  stroke:var(--green);
-  stroke-width:3;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-dasharray:1200;
-  stroke-dashoffset:1200;
-  animation:chartDraw 2s .3s forwards;
-}
-
-@keyframes chartDraw{
-  to{
-    stroke-dashoffset:0;
-  }
-}
-
-.chart-tooltip{
-  position:absolute;
-  top:30px;
-  right:30px;
-  padding:10px 12px;
-  background:#11171a;
-  border:1px solid var(--border2);
-  border-radius:9px;
-  z-index:4;
-}
-
-.chart-tooltip small{
-  display:block;
-  color:var(--muted);
-  font-size:7px;
-}
-
-.chart-tooltip strong{
-  display:block;
-  margin-top:4px;
-  font-size:13px;
-}
-
-.right-stack{
+.grid-main{
   display:grid;
+  grid-template-columns:minmax(0,1.75fr) minmax(280px,.75fr);
   gap:10px;
+  margin-bottom:10px;
 }
 
-.mini-panel{
-  padding-bottom:8px;
+.panel{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.022),transparent 50%),
+    #0b0b0b;
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
 }
 
-.metric-list{
-  padding:7px 17px;
-}
-
-.metric-row{
-  min-height:49px;
+.panel-head{
+  min-height:60px;
+  padding:0 19px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  border-bottom:1px solid var(--border);
+  border-bottom:1px solid var(--line);
 }
 
-.metric-row:last-child{
-  border:0;
+.panel-title{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:-.01em;
 }
 
-.metric-row span{
-  color:#677077;
+.panel-meta{
+  color:#555;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.panel-body{
+  padding:19px;
+}
+
+/* =========================
+   EQUITY CHART
+========================= */
+
+.chart-panel{
+  min-height:350px;
+}
+
+.chart-header-value{
+  font-family:Manrope,sans-serif;
+  font-size:20px;
+  margin-top:3px;
+}
+
+.chart-header-value span{
+  font-family:DM Mono,monospace;
+  color:#777;
   font-size:9px;
+  margin-left:7px;
 }
 
-.metric-row strong{
+.chart{
+  height:260px;
+  position:relative;
+  margin-top:4px;
+  overflow:hidden;
+}
+
+.chart-grid{
+  position:absolute;
+  inset:10px 0 28px;
+  background:
+    linear-gradient(to bottom,transparent 49.5%,#171717 50%,transparent 50.5%),
+    linear-gradient(to bottom,transparent 24.5%,#141414 25%,transparent 25.5%),
+    linear-gradient(to bottom,transparent 74.5%,#141414 75%,transparent 75.5%);
+}
+
+.chart svg{
+  width:100%;
+  height:100%;
+  position:absolute;
+  inset:0;
+  overflow:visible;
+}
+
+.chart-line{
+  fill:none;
+  stroke:#eee;
+  stroke-width:1.5;
+  vector-effect:non-scaling-stroke;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+  animation:draw 2.3s var(--ease) forwards;
+}
+
+.chart-area{
+  fill:url(#areaGradient);
+  opacity:.8;
+}
+
+.chart-dot{
+  fill:#fff;
+  stroke:#111;
+  stroke-width:3;
+}
+
+@keyframes draw{
+  to{stroke-dashoffset:0}
+}
+
+.chart-labels{
+  position:absolute;
+  bottom:2px;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:space-between;
+  color:#444;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+/* =========================
+   SESSION
+========================= */
+
+.session-list{
+  display:flex;
+  flex-direction:column;
+}
+
+.session{
+  padding:16px 0;
+  border-bottom:1px solid #171717;
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.session:last-child{
+  border-bottom:0;
+}
+
+.session-icon{
+  width:28px;
+  height:28px;
+  border:1px solid #252525;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  font-size:10px;
+  color:#aaa;
+}
+
+.session-info{
+  flex:1;
+}
+
+.session-name{
+  font-size:11px;
+}
+
+.session-time{
+  font-family:DM Mono,monospace;
+  color:#4e4e4e;
+  font-size:8px;
+  margin-top:4px;
+}
+
+.session-state{
+  color:#666;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+.session-state.active{
+  color:#ddd;
+}
+
+.session-state.active:before{
+  content:"";
+  display:inline-block;
+  width:5px;
+  height:5px;
+  background:#ddd;
+  border-radius:50%;
+  margin-right:5px;
+  box-shadow:0 0 9px #aaa;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.table-panel{
+  margin-bottom:10px;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:720px;
+}
+
+th{
+  text-align:left;
+  color:#4f4f4f;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+  font-weight:400;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  padding:13px 18px;
+  border-bottom:1px solid #1a1a1a;
+}
+
+td{
+  padding:15px 18px;
+  border-bottom:1px solid #151515;
+  color:#bbb;
+  font-size:10px;
+}
+
+tbody tr{
+  transition:.2s;
+}
+
+tbody tr:hover{
+  background:#111;
+}
+
+.symbol{
+  color:#eee;
+  font-weight:600;
+}
+
+.direction{
+  display:inline-flex;
+  padding:5px 8px;
+  border-radius:5px;
+  border:1px solid #292929;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+  color:#aaa;
+}
+
+.result{
+  font-family:DM Mono,monospace;
+}
+
+.result.win{
+  color:#ddd;
+}
+
+.result.loss{
+  color:#666;
+}
+
+.tag{
+  display:inline-flex;
+  padding:5px 8px;
+  border:1px solid #242424;
+  border-radius:5px;
+  color:#777;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+/* =========================
+   LOWER GRID
+========================= */
+
+.lower-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.checklist{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  border:1px solid #181818;
+  border-radius:9px;
+  background:#0e0e0e;
+  color:#aaa;
+  font-size:10px;
+}
+
+.check input{
+  appearance:none;
+  width:15px;
+  height:15px;
+  border:1px solid #393939;
+  border-radius:4px;
+  cursor:pointer;
+  position:relative;
+}
+
+.check input:checked{
+  background:#ddd;
+  border-color:#ddd;
+}
+
+.check input:checked:after{
+  content:"✓";
+  color:#000;
+  position:absolute;
+  left:3px;
+  top:0;
   font-size:10px;
 }
 
 .progress{
-  width:70px;
-  height:4px;
-  background:#1b2125;
-  border-radius:99px;
+  height:3px;
+  background:#1a1a1a;
+  border-radius:10px;
   overflow:hidden;
-  margin-left:10px;
+  margin-top:15px;
 }
 
-.progress i{
+.progress span{
   display:block;
+  width:72%;
   height:100%;
-  background:var(--green);
+  background:#bdbdbd;
+  animation:progressIn 1.2s var(--ease);
 }
 
-.calendar{
-  padding:15px 17px 18px;
+@keyframes progressIn{
+  from{width:0}
 }
 
-.week{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:5px;
-}
+/* =========================
+   JOURNAL
+========================= */
 
-.day{
-  aspect-ratio:1;
-  border-radius:5px;
-  background:#11161a;
-  border:1px solid rgba(255,255,255,.025);
-  position:relative;
-}
-
-.day.good{
-  background:rgba(120,242,173,.22);
-}
-
-.day.good2{
-  background:rgba(120,242,173,.1);
-}
-
-.day.bad{
-  background:rgba(255,116,124,.16);
-}
-
-.day.today{
-  outline:1px solid var(--green);
-  outline-offset:2px;
-}
-
-.day-labels{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:5px;
-  margin-bottom:6px;
-}
-
-.day-labels span{
-  text-align:center;
-  color:#4f585e;
-  font-size:7px;
-}
-
-/* =========================================================
-   RECENT TRADES
-========================================================= */
-
-.recent{
-  margin-top:10px;
-}
-
-.trade-table{
-  width:100%;
-}
-
-.table-head,
-.table-row{
-  display:grid;
-  grid-template-columns:1.2fr .8fr .8fr .75fr .7fr .7fr;
-  align-items:center;
-}
-
-.table-head{
-  min-height:40px;
-  padding:0 18px;
-  color:#4f585e;
-  font-size:7px;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  border-bottom:1px solid var(--border);
-}
-
-.table-row{
-  min-height:57px;
-  padding:0 18px;
-  border-bottom:1px solid var(--border);
-  font-size:9px;
-}
-
-.table-row:last-child{
-  border:0;
-}
-
-.market{
-  font-weight:700;
-}
-
-.market small{
-  display:block;
-  color:#596268;
-  font-size:7px;
-  font-weight:400;
-  margin-top:3px;
-}
-
-.badge{
-  display:inline-flex;
-  width:max-content;
-  padding:5px 7px;
-  border:1px solid var(--border);
-  border-radius:6px;
-  color:#899196;
-  font-size:7px;
-}
-
-.result{
-  font-weight:700;
-}
-
-/* =========================================================
-   JOURNAL VIEW
-========================================================= */
-
-.view-header{
-  margin-bottom:24px;
+.toolbar{
   display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
 }
 
-.view-header h1{
-  font-size:25px;
-  letter-spacing:-.05em;
+.search{
+  height:42px;
+  border:1px solid var(--line);
+  background:#0d0d0d;
+  border-radius:9px;
+  padding:0 13px;
+  color:#ddd;
+  outline:none;
+  min-width:220px;
+  transition:.25s;
 }
 
-.view-header p{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:5px;
-}
-
-.filters{
-  display:flex;
-  gap:6px;
+.search:focus{
+  border-color:#444;
+  box-shadow:0 0 0 3px rgba(255,255,255,.025);
 }
 
 .filter{
-  height:34px;
-  padding:0 10px;
-  border:1px solid var(--border);
-  border-radius:8px;
-  background:#0c0f12;
-  color:#687177;
-  font-size:8px;
-}
-
-.filter.active{
-  color:var(--green);
-  border-color:rgba(120,242,173,.16);
-  background:var(--green-bg);
+  height:42px;
+  border:1px solid var(--line);
+  background:#0d0d0d;
+  color:#777;
+  border-radius:9px;
+  padding:0 12px;
+  outline:none;
 }
 
 .journal-layout{
-  grid-template-columns:1.35fr .65fr;
+  display:grid;
+  grid-template-columns:1.7fr .7fr;
   gap:10px;
 }
 
-.form-panel{
-  padding:20px;
-}
-
-.form-title{
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:18px;
-}
-
-.form-grid{
+.journal-form{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:12px;
+  gap:11px;
 }
 
 .field{
@@ -784,286 +966,420 @@ a{
 }
 
 .field label{
-  color:#626b71;
+  color:#555;
+  font-family:DM Mono,monospace;
   font-size:8px;
   text-transform:uppercase;
   letter-spacing:.1em;
-  font-weight:700;
 }
 
 .field input,
 .field select,
 .field textarea{
   width:100%;
-  border:1px solid var(--border);
-  background:#090c0f;
-  color:#dfe5e2;
-  border-radius:9px;
-  padding:0 11px;
+  background:#0a0a0a;
+  border:1px solid #202020;
+  color:#ddd;
+  border-radius:8px;
+  padding:11px;
   outline:none;
-  height:39px;
-  font-size:10px;
+  transition:.2s;
 }
 
 .field textarea{
-  height:100px;
-  padding:11px;
+  min-height:110px;
   resize:vertical;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus{
-  border-color:rgba(120,242,173,.25);
+  border-color:#444;
+  background:#0e0e0e;
 }
 
-.save-btn{
-  margin-top:17px;
-  height:42px;
-  padding:0 17px;
-  border:0;
-  border-radius:9px;
-  background:var(--green);
-  color:#07100b;
-  font-size:9px;
-  font-weight:800;
-}
-
-.review-card{
-  padding:20px;
-}
-
-.review-score{
+.form-actions{
+  grid-column:1/-1;
   display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
+  justify-content:flex-end;
+  gap:8px;
+  padding-top:5px;
 }
 
-.review-score span{
-  color:var(--muted);
-  font-size:8px;
-}
-
-.review-score strong{
-  font-size:45px;
-  letter-spacing:-.08em;
-}
-
-.score{
-  margin-top:12px;
-  height:5px;
-  border-radius:99px;
-  background:#1b2226;
-  overflow:hidden;
-}
-
-.score i{
-  display:block;
-  width:82%;
-  height:100%;
-  background:var(--green);
-}
-
-.tag-list{
-  display:flex;
-  gap:5px;
-  flex-wrap:wrap;
-  margin-top:23px;
-}
-
-.tag{
-  padding:7px 9px;
-  border-radius:7px;
-  border:1px solid var(--border);
-  background:#0c1012;
-  color:#70797e;
-  font-size:8px;
-}
-
-.tag.selected{
-  color:var(--green);
-  border-color:rgba(120,242,173,.15);
-  background:var(--green-bg);
-}
-
-/* =========================================================
-   ANALYTICS VIEW
-========================================================= */
+/* =========================
+   ANALYTICS
+========================= */
 
 .analytics-grid{
   display:grid;
-  grid-template-columns:1.5fr .5fr;
+  grid-template-columns:repeat(4,1fr);
   gap:10px;
+  margin-bottom:10px;
 }
 
-.big-chart{
-  height:430px;
-  padding:25px;
-  position:relative;
+.metric-box{
+  padding:18px;
+  border:1px solid var(--line);
+  background:#0b0b0b;
+  border-radius:14px;
 }
 
-.big-chart-grid{
-  position:absolute;
-  inset:25px;
-  background:
-    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
-  background-size:100% 20%,10% 100%;
+.metric-number{
+  font-family:Manrope,sans-serif;
+  font-size:26px;
+  margin-top:10px;
 }
 
-.big-chart svg{
-  width:100%;
-  height:100%;
-  position:relative;
-  z-index:2;
+.metric-caption{
+  color:#555;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+  margin-top:5px;
 }
 
-.analytics-line{
-  fill:none;
-  stroke:var(--green);
-  stroke-width:3;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-}
-
-.analytics-cards{
+.analytics-layout{
   display:grid;
+  grid-template-columns:1.4fr 1fr;
   gap:10px;
 }
 
-.analytics-card{
-  padding:20px;
-  border:1px solid var(--border);
-  border-radius:15px;
-  background:#0c0f12;
-}
-
-.analytics-card small{
-  color:#5e676d;
-  font-size:8px;
-  text-transform:uppercase;
-  letter-spacing:.1em;
-}
-
-.analytics-card strong{
-  display:block;
-  margin-top:9px;
-  font-size:27px;
-  letter-spacing:-.06em;
-}
-
-.bar-list{
-  margin-top:30px;
-}
-
-.bar-item{
-  margin-bottom:18px;
-}
-
-.bar-top{
+.bars{
+  height:260px;
   display:flex;
-  justify-content:space-between;
-  color:#777f84;
-  font-size:8px;
-  margin-bottom:7px;
+  align-items:flex-end;
+  gap:12px;
+  padding:20px 10px 0;
+  border-bottom:1px solid #222;
 }
 
-.bar-bg{
-  height:5px;
-  background:#1a2024;
-  border-radius:99px;
-  overflow:hidden;
-}
-
-.bar-bg i{
+.bar-wrap{
+  flex:1;
   height:100%;
-  display:block;
-  background:var(--green);
-  border-radius:99px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  position:relative;
 }
 
-/* =========================================================
-   STRATEGIES
-========================================================= */
+.bar{
+  width:70%;
+  background:linear-gradient(to top,#555,#ddd);
+  border-radius:4px 4px 0 0;
+  min-height:4px;
+  animation:barIn .8s var(--ease);
+  transform-origin:bottom;
+}
 
-.strategy-grid{
+.bar-label{
+  position:absolute;
+  bottom:-22px;
+  color:#555;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+@keyframes barIn{
+  from{transform:scaleY(0)}
+}
+
+.donut{
+  width:190px;
+  height:190px;
+  margin:22px auto;
+  border-radius:50%;
+  background:conic-gradient(#ddd 0 64%,#333 64% 100%);
+  position:relative;
+  animation:spinIn 1s var(--ease);
+}
+
+.donut:after{
+  content:"64%";
+  position:absolute;
+  inset:20px;
+  border-radius:50%;
+  background:#0b0b0b;
+  display:grid;
+  place-items:center;
+  font-family:Manrope,sans-serif;
+  font-size:28px;
+  font-weight:600;
+}
+
+@keyframes spinIn{
+  from{transform:rotate(-80deg) scale(.8);opacity:0}
+}
+
+/* =========================
+   CALENDAR
+========================= */
+
+.calendar-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+
+.calendar-title{
+  font-family:Manrope,sans-serif;
+  font-size:18px;
+}
+
+.month-actions{
+  display:flex;
+  gap:5px;
+}
+
+.month-btn{
+  width:32px;
+  height:32px;
+  border:1px solid #222;
+  border-radius:7px;
+  background:#0d0d0d;
+  color:#777;
+}
+
+.weekdays,
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+}
+
+.weekdays div{
+  padding:11px 8px;
+  color:#4c4c4c;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+.day{
+  min-height:95px;
+  border-top:1px solid #191919;
+  border-right:1px solid #191919;
+  padding:9px;
+  position:relative;
+  transition:.2s;
+}
+
+.day:hover{
+  background:#101010;
+}
+
+.day:nth-child(7n){
+  border-right:0;
+}
+
+.day-number{
+  color:#555;
+  font-family:DM Mono,monospace;
+  font-size:9px;
+}
+
+.day-pnl{
+  position:absolute;
+  bottom:9px;
+  left:9px;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+  color:#777;
+}
+
+.day.active-day{
+  box-shadow:inset 0 0 0 1px #343434;
+  background:#111;
+}
+
+.day.positive-day:after,
+.day.negative-day:after{
+  content:"";
+  position:absolute;
+  top:9px;
+  right:9px;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#aaa;
+}
+
+.day.negative-day:after{
+  background:#444;
+}
+
+/* =========================
+   PLAYBOOK
+========================= */
+
+.playbook-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:10px;
 }
 
-.strategy-card{
-  min-height:260px;
+.setup-card{
   padding:20px;
-  background:#0c0f12;
-  border:1px solid var(--border);
-  border-radius:16px;
+  border:1px solid var(--line);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),transparent 60%),
+    #0c0c0c;
+  border-radius:14px;
+  min-height:220px;
   position:relative;
-  transition:.25s;
+  overflow:hidden;
+  transition:.35s var(--ease);
+  cursor:pointer;
 }
 
-.strategy-card:hover{
-  transform:translateY(-3px);
-  border-color:#293239;
+.setup-card:hover{
+  transform:translateY(-5px);
+  border-color:#393939;
 }
 
-.strategy-top{
-  display:flex;
-  justify-content:space-between;
-}
-
-.strategy-number{
-  color:#4e575d;
-  font-family:"DM Mono";
+.setup-number{
+  color:#444;
+  font-family:DM Mono,monospace;
   font-size:9px;
 }
 
-.strategy-status{
-  color:var(--green);
-  font-size:7px;
-  padding:5px 7px;
-  border-radius:6px;
-  background:var(--green-bg);
-}
-
-.strategy-card h3{
-  margin-top:48px;
+.setup-title{
+  margin-top:27px;
+  font-family:Manrope,sans-serif;
   font-size:18px;
-  letter-spacing:-.04em;
 }
 
-.strategy-card p{
-  margin-top:8px;
-  color:#626b70;
-  font-size:9px;
+.setup-desc{
+  margin-top:9px;
+  color:#666;
+  font-size:10px;
   line-height:1.7;
 }
 
-.strategy-stats{
+.setup-tags{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
   position:absolute;
-  bottom:20px;
-  left:20px;
-  right:20px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  border-top:1px solid var(--border);
-  padding-top:15px;
+  bottom:18px;
 }
 
-.strategy-stats span{
-  color:#555f65;
-  font-size:7px;
+.setup-card:after{
+  content:"↗";
+  position:absolute;
+  right:19px;
+  top:18px;
+  color:#555;
+  font-size:15px;
+  transition:.3s;
 }
 
-.strategy-stats strong{
+.setup-card:hover:after{
+  color:#fff;
+  transform:translate(3px,-3px);
+}
+
+/* =========================
+   REPLAY
+========================= */
+
+.replay-container{
+  background:#090909;
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
+}
+
+.replay-top{
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+}
+
+.replay-symbol{
+  font-family:DM Mono,monospace;
+  font-size:10px;
+}
+
+.replay-status{
+  padding:5px 8px;
+  border:1px solid #282828;
+  border-radius:5px;
+  color:#888;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+.market{
+  height:470px;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px),
+    #080808;
+  background-size:48px 48px;
+}
+
+.market svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+.candle{
+  fill:#aaa;
+  opacity:.8;
+}
+
+.wick{
+  stroke:#777;
+  stroke-width:1;
+}
+
+.replay-controls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:13px 18px;
+  border-top:1px solid var(--line);
+}
+
+.play-btn{
+  width:36px;
+  height:36px;
+  border:1px solid #303030;
+  background:#151515;
+  color:#fff;
+  border-radius:8px;
+}
+
+.timeline{
+  flex:1;
+  height:3px;
+  background:#222;
+  border-radius:10px;
+  position:relative;
+  overflow:hidden;
+}
+
+.timeline span{
   display:block;
-  margin-top:5px;
-  font-size:11px;
+  width:48%;
+  height:100%;
+  background:#aaa;
+  transition:.2s;
 }
 
-/* =========================================================
-   PSYCHOLOGY VIEW
-========================================================= */
+.timecode{
+  color:#555;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+/* =========================
+   PSYCHOLOGY
+========================= */
 
 .psych-grid{
   display:grid;
@@ -1071,807 +1387,815 @@ a{
   gap:10px;
 }
 
-.psych-score{
-  padding:28px;
-  min-height:330px;
-}
-
-.score-circle{
-  width:210px;
-  height:210px;
-  border-radius:50%;
-  margin:25px auto;
-  background:conic-gradient(var(--green) 0 82%,#1b2225 82% 100%);
+.mood-grid{
   display:grid;
-  place-items:center;
-  position:relative;
-}
-
-.score-circle:after{
-  content:"";
-  position:absolute;
-  width:170px;
-  height:170px;
-  border-radius:50%;
-  background:#0d1013;
-}
-
-.circle-text{
-  position:relative;
-  z-index:2;
-  text-align:center;
-}
-
-.circle-text strong{
-  display:block;
-  font-size:45px;
-  letter-spacing:-.08em;
-}
-
-.circle-text span{
-  color:#596269;
-  font-size:7px;
-  text-transform:uppercase;
-}
-
-.emotion-grid{
-  padding:20px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-
-.emotion-card{
-  padding:15px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#0b0f11;
-}
-
-.emotion-card span{
-  color:#626b71;
-  font-size:8px;
-}
-
-.emotion-card strong{
-  display:block;
-  margin-top:8px;
-  font-size:17px;
-}
-
-.insight{
-  margin-top:15px;
-  padding:15px;
-  border-radius:10px;
-  border:1px solid rgba(120,242,173,.1);
-  background:rgba(120,242,173,.035);
-  color:#7c8785;
-  font-size:9px;
-  line-height:1.7;
-}
-
-.insight b{
-  color:var(--green);
-}
-
-/* =========================================================
-   CALENDAR
-========================================================= */
-
-.calendar-large{
-  padding:22px;
-}
-
-.calendar-month{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-
-.calendar-month strong{
-  font-size:14px;
-}
-
-.calendar-month span{
-  color:#596269;
-  font-size:9px;
-}
-
-.calendar-grid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:7px;
 }
 
-.calendar-cell{
-  min-height:105px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  background:#0b0e10;
-  padding:9px;
-  position:relative;
-}
-
-.calendar-cell .number{
-  color:#596269;
-  font-size:8px;
-}
-
-.calendar-cell strong{
-  position:absolute;
-  bottom:9px;
-  left:9px;
+.mood{
+  height:50px;
+  border:1px solid #202020;
+  border-radius:8px;
+  background:#0d0d0d;
+  color:#777;
   font-size:10px;
+  transition:.2s;
 }
 
-.calendar-cell.green-cell{
-  background:rgba(120,242,173,.065);
+.mood:hover,
+.mood.selected{
+  color:#fff;
+  background:#171717;
+  border-color:#444;
 }
 
-.calendar-cell.red-cell{
-  background:rgba(255,116,124,.06);
+.slider-row{
+  margin:18px 0;
 }
 
-.calendar-cell.empty{
-  opacity:.2;
+.slider-top{
+  display:flex;
+  justify-content:space-between;
+  color:#777;
+  font-size:10px;
+  margin-bottom:9px;
 }
 
-.calendar-cell.today{
-  border-color:rgba(120,242,173,.35);
+input[type=range]{
+  width:100%;
+  accent-color:#ddd;
 }
 
-/* =========================================================
-   SETTINGS
-========================================================= */
+/* =========================
+   ACADEMY
+========================= */
 
-.settings-grid{
+.course-grid{
   display:grid;
-  grid-template-columns:220px 1fr;
+  grid-template-columns:repeat(3,1fr);
   gap:10px;
 }
 
-.settings-menu{
+.course{
+  border:1px solid var(--line);
+  background:#0b0b0b;
+  border-radius:14px;
+  padding:18px;
+  transition:.3s;
+}
+
+.course:hover{
+  border-color:#363636;
+  transform:translateY(-3px);
+}
+
+.course-top{
+  display:flex;
+  justify-content:space-between;
+}
+
+.course-num{
+  color:#555;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+.course-state{
+  color:#777;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+.course-title{
+  margin-top:35px;
+  font-family:Manrope,sans-serif;
+  font-size:16px;
+}
+
+.course-description{
+  color:#666;
+  font-size:10px;
+  line-height:1.6;
+  margin-top:8px;
+  min-height:50px;
+}
+
+.course-progress{
+  height:3px;
+  background:#1d1d1d;
+  margin-top:17px;
+}
+
+.course-progress span{
+  display:block;
+  height:100%;
+  background:#aaa;
+}
+
+/* =========================
+   COMMUNITY
+========================= */
+
+.community-grid{
+  display:grid;
+  grid-template-columns:1.3fr .7fr;
+  gap:10px;
+}
+
+.post{
+  padding:19px;
+  border-bottom:1px solid #181818;
+  transition:.2s;
+}
+
+.post:hover{
+  background:#101010;
+}
+
+.post:last-child{
+  border-bottom:0;
+}
+
+.post-head{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.post-avatar{
+  width:29px;
+  height:29px;
+  border-radius:50%;
+  border:1px solid #333;
+  display:grid;
+  place-items:center;
+  font-size:8px;
+  color:#bbb;
+}
+
+.post-author{
+  font-size:10px;
+}
+
+.post-time{
+  color:#4f4f4f;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+  margin-left:auto;
+}
+
+.post-body{
+  margin:13px 0 12px 38px;
+  color:#999;
+  font-size:11px;
+  line-height:1.65;
+}
+
+.post-actions{
+  margin-left:38px;
+  display:flex;
+  gap:15px;
+  color:#555;
+  font-family:DM Mono,monospace;
+  font-size:8px;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.settings-grid{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  gap:10px;
+}
+
+.settings-nav{
   padding:8px;
 }
 
 .settings-tab{
   width:100%;
-  height:40px;
-  border:0;
-  background:transparent;
-  color:#687177;
+  padding:11px;
   text-align:left;
-  padding:0 11px;
-  border-radius:8px;
-  font-size:9px;
-}
-
-.settings-tab.active{
-  color:#dfe6e2;
-  background:#151a1e;
-}
-
-.settings-content{
-  padding:25px;
-}
-
-.setting-row{
-  padding:20px 0;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:30px;
-}
-
-.setting-row:last-child{
-  border:0;
-}
-
-.setting-row h4{
+  background:transparent;
+  color:#666;
+  border-radius:7px;
   font-size:10px;
 }
 
-.setting-row p{
-  color:#596269;
-  font-size:8px;
+.settings-tab.active,
+.settings-tab:hover{
+  background:#151515;
+  color:#ddd;
+}
+
+.settings-content{
+  padding:24px;
+}
+
+.setting-row{
+  padding:18px 0;
+  border-bottom:1px solid #181818;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.setting-title{
+  font-size:11px;
+  color:#ccc;
+}
+
+.setting-description{
+  color:#555;
+  font-size:9px;
   margin-top:5px;
 }
 
 .toggle{
-  width:40px;
-  height:22px;
-  border-radius:99px;
-  background:#20272c;
+  width:38px;
+  height:21px;
+  background:#282828;
+  border-radius:20px;
   padding:3px;
+  transition:.2s;
 }
 
-.toggle i{
+.toggle span{
   display:block;
-  width:16px;
-  height:16px;
+  width:15px;
+  height:15px;
   border-radius:50%;
-  background:#687177;
+  background:#777;
+  transition:.2s;
 }
 
 .toggle.on{
-  background:rgba(120,242,173,.2);
+  background:#ddd;
 }
 
-.toggle.on i{
-  background:var(--green);
-  margin-left:18px;
+.toggle.on span{
+  background:#111;
+  transform:translateX(17px);
 }
 
-/* =========================================================
+/* =========================
    MODAL
-========================================================= */
+========================= */
 
-.modal{
+.modal-overlay{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.72);
-  backdrop-filter:blur(8px);
-  z-index:300;
+  backdrop-filter:blur(13px);
+  z-index:500;
   display:none;
   align-items:center;
   justify-content:center;
   padding:20px;
+  opacity:0;
+  transition:.25s;
 }
 
-.modal.show{
+.modal-overlay.open{
   display:flex;
+  opacity:1;
 }
 
-.modal-box{
-  width:min(560px,100%);
-  background:#0d1114;
-  border:1px solid var(--border2);
-  border-radius:18px;
-  box-shadow:0 40px 100px rgba(0,0,0,.6);
-  overflow:hidden;
+.modal{
+  width:min(620px,100%);
+  background:#0c0c0c;
+  border:1px solid #292929;
+  border-radius:17px;
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  transform:translateY(15px) scale(.98);
+  transition:.3s var(--ease);
+}
+
+.modal-overlay.open .modal{
+  transform:none;
 }
 
 .modal-head{
-  height:60px;
+  height:64px;
+  padding:0 20px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 20px;
-  border-bottom:1px solid var(--border);
+  border-bottom:1px solid #202020;
 }
 
-.modal-head strong{
-  font-size:12px;
+.modal-title{
+  font-family:Manrope,sans-serif;
+  font-size:14px;
 }
 
 .close{
-  border:0;
-  background:transparent;
-  color:#657076;
-  font-size:18px;
+  width:30px;
+  height:30px;
+  border-radius:7px;
+  border:1px solid #242424;
+  background:#111;
+  color:#777;
 }
 
 .modal-body{
   padding:20px;
 }
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* =========================
+   TOAST
+========================= */
 
-.mobile-header{
+.toast{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:#ededed;
+  color:#090909;
+  border-radius:9px;
+  padding:12px 16px;
+  font-size:10px;
+  font-weight:600;
+  transform:translateY(80px);
+  opacity:0;
+  z-index:900;
+  transition:.35s var(--ease);
+  box-shadow:0 15px 50px rgba(0,0,0,.4);
+}
+
+.toast.show{
+  transform:none;
+  opacity:1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-menu{
   display:none;
 }
 
 @media(max-width:1100px){
-
   .stats{
     grid-template-columns:repeat(3,1fr);
   }
 
-  .dashboard-grid,
+  .grid-main,
   .journal-layout,
-  .analytics-grid{
+  .analytics-layout,
+  .community-grid{
     grid-template-columns:1fr;
   }
 
-  .strategy-grid{
-    grid-template-columns:1fr 1fr;
+  .playbook-grid,
+  .course-grid{
+    grid-template-columns:repeat(2,1fr);
   }
-
 }
 
 @media(max-width:800px){
-
   .sidebar{
     transform:translateX(-100%);
-    transition:.3s;
+    box-shadow:20px 0 70px rgba(0,0,0,.5);
   }
 
   .sidebar.open{
-    transform:translateX(0);
+    transform:none;
   }
 
   .main{
     margin-left:0;
-    width:100%;
   }
 
-  .mobile-header{
-    display:flex;
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    height:58px;
-    z-index:150;
-    background:rgba(7,9,11,.9);
-    border-bottom:1px solid var(--border);
-    align-items:center;
-    padding:0 15px;
-  }
-
-  .mobile-header button{
-    border:1px solid var(--border);
-    background:#0d1013;
-    color:#fff;
-    border-radius:8px;
-    width:34px;
-    height:34px;
-  }
-
-  .mobile-logo{
-    margin-left:12px;
-    font-size:11px;
-    font-weight:800;
-    letter-spacing:.1em;
+  .mobile-menu{
+    display:grid;
   }
 
   .topbar{
-    margin-top:58px;
-    position:relative;
+    padding:0 16px;
   }
 
   .content{
-    padding:20px 15px 50px;
+    padding:22px 14px;
+  }
+
+  .member-pill{
+    display:none;
+  }
+
+  .context-small{
+    display:none;
   }
 
   .stats{
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,1fr);
   }
 
-  .strategy-grid,
+  .lower-grid,
   .psych-grid,
   .settings-grid{
     grid-template-columns:1fr;
   }
 
-  .table-head,
-  .table-row{
-    grid-template-columns:1.3fr .8fr .8fr .7fr;
-  }
-
-  .table-head span:nth-child(5),
-  .table-head span:nth-child(6),
-  .table-row > span:nth-child(5),
-  .table-row > span:nth-child(6){
-    display:none;
-  }
-
-  .welcome,
-  .view-header{
-    align-items:flex-start;
-    flex-direction:column;
-    gap:15px;
-  }
-
-  .filters{
-    width:100%;
-    overflow:auto;
-  }
-
-  .calendar-cell{
-    min-height:70px;
-  }
-}
-
-@media(max-width:520px){
-
-  .topbar{
-    padding:0 15px;
-  }
-
-  .top-actions .top-btn:not(.primary){
-    display:none;
-  }
-
-  .stats{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .stat-value{
-    font-size:18px;
-  }
-
-  .form-grid{
+  .playbook-grid,
+  .course-grid{
     grid-template-columns:1fr;
   }
 
-  .field.full{
+  .journal-form{
+    grid-template-columns:1fr;
+  }
+
+  .field.full,
+  .form-actions{
     grid-column:auto;
   }
 
-  .strategy-grid{
+  .hero-row{
+    align-items:flex-start;
+    gap:15px;
+    flex-direction:column;
+  }
+
+  .title{
+    font-size:25px;
+  }
+}
+
+@media(max-width:480px){
+  .stats{
     grid-template-columns:1fr;
   }
 
-  .analytics-cards{
-    grid-template-columns:1fr 1fr;
-    display:grid;
+  .top-actions .icon-btn:nth-child(2){
+    display:none;
   }
-
-  .calendar-grid{
-    gap:3px;
-  }
-
-  .calendar-cell{
-    min-height:55px;
-    padding:5px;
-  }
-
-  .calendar-cell strong{
-    left:5px;
-    bottom:5px;
-    font-size:7px;
-  }
-
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-
-<!-- ======================================================
-     MOBILE HEADER
-====================================================== -->
-
-<div class="mobile-header">
-  <button id="menuBtn">☰</button>
-  <div class="mobile-logo">NEXT CANDLE</div>
-</div>
-
-<!-- ======================================================
+<!-- =========================================================
      SIDEBAR
-====================================================== -->
+========================================================= -->
 
 <aside class="sidebar" id="sidebar">
 
-  <div class="brand">
-    <div class="brand-icon">N</div>
+  <div class="logo">
+    <div class="logo-mark"></div>
     <div>
-      <div class="brand-name">NEXT CANDLE</div>
-      <span class="brand-version">TRADING TERMINAL</span>
+      <div class="logo-text">NEXT CANDLE</div>
+      <div class="logo-sub">MEMBER TERMINAL</div>
     </div>
   </div>
 
-  <div class="nav-section">Workspace</div>
+  <div class="nav-wrap">
 
-  <div class="nav">
+    <div class="nav-label">Workspace</div>
 
-    <button class="nav-btn active" data-view="dashboard">
-      <span class="nav-icon">⌂</span>
-      Dashboard
-    </button>
+    <nav class="nav">
 
-    <button class="nav-btn" data-view="journal">
-      <span class="nav-icon">＋</span>
-      New Trade
-    </button>
+      <button class="nav-btn active" data-section="overview">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-name">Overview</span>
+        <span class="nav-shortcut">01</span>
+      </button>
 
-    <button class="nav-btn" data-view="trades">
-      <span class="nav-icon">▤</span>
-      Trade History
-    </button>
+      <button class="nav-btn" data-section="journal">
+        <span class="nav-icon">◫</span>
+        <span class="nav-name">Trading Journal</span>
+        <span class="nav-shortcut">02</span>
+      </button>
 
-    <button class="nav-btn" data-view="analytics">
-      <span class="nav-icon">◒</span>
-      Analytics
-    </button>
+      <button class="nav-btn" data-section="analytics">
+        <span class="nav-icon">◒</span>
+        <span class="nav-name">Analytics</span>
+        <span class="nav-shortcut">03</span>
+      </button>
 
-    <button class="nav-btn" data-view="strategies">
-      <span class="nav-icon">◎</span>
-      Strategies
-    </button>
+      <button class="nav-btn" data-section="calendar">
+        <span class="nav-icon">▦</span>
+        <span class="nav-name">Calendar</span>
+        <span class="nav-shortcut">04</span>
+      </button>
 
-  </div>
+    </nav>
 
-  <div class="nav-section">Review</div>
+    <div class="nav-label">Edge</div>
 
-  <div class="nav">
+    <nav class="nav">
 
-    <button class="nav-btn" data-view="psychology">
-      <span class="nav-icon">◌</span>
-      Psychology
-    </button>
+      <button class="nav-btn" data-section="playbook">
+        <span class="nav-icon">◈</span>
+        <span class="nav-name">Playbook</span>
+      </button>
 
-    <button class="nav-btn" data-view="calendar">
-      <span class="nav-icon">▦</span>
-      Calendar
-    </button>
+      <button class="nav-btn" data-section="replay">
+        <span class="nav-icon">▷</span>
+        <span class="nav-name">Replay Lab</span>
+      </button>
 
-  </div>
+      <button class="nav-btn" data-section="psychology">
+        <span class="nav-icon">◎</span>
+        <span class="nav-name">Psychology</span>
+      </button>
 
-  <div class="nav-section">System</div>
+    </nav>
 
-  <div class="nav">
+    <div class="nav-label">Learn</div>
 
-    <button class="nav-btn" data-view="settings">
-      <span class="nav-icon">⚙</span>
-      Settings
-    </button>
+    <nav class="nav">
+
+      <button class="nav-btn" data-section="academy">
+        <span class="nav-icon">◇</span>
+        <span class="nav-name">Academy</span>
+      </button>
+
+      <button class="nav-btn" data-section="community">
+        <span class="nav-icon">⌁</span>
+        <span class="nav-name">Community</span>
+      </button>
+
+    </nav>
 
   </div>
 
   <div class="sidebar-bottom">
 
-    <div class="account">
+    <div class="profile">
+      <div class="avatar">M</div>
 
-      <div class="account-top">
-        <div class="avatar">M</div>
-
-        <div>
-          <div class="account-name">Member Account</div>
-          <div class="account-status">● ACTIVE ACCESS</div>
-        </div>
+      <div class="profile-info">
+        <div class="profile-name">Member Account</div>
+        <div class="profile-role">FULL ACCESS</div>
       </div>
 
-      <button class="logout">
-        ACCOUNT SETTINGS
-      </button>
-
+      <div class="profile-more">•••</div>
     </div>
 
   </div>
 
 </aside>
 
-<!-- ======================================================
+
+<!-- =========================================================
      MAIN
-====================================================== -->
+========================================================= -->
 
 <main class="main">
 
-<header class="topbar">
+  <header class="topbar">
 
-  <div>
-    <div class="page-title" id="pageTitle">
-      Dashboard
+    <div class="page-context">
+      <button class="icon-btn mobile-menu" id="mobileMenu">☰</button>
+
+      <span class="context-small">NEXT CANDLE</span>
+      <span class="context-arrow">/</span>
+      <span class="context-current" id="currentPage">
+        Overview
+      </span>
     </div>
 
-    <div class="page-sub" id="pageSub">
-      Your trading performance at a glance
-    </div>
-  </div>
+    <div class="top-actions">
 
-  <div class="top-actions">
+      <button class="icon-btn" id="searchBtn" title="Search">
+        ⌕
+      </button>
 
-    <button class="top-btn">
-      30 DAYS
-    </button>
+      <button class="icon-btn" id="notifyBtn" title="Notifications">
+        ♢
+      </button>
 
-    <button class="top-btn">
-      EXPORT
-    </button>
-
-    <button class="top-btn primary" id="quickTrade">
-      + LOG TRADE
-    </button>
-
-  </div>
-
-</header>
-
-<div class="content">
-
-<!-- ======================================================
-     DASHBOARD
-====================================================== -->
-
-<section class="view active" id="dashboard">
-
-  <div class="welcome">
-
-    <div>
-      <h1>Good evening.</h1>
-      <p>
-        Here's what your trading process looks like right now.
-      </p>
-    </div>
-
-    <div class="date">
-      29 SEP 2026 · 21:42
-    </div>
-
-  </div>
-
-  <div class="grid stats">
-
-    <div class="stat-card">
-      <div class="stat-label">Net P&L</div>
-      <div class="stat-value green">+$4,286</div>
-      <div class="stat-change green">↑ 18.42% this period</div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-label">Win Rate</div>
-      <div class="stat-value">76.4%</div>
-      <div class="stat-change">↑ 4.8% vs previous period</div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-label">Profit Factor</div>
-      <div class="stat-value">2.31</div>
-      <div class="stat-change">89 trades recorded</div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-label">Average R</div>
-      <div class="stat-value green">+1.42R</div>
-      <div class="stat-change">+0.31R vs previous</div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-label">Discipline</div>
-      <div class="stat-value">82/100</div>
-      <div class="stat-change green">↑ 7 points</div>
-    </div>
-
-  </div>
-
-  <div class="grid dashboard-grid">
-
-    <div class="panel chart-panel">
-
-      <div class="panel-head">
-        <strong>Equity Curve</strong>
-
-        <span>
-          NET PERFORMANCE · 30 DAYS
-        </span>
-      </div>
-
-      <div class="chart-area">
-
-        <div class="chart-grid-bg"></div>
-
-        <div class="chart-tooltip">
-          <small>CURRENT EQUITY</small>
-          <strong class="green">$29,286</strong>
-        </div>
-
-        <svg class="equity-svg"
-             viewBox="0 0 900 300"
-             preserveAspectRatio="none">
-
-          <defs>
-            <linearGradient id="equityFill"
-              x1="0"
-              x2="0"
-              y1="0"
-              y2="1">
-
-              <stop
-                offset="0%"
-                stop-color="#78f2ad"
-                stop-opacity=".16"/>
-
-              <stop
-                offset="100%"
-                stop-color="#78f2ad"
-                stop-opacity="0"/>
-
-            </linearGradient>
-          </defs>
-
-          <path
-            d="M0 270
-               L45 260
-               L90 266
-               L135 235
-               L180 242
-               L225 210
-               L270 218
-               L315 180
-               L360 191
-               L405 150
-               L450 160
-               L495 125
-               L540 139
-               L585 98
-               L630 112
-               L675 75
-               L720 87
-               L765 48
-               L810 61
-               L855 29
-               L900 15
-               L900 300
-               L0 300 Z"
-            fill="url(#equityFill)"/>
-
-          <path
-            class="equity-line"
-            d="M0 270
-               L45 260
-               L90 266
-               L135 235
-               L180 242
-               L225 210
-               L270 218
-               L315 180
-               L360 191
-               L405 150
-               L450 160
-               L495 125
-               L540 139
-               L585 98
-               L630 112
-               L675 75
-               L720 87
-               L765 48
-               L810 61
-               L855 29
-               L900 15"/>
-
-        </svg>
-
+      <div class="member-pill">
+        <span class="status-dot"></span>
+        MEMBER ACCESS
       </div>
 
     </div>
 
-    <div class="right-stack">
+  </header>
 
-      <div class="panel mini-panel">
 
-        <div class="panel-head">
-          <strong>Performance Metrics</strong>
-          <span>LIVE</span>
+  <div class="content">
+
+    <!-- =====================================================
+         OVERVIEW
+    ====================================================== -->
+
+    <section class="section active" id="overview">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Member workspace / 01</div>
+          <h1 class="title">Trading cockpit.</h1>
+          <p class="subtitle">
+            Everything you need to review, execute and improve your process.
+          </p>
         </div>
 
-        <div class="metric-list">
+        <button class="primary-btn" id="newTradeBtn">
+          + New trade
+        </button>
 
-          <div class="metric-row">
-            <span>Expectancy</span>
-            <strong class="green">+0.91R</strong>
-          </div>
+      </div>
 
-          <div class="metric-row">
-            <span>Max Drawdown</span>
-            <strong>4.8%</strong>
-          </div>
 
-          <div class="metric-row">
-            <span>Avg Win</span>
-            <strong class="green">+1.91R</strong>
-          </div>
+      <div class="stats">
 
-          <div class="metric-row">
-            <span>Avg Loss</span>
-            <strong class="red">-1.00R</strong>
-          </div>
+        <div class="stat">
+          <div class="stat-label">Net P&L</div>
+          <div class="stat-value" data-count="2840">€0</div>
+          <div class="stat-change positive">+12.8% this month</div>
+        </div>
 
-          <div class="metric-row">
-            <span>Rule Adherence</span>
+        <div class="stat">
+          <div class="stat-label">Win rate</div>
+          <div class="stat-value" data-count="76">0%</div>
+          <div class="stat-change">89 recorded trades</div>
+        </div>
 
-            <div style="display:flex;align-items:center">
-              <strong>82%</strong>
-              <div class="progress">
-                <i style="width:82%"></i>
+        <div class="stat">
+          <div class="stat-label">Profit factor</div>
+          <div class="stat-value">2.41</div>
+          <div class="stat-change positive">+0.18 vs last month</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Average R</div>
+          <div class="stat-value">+1.72R</div>
+          <div class="stat-change positive">execution average</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-label">Rule adherence</div>
+          <div class="stat-value">91%</div>
+          <div class="stat-change positive">+6% improvement</div>
+        </div>
+
+      </div>
+
+
+      <div class="grid-main">
+
+        <div class="panel chart-panel">
+
+          <div class="panel-head">
+
+            <div>
+              <div class="panel-title">Equity curve</div>
+              <div class="chart-header-value">
+                €2,840
+                <span>+12.8%</span>
               </div>
+            </div>
+
+            <div class="panel-meta">
+              LAST 30 DAYS
+            </div>
+
+          </div>
+
+          <div class="panel-body">
+
+            <div class="chart">
+
+              <div class="chart-grid"></div>
+
+              <svg viewBox="0 0 900 250" preserveAspectRatio="none">
+
+                <defs>
+
+                  <linearGradient id="areaGradient"
+                                  x1="0"
+                                  y1="0"
+                                  x2="0"
+                                  y2="1">
+
+                    <stop offset="0%"
+                          stop-color="white"
+                          stop-opacity=".12"/>
+
+                    <stop offset="100%"
+                          stop-color="white"
+                          stop-opacity="0"/>
+
+                  </linearGradient>
+
+                </defs>
+
+                <path
+                  class="chart-area"
+                  d="M0 218
+                     C50 210,80 220,120 198
+                     S180 190,220 181
+                     S280 192,320 155
+                     S370 166,410 139
+                     S465 148,500 118
+                     S550 130,590 96
+                     S640 112,675 79
+                     S725 92,760 61
+                     S820 73,900 30
+                     L900 250 L0 250 Z"/>
+
+                <path
+                  class="chart-line"
+                  d="M0 218
+                     C50 210,80 220,120 198
+                     S180 190,220 181
+                     S280 192,320 155
+                     S370 166,410 139
+                     S465 148,500 118
+                     S550 130,590 96
+                     S640 112,675 79
+                     S725 92,760 61
+                     S820 73,900 30"/>
+
+                <circle
+                  class="chart-dot"
+                  cx="900"
+                  cy="30"
+                  r="4"/>
+
+              </svg>
+
+              <div class="chart-labels">
+                <span>SEP 01</span>
+                <span>SEP 08</span>
+                <span>SEP 15</span>
+                <span>SEP 22</span>
+                <span>SEP 29</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Market sessions</div>
+            <div class="panel-meta">LOCAL TIME</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="session-list">
+
+              <div class="session">
+
+                <div class="session-icon">A</div>
+
+                <div class="session-info">
+                  <div class="session-name">Asia</div>
+                  <div class="session-time">00:00 — 06:00</div>
+                </div>
+
+                <div class="session-state">
+                  CLOSED
+                </div>
+
+              </div>
+
+              <div class="session">
+
+                <div class="session-icon">L</div>
+
+                <div class="session-info">
+                  <div class="session-name">London</div>
+                  <div class="session-time">08:00 — 11:00</div>
+                </div>
+
+                <div class="session-state active">
+                  ACTIVE
+                </div>
+
+              </div>
+
+              <div class="session">
+
+                <div class="session-icon">N</div>
+
+                <div class="session-info">
+                  <div class="session-name">New York</div>
+                  <div class="session-time">14:30 — 17:00</div>
+                </div>
+
+                <div class="session-state">
+                  UPCOMING
+                </div>
+
+              </div>
+
             </div>
 
           </div>
@@ -1880,1161 +2204,1494 @@ a{
 
       </div>
 
-      <div class="panel mini-panel">
+
+      <div class="panel table-panel">
 
         <div class="panel-head">
-          <strong>Trading Consistency</strong>
-          <span>30 DAYS</span>
-        </div>
 
-        <div class="calendar">
-
-          <div class="day-labels">
-            <span>M</span>
-            <span>T</span>
-            <span>W</span>
-            <span>T</span>
-            <span>F</span>
-            <span>S</span>
-            <span>S</span>
+          <div class="panel-title">
+            Recent executions
           </div>
 
-          <div class="week">
-            <div class="day good"></div>
-            <div class="day good2"></div>
-            <div class="day good"></div>
-            <div class="day"></div>
-            <div class="day bad"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-
-            <div class="day good"></div>
-            <div class="day good"></div>
-            <div class="day good2"></div>
-            <div class="day"></div>
-            <div class="day good"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-
-            <div class="day good2"></div>
-            <div class="day good"></div>
-            <div class="day good"></div>
-            <div class="day bad"></div>
-            <div class="day good"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-
-            <div class="day good"></div>
-            <div class="day today good"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-            <div class="day"></div>
-          </div>
+          <button class="secondary-btn" onclick="showSection('journal')">
+            View journal
+          </button>
 
         </div>
 
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Instrument</th>
+                <th>Direction</th>
+                <th>Session</th>
+                <th>Setup</th>
+                <th>Risk</th>
+                <th>Result</th>
+                <th>Date</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td class="symbol">XAUUSD</td>
+                <td><span class="direction">LONG</span></td>
+                <td>London</td>
+                <td><span class="tag">Liquidity</span></td>
+                <td>0.50%</td>
+                <td class="result win">+2.4R</td>
+                <td>Sep 29</td>
+              </tr>
+
+              <tr>
+                <td class="symbol">NAS100</td>
+                <td><span class="direction">SHORT</span></td>
+                <td>New York</td>
+                <td><span class="tag">FVG</span></td>
+                <td>0.50%</td>
+                <td class="result loss">-1.0R</td>
+                <td>Sep 28</td>
+              </tr>
+
+              <tr>
+                <td class="symbol">XAUUSD</td>
+                <td><span class="direction">LONG</span></td>
+                <td>London</td>
+                <td><span class="tag">Sweep</span></td>
+                <td>0.50%</td>
+                <td class="result win">+3.1R</td>
+                <td>Sep 27</td>
+              </tr>
+
+              <tr>
+                <td class="symbol">US100</td>
+                <td><span class="direction">SHORT</span></td>
+                <td>New York</td>
+                <td><span class="tag">Breakout</span></td>
+                <td>0.25%</td>
+                <td class="result win">+1.6R</td>
+                <td>Sep 26</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
       </div>
 
-    </div>
+
+      <div class="lower-grid">
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Pre-session checklist</div>
+            <div class="panel-meta">TODAY</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="checklist">
+
+              <label class="check">
+                <input type="checkbox" checked>
+                <span>Mark previous day liquidity</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" checked>
+                <span>Define session levels</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox" checked>
+                <span>Check high-impact news</span>
+              </label>
+
+              <label class="check">
+                <input type="checkbox">
+                <span>Wait for confirmation</span>
+              </label>
+
+            </div>
+
+            <div class="progress">
+              <span></span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Review queue</div>
+            <div class="panel-meta">2 ITEMS</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="checklist">
+
+              <div class="check">
+                <span>01</span>
+                <span style="flex:1">Review Sep 27 execution</span>
+                <span style="color:#555">→</span>
+              </div>
+
+              <div class="check">
+                <span>02</span>
+                <span style="flex:1">Update London playbook</span>
+                <span style="color:#555">→</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         JOURNAL
+    ====================================================== -->
+
+    <section class="section" id="journal">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Workspace / 02</div>
+          <h1 class="title">Trading journal.</h1>
+          <p class="subtitle">
+            Record the trade. Study the process. Build the edge.
+          </p>
+        </div>
+
+        <button class="primary-btn" id="addTradeTop">
+          + Record execution
+        </button>
+
+      </div>
+
+
+      <div class="toolbar">
+
+        <input
+          class="search"
+          id="tradeSearch"
+          placeholder="Search instrument, setup or session…">
+
+        <select class="filter" id="directionFilter">
+          <option value="all">All directions</option>
+          <option value="LONG">Long</option>
+          <option value="SHORT">Short</option>
+        </select>
+
+        <select class="filter">
+          <option>All sessions</option>
+          <option>London</option>
+          <option>New York</option>
+          <option>Asia</option>
+        </select>
+
+      </div>
+
+
+      <div class="journal-layout">
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Trade database</div>
+            <div class="panel-meta">LOCAL DATA</div>
+          </div>
+
+          <div class="table-wrap">
+
+            <table id="journalTable">
+
+              <thead>
+                <tr>
+                  <th>Asset</th>
+                  <th>Direction</th>
+                  <th>Session</th>
+                  <th>Setup</th>
+                  <th>R</th>
+                  <th>Emotion</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+
+              <tbody id="journalBody">
+
+                <tr data-search="xauusd long london liquidity calm">
+                  <td class="symbol">XAUUSD</td>
+                  <td><span class="direction">LONG</span></td>
+                  <td>London</td>
+                  <td>Liquidity Sweep</td>
+                  <td class="result win">+2.4R</td>
+                  <td>Calm</td>
+                  <td>29/09</td>
+                </tr>
+
+                <tr data-search="nas100 short new york fvg impatient">
+                  <td class="symbol">NAS100</td>
+                  <td><span class="direction">SHORT</span></td>
+                  <td>New York</td>
+                  <td>FVG</td>
+                  <td class="result loss">-1.0R</td>
+                  <td>Impatient</td>
+                  <td>28/09</td>
+                </tr>
+
+                <tr data-search="xauusd long london sweep focused">
+                  <td class="symbol">XAUUSD</td>
+                  <td><span class="direction">LONG</span></td>
+                  <td>London</td>
+                  <td>Sweep</td>
+                  <td class="result win">+3.1R</td>
+                  <td>Focused</td>
+                  <td>27/09</td>
+                </tr>
+
+                <tr data-search="us100 short new york breakout neutral">
+                  <td class="symbol">US100</td>
+                  <td><span class="direction">SHORT</span></td>
+                  <td>New York</td>
+                  <td>Breakout</td>
+                  <td class="result win">+1.6R</td>
+                  <td>Neutral</td>
+                  <td>26/09</td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Journal quality</div>
+            <div class="panel-meta">LAST 30 DAYS</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="metric-number">91%</div>
+
+            <div class="metric-caption">
+              COMPLETION RATE
+            </div>
+
+            <div class="progress">
+              <span style="width:91%"></span>
+            </div>
+
+            <div style="height:25px"></div>
+
+            <div class="checklist">
+
+              <div class="check">
+                <span style="flex:1">Pre-trade plan</span>
+                <span>94%</span>
+              </div>
+
+              <div class="check">
+                <span style="flex:1">Entry reason</span>
+                <span>97%</span>
+              </div>
+
+              <div class="check">
+                <span style="flex:1">Screenshot</span>
+                <span>82%</span>
+              </div>
+
+              <div class="check">
+                <span style="flex:1">Post-trade review</span>
+                <span>88%</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ANALYTICS
+    ====================================================== -->
+
+    <section class="section" id="analytics">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Edge / 03</div>
+          <h1 class="title">Analytics.</h1>
+          <p class="subtitle">
+            Find what actually works in your own data.
+          </p>
+        </div>
+
+        <select class="filter">
+          <option>Last 30 days</option>
+          <option>Last 90 days</option>
+          <option>All time</option>
+        </select>
+
+      </div>
+
+
+      <div class="analytics-grid">
+
+        <div class="metric-box">
+          <div class="stat-label">Expectancy</div>
+          <div class="metric-number">+0.82R</div>
+          <div class="metric-caption">PER TRADE</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="stat-label">Max drawdown</div>
+          <div class="metric-number">-4.8R</div>
+          <div class="metric-caption">PEAK TO VALLEY</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="stat-label">Best session</div>
+          <div class="metric-number">London</div>
+          <div class="metric-caption">BY EXPECTANCY</div>
+        </div>
+
+        <div class="metric-box">
+          <div class="stat-label">Best setup</div>
+          <div class="metric-number">Sweep</div>
+          <div class="metric-caption">BY SAMPLE SIZE</div>
+        </div>
+
+      </div>
+
+
+      <div class="analytics-layout">
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Performance by session</div>
+            <div class="panel-meta">AVERAGE R</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="bars">
+
+              <div class="bar-wrap">
+                <div class="bar" style="height:82%"></div>
+                <div class="bar-label">LON</div>
+              </div>
+
+              <div class="bar-wrap">
+                <div class="bar" style="height:57%"></div>
+                <div class="bar-label">NY</div>
+              </div>
+
+              <div class="bar-wrap">
+                <div class="bar" style="height:32%"></div>
+                <div class="bar-label">ASIA</div>
+              </div>
+
+              <div class="bar-wrap">
+                <div class="bar" style="height:67%"></div>
+                <div class="bar-label">OPEN</div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Win / loss distribution</div>
+            <div class="panel-meta">89 TRADES</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="donut"></div>
+
+            <div style="
+              display:flex;
+              justify-content:center;
+              gap:25px;
+              font-family:DM Mono,monospace;
+              font-size:8px;
+              color:#666;
+            ">
+              <span>● WINS 76%</span>
+              <span style="color:#333">● LOSSES 24%</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CALENDAR
+    ====================================================== -->
+
+    <section class="section" id="calendar">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Workspace / 04</div>
+          <h1 class="title">Trading calendar.</h1>
+          <p class="subtitle">
+            See your process across time, not isolated trades.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="panel">
+
+        <div class="panel-body">
+
+          <div class="calendar-head">
+
+            <div class="calendar-title">
+              September 2026
+            </div>
+
+            <div class="month-actions">
+              <button class="month-btn">←</button>
+              <button class="month-btn">→</button>
+            </div>
+
+          </div>
+
+          <div class="weekdays">
+            <div>MON</div>
+            <div>TUE</div>
+            <div>WED</div>
+            <div>THU</div>
+            <div>FRI</div>
+            <div>SAT</div>
+            <div>SUN</div>
+          </div>
+
+          <div class="calendar-grid">
+
+            <div class="day"><div class="day-number">1</div></div>
+            <div class="day"><div class="day-number">2</div></div>
+            <div class="day"><div class="day-number">3</div></div>
+            <div class="day"><div class="day-number">4</div></div>
+            <div class="day"><div class="day-number">5</div></div>
+            <div class="day"><div class="day-number">6</div></div>
+            <div class="day"><div class="day-number">7</div></div>
+
+            <div class="day"><div class="day-number">8</div></div>
+            <div class="day"><div class="day-number">9</div></div>
+            <div class="day"><div class="day-number">10</div></div>
+            <div class="day"><div class="day-number">11</div></div>
+            <div class="day"><div class="day-number">12</div></div>
+            <div class="day"><div class="day-number">13</div></div>
+            <div class="day"><div class="day-number">14</div></div>
+
+            <div class="day"><div class="day-number">15</div></div>
+            <div class="day"><div class="day-number">16</div></div>
+            <div class="day"><div class="day-number">17</div></div>
+            <div class="day"><div class="day-number">18</div></div>
+            <div class="day"><div class="day-number">19</div></div>
+            <div class="day"><div class="day-number">20</div></div>
+            <div class="day"><div class="day-number">21</div></div>
+
+            <div class="day"><div class="day-number">22</div></div>
+
+            <div class="day positive-day">
+              <div class="day-number">23</div>
+              <div class="day-pnl">+1.8R</div>
+            </div>
+
+            <div class="day positive-day">
+              <div class="day-number">24</div>
+              <div class="day-pnl">+2.4R</div>
+            </div>
+
+            <div class="day negative-day">
+              <div class="day-number">25</div>
+              <div class="day-pnl">-1.0R</div>
+            </div>
+
+            <div class="day positive-day">
+              <div class="day-number">26</div>
+              <div class="day-pnl">+1.6R</div>
+            </div>
+
+            <div class="day positive-day">
+              <div class="day-number">27</div>
+              <div class="day-pnl">+3.1R</div>
+            </div>
+
+            <div class="day negative-day">
+              <div class="day-number">28</div>
+              <div class="day-pnl">-1.0R</div>
+            </div>
+
+            <div class="day active-day positive-day">
+              <div class="day-number">29</div>
+              <div class="day-pnl">+2.4R</div>
+            </div>
+
+            <div class="day"><div class="day-number">30</div></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PLAYBOOK
+    ====================================================== -->
+
+    <section class="section" id="playbook">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Edge / Playbook</div>
+          <h1 class="title">Your playbook.</h1>
+          <p class="subtitle">
+            Turn repeatable market behaviour into documented setups.
+          </p>
+        </div>
+
+        <button class="primary-btn" id="newSetupBtn">
+          + New setup
+        </button>
+
+      </div>
+
+
+      <div class="playbook-grid">
+
+        <div class="setup-card" onclick="openSetup('Liquidity Sweep')">
+
+          <div class="setup-number">SETUP 01</div>
+
+          <div class="setup-title">
+            Liquidity Sweep
+          </div>
+
+          <div class="setup-desc">
+            A structured framework for studying liquidity events,
+            confirmation and execution timing.
+          </div>
+
+          <div class="setup-tags">
+            <span class="tag">LIQUIDITY</span>
+            <span class="tag">SESSION</span>
+          </div>
+
+        </div>
+
+
+        <div class="setup-card" onclick="openSetup('FVG / IFVG')">
+
+          <div class="setup-number">SETUP 02</div>
+
+          <div class="setup-title">
+            FVG / IFVG
+          </div>
+
+          <div class="setup-desc">
+            Track imbalance-based entries and compare execution quality
+            across market conditions.
+          </div>
+
+          <div class="setup-tags">
+            <span class="tag">IMBALANCE</span>
+            <span class="tag">ENTRY</span>
+          </div>
+
+        </div>
+
+
+        <div class="setup-card" onclick="openSetup('Order Block')">
+
+          <div class="setup-number">SETUP 03</div>
+
+          <div class="setup-title">
+            Order Block
+          </div>
+
+          <div class="setup-desc">
+            Document location, confirmation and invalidation instead of
+            treating every zone equally.
+          </div>
+
+          <div class="setup-tags">
+            <span class="tag">STRUCTURE</span>
+            <span class="tag">ZONE</span>
+          </div>
+
+        </div>
+
+
+        <div class="setup-card" onclick="openSetup('Session Breakout')">
+
+          <div class="setup-number">SETUP 04</div>
+
+          <div class="setup-title">
+            Session Breakout
+          </div>
+
+          <div class="setup-desc">
+            Study expansion from defined session ranges and compare
+            continuation versus failed-break behaviour.
+          </div>
+
+          <div class="setup-tags">
+            <span class="tag">BREAKOUT</span>
+            <span class="tag">SESSION</span>
+          </div>
+
+        </div>
+
+
+        <div class="setup-card">
+
+          <div class="setup-number">SETUP 05</div>
+
+          <div class="setup-title">
+            Custom Setup
+          </div>
+
+          <div class="setup-desc">
+            Build your own framework and let the journal collect the data
+            behind it.
+          </div>
+
+          <div class="setup-tags">
+            <span class="tag">CUSTOM</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         REPLAY
+    ====================================================== -->
+
+    <section class="section" id="replay">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Edge / Replay Lab</div>
+          <h1 class="title">Replay Lab.</h1>
+          <p class="subtitle">
+            Reconstruct the market without knowing what happens next.
+          </p>
+        </div>
+
+        <div class="replay-status">
+          REPLAY MODE
+        </div>
+
+      </div>
+
+
+      <div class="replay-container">
+
+        <div class="replay-top">
+
+          <div class="replay-symbol">
+            XAUUSD · 5 MIN
+          </div>
+
+          <div style="
+            color:#555;
+            font-family:DM Mono,monospace;
+            font-size:8px;
+          ">
+            SEP 29 · 08:47
+          </div>
+
+        </div>
+
+
+        <div class="market">
+
+          <svg viewBox="0 0 1200 470" preserveAspectRatio="none">
+
+            <polyline
+              points="
+              0,330
+              40,310
+              80,325
+              120,290
+              160,305
+              200,260
+              240,275
+              280,240
+              320,250
+              360,220
+              400,235
+              440,180
+              480,205
+              520,160
+              560,175
+              600,125
+              640,150
+              680,110
+              720,140
+              760,90
+              800,105
+              840,70
+              880,100
+              920,80
+              960,125
+              1000,110
+              1040,145
+              1080,115
+              1120,130
+              1160,85
+              1200,65"
+              fill="none"
+              stroke="#aaa"
+              stroke-width="2"/>
+
+            <line x1="0" y1="160" x2="1200" y2="160"
+                  stroke="#333"
+                  stroke-dasharray="6 8"/>
+
+            <line x1="0" y1="280" x2="1200" y2="280"
+                  stroke="#222"
+                  stroke-dasharray="6 8"/>
+
+          </svg>
+
+          <div style="
+            position:absolute;
+            top:20px;
+            left:20px;
+            padding:7px 9px;
+            border:1px solid #292929;
+            background:#0d0d0dcc;
+            font-family:DM Mono,monospace;
+            font-size:8px;
+            color:#777;
+          ">
+            ASIA HIGH
+          </div>
+
+          <div style="
+            position:absolute;
+            top:122px;
+            left:20px;
+            padding:7px 9px;
+            border:1px solid #292929;
+            background:#0d0d0dcc;
+            font-family:DM Mono,monospace;
+            font-size:8px;
+            color:#777;
+          ">
+            PDH
+          </div>
+
+        </div>
+
+
+        <div class="replay-controls">
+
+          <button class="play-btn" id="playReplay">▶</button>
+
+          <button class="icon-btn" style="width:36px;height:36px">
+            ‹
+          </button>
+
+          <div class="timeline">
+            <span id="timelineFill"></span>
+          </div>
+
+          <button class="icon-btn" style="width:36px;height:36px">
+            ›
+          </button>
+
+          <div class="timecode" id="timecode">
+            48%
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PSYCHOLOGY
+    ====================================================== -->
+
+    <section class="section" id="psychology">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Mindset / Psychology</div>
+          <h1 class="title">Psychology lab.</h1>
+          <p class="subtitle">
+            Your execution is only as consistent as your state.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="psych-grid">
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Pre-trade state</div>
+            <div class="panel-meta">TODAY</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="eyebrow">How do you feel right now?</div>
+
+            <div class="mood-grid">
+
+              <button class="mood">Calm</button>
+              <button class="mood">Focused</button>
+              <button class="mood">Neutral</button>
+              <button class="mood">Excited</button>
+              <button class="mood">Uncertain</button>
+              <button class="mood">Frustrated</button>
+
+            </div>
+
+            <div class="slider-row">
+
+              <div class="slider-top">
+                <span>Confidence</span>
+                <span id="confidenceValue">72</span>
+              </div>
+
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value="72"
+                id="confidence">
+
+            </div>
+
+            <div class="slider-row">
+
+              <div class="slider-top">
+                <span>Discipline</span>
+                <span id="disciplineValue">88</span>
+              </div>
+
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value="88"
+                id="discipline">
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Execution score</div>
+            <div class="panel-meta">7 DAY TREND</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div style="
+              font-family:Manrope;
+              font-size:55px;
+              letter-spacing:-.06em;
+            ">
+              86
+            </div>
+
+            <div style="
+              color:#666;
+              font-size:10px;
+              margin-top:-5px;
+            ">
+              / 100 discipline index
+            </div>
+
+            <div class="progress" style="margin-top:25px">
+              <span style="width:86%"></span>
+            </div>
+
+            <div style="
+              margin-top:25px;
+              display:grid;
+              gap:8px;
+            ">
+
+              <div class="check">
+                <span style="flex:1">Waited for confirmation</span>
+                <span>✓</span>
+              </div>
+
+              <div class="check">
+                <span style="flex:1">Risk respected</span>
+                <span>✓</span>
+              </div>
+
+              <div class="check">
+                <span style="flex:1">No revenge trade</span>
+                <span>✓</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACADEMY
+    ====================================================== -->
+
+    <section class="section" id="academy">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Learn / Academy</div>
+          <h1 class="title">The Academy.</h1>
+          <p class="subtitle">
+            Structured education. Built for repetition, not consumption.
+          </p>
+        </div>
+
+        <div class="member-pill">
+          42% COMPLETE
+        </div>
+
+      </div>
+
+
+      <div class="course-grid">
+
+        <div class="course">
+
+          <div class="course-top">
+            <span class="course-num">MODULE 01</span>
+            <span class="course-state">COMPLETED</span>
+          </div>
+
+          <div class="course-title">
+            Market Structure
+          </div>
+
+          <div class="course-description">
+            Understand structure, context and the difference between
+            continuation and displacement.
+          </div>
+
+          <div class="course-progress">
+            <span style="width:100%"></span>
+          </div>
+
+        </div>
+
+
+        <div class="course">
+
+          <div class="course-top">
+            <span class="course-num">MODULE 02</span>
+            <span class="course-state">COMPLETED</span>
+          </div>
+
+          <div class="course-title">
+            Liquidity
+          </div>
+
+          <div class="course-description">
+            Study where liquidity forms and how session behaviour can
+            influence price delivery.
+          </div>
+
+          <div class="course-progress">
+            <span style="width:100%"></span>
+          </div>
+
+        </div>
+
+
+        <div class="course">
+
+          <div class="course-top">
+            <span class="course-num">MODULE 03</span>
+            <span class="course-state">72%</span>
+          </div>
+
+          <div class="course-title">
+            Imbalances
+          </div>
+
+          <div class="course-description">
+            Explore FVGs, IFVGs and how context changes the quality of an
+            imbalance.
+          </div>
+
+          <div class="course-progress">
+            <span style="width:72%"></span>
+          </div>
+
+        </div>
+
+
+        <div class="course">
+
+          <div class="course-top">
+            <span class="course-num">MODULE 04</span>
+            <span class="course-state">LOCKED</span>
+          </div>
+
+          <div class="course-title">
+            Risk Architecture
+          </div>
+
+          <div class="course-description">
+            Build a repeatable risk framework and understand why sizing
+            should follow the setup rather than emotion.
+          </div>
+
+          <div class="course-progress">
+            <span style="width:0%"></span>
+          </div>
+
+        </div>
+
+
+        <div class="course">
+
+          <div class="course-top">
+            <span class="course-num">MODULE 05</span>
+            <span class="course-state">LOCKED</span>
+          </div>
+
+          <div class="course-title">
+            Psychology
+          </div>
+
+          <div class="course-description">
+            Develop a process for recognising emotional decisions before
+            they become execution errors.
+          </div>
+
+          <div class="course-progress">
+            <span style="width:0%"></span>
+          </div>
+
+        </div>
+
+
+        <div class="course">
+
+          <div class="course-top">
+            <span class="course-num">MODULE 06</span>
+            <span class="course-state">LOCKED</span>
+          </div>
+
+          <div class="course-title">
+            Execution
+          </div>
+
+          <div class="course-description">
+            Bring the framework together and build a repeatable execution
+            model around your own data.
+          </div>
+
+          <div class="course-progress">
+            <span style="width:0%"></span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COMMUNITY
+    ====================================================== -->
+
+    <section class="section" id="community">
+
+      <div class="hero-row">
+
+        <div>
+          <div class="eyebrow">Learn / Community</div>
+          <h1 class="title">Private community.</h1>
+          <p class="subtitle">
+            Share ideas. Review executions. Stay accountable.
+          </p>
+        </div>
+
+        <button class="primary-btn">
+          Open community ↗
+        </button>
+
+      </div>
+
+
+      <div class="community-grid">
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Latest discussions</div>
+            <div class="panel-meta">PRIVATE</div>
+          </div>
+
+
+          <div class="post">
+
+            <div class="post-head">
+
+              <div class="post-avatar">NC</div>
+
+              <div class="post-author">
+                Next Candle
+              </div>
+
+              <div class="post-time">
+                18 MIN AGO
+              </div>
+
+            </div>
+
+            <div class="post-body">
+              New replay session uploaded. Focus this week:
+              waiting for confirmation instead of anticipating the move.
+            </div>
+
+            <div class="post-actions">
+              <span>12 REPLIES</span>
+              <span>VIEW</span>
+            </div>
+
+          </div>
+
+
+          <div class="post">
+
+            <div class="post-head">
+
+              <div class="post-avatar">TR</div>
+
+              <div class="post-author">
+                Member
+              </div>
+
+              <div class="post-time">
+                1 HR AGO
+              </div>
+
+            </div>
+
+            <div class="post-body">
+              Posted a London execution for review. Interested in feedback
+              on entry timing and confirmation quality.
+            </div>
+
+            <div class="post-actions">
+              <span>8 REPLIES</span>
+              <span>VIEW</span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panel-head">
+            <div class="panel-title">Member resources</div>
+          </div>
+
+          <div class="panel-body">
+
+            <div class="checklist">
+
+              <div class="check">
+                <span style="flex:1">Strategy library</span>
+                <span>→</span>
+              </div>
+
+              <div class="check">
+                <span style="flex:1">Weekly review</span>
+                <span>→</span>
+              </div>
+
+              <div class="check">
+                <span style="flex:1">Replay sessions</span>
+                <span>→</span>
+              </div>
+
+              <div class="check">
+                <span style="flex:1">Risk calculator</span>
+                <span>→</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
 
   </div>
 
-  <div class="panel recent">
+</main>
 
-    <div class="panel-head">
-      <strong>Recent Trades</strong>
-      <span>VIEW HISTORY →</span>
-    </div>
 
-    <div class="trade-table">
+<!-- =========================================================
+     NEW TRADE MODAL
+========================================================= -->
 
-      <div class="table-head">
-        <span>Market</span>
-        <span>Direction</span>
-        <span>Strategy</span>
-        <span>Result</span>
-        <span>R</span>
-        <span>Date</span>
+<div class="modal-overlay" id="tradeModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        Record execution
       </div>
 
-      <div class="table-row">
-
-        <span class="market">
-          US100
-          <small>London</small>
-        </span>
-
-        <span class="green">LONG</span>
-
-        <span>
-          <span class="badge">Liquidity</span>
-        </span>
-
-        <span class="result green">WIN</span>
-
-        <span class="green">+2.10R</span>
-
-        <span class="muted">Today</span>
-
-      </div>
-
-      <div class="table-row">
-
-        <span class="market">
-          XAUUSD
-          <small>New York</small>
-        </span>
-
-        <span class="red">SHORT</span>
-
-        <span>
-          <span class="badge">FVG</span>
-        </span>
-
-        <span class="result green">WIN</span>
-
-        <span class="green">+1.70R</span>
-
-        <span class="muted">Yesterday</span>
-
-      </div>
-
-      <div class="table-row">
-
-        <span class="market">
-          SPX500
-          <small>New York</small>
-        </span>
-
-        <span class="green">LONG</span>
-
-        <span>
-          <span class="badge">Breakout</span>
-        </span>
-
-        <span class="result red">LOSS</span>
-
-        <span class="red">-1.00R</span>
-
-        <span class="muted">27 Sep</span>
-
-      </div>
+      <button class="close" data-close="tradeModal">
+        ×
+      </button>
 
     </div>
 
-  </div>
+    <div class="modal-body">
 
-</section>
-
-<!-- ======================================================
-     NEW TRADE
-====================================================== -->
-
-<section class="view" id="journal">
-
-  <div class="view-header">
-
-    <div>
-      <h1>Log a trade</h1>
-      <p>Capture the trade while the information is fresh.</p>
-    </div>
-
-  </div>
-
-  <div class="grid journal-layout">
-
-    <div class="panel form-panel">
-
-      <div class="form-title">
-        Trade Information
-      </div>
-
-      <div class="form-grid">
+      <form class="journal-form" id="tradeForm">
 
         <div class="field">
           <label>Instrument</label>
-
-          <select>
-            <option>US100</option>
+          <select id="tradeAsset">
             <option>XAUUSD</option>
+            <option>NAS100</option>
+            <option>US100</option>
             <option>SPX500</option>
             <option>XAGUSD</option>
-            <option>BTCUSD</option>
           </select>
         </div>
 
         <div class="field">
           <label>Direction</label>
-
-          <select>
-            <option>Long</option>
-            <option>Short</option>
+          <select id="tradeDirection">
+            <option>LONG</option>
+            <option>SHORT</option>
           </select>
         </div>
 
         <div class="field">
           <label>Session</label>
-
-          <select>
+          <select id="tradeSession">
             <option>London</option>
             <option>New York</option>
             <option>Asia</option>
-            <option>Other</option>
           </select>
         </div>
 
         <div class="field">
-          <label>Strategy</label>
-
-          <select>
-            <option>Liquidity Sweep</option>
-            <option>FVG</option>
-            <option>Order Block</option>
-            <option>Breakout</option>
-            <option>Custom</option>
-          </select>
+          <label>Setup</label>
+          <input id="tradeSetup" placeholder="e.g. Liquidity Sweep">
         </div>
 
         <div class="field">
-          <label>Entry</label>
-          <input type="text" placeholder="20,450.50">
+          <label>Risk %</label>
+          <input id="tradeRisk" type="number" step=".05" placeholder="0.50">
         </div>
 
         <div class="field">
-          <label>Exit</label>
-          <input type="text" placeholder="20,520.50">
-        </div>
-
-        <div class="field">
-          <label>Risk</label>
-          <input type="text" placeholder="1.00R">
-        </div>
-
-        <div class="field">
-          <label>Result</label>
-
-          <select>
-            <option>Win</option>
-            <option>Loss</option>
-            <option>Break Even</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>R Multiple</label>
-          <input type="text" placeholder="+2.10R">
-        </div>
-
-        <div class="field">
-          <label>Execution Score</label>
-
-          <select>
-            <option>10 / 10</option>
-            <option>9 / 10</option>
-            <option>8 / 10</option>
-            <option>7 / 10</option>
-            <option>6 / 10</option>
-            <option>5 / 10</option>
-          </select>
-
+          <label>Result R</label>
+          <input id="tradeResult" type="number" step=".1" placeholder="2.4">
         </div>
 
         <div class="field full">
-          <label>Trade Review</label>
-
+          <label>Trade notes</label>
           <textarea
-            placeholder="What happened? Did the trade follow your plan? What would you repeat or change?"></textarea>
+            id="tradeNotes"
+            placeholder="Why did you take the trade? What did you see? What would you change?"></textarea>
+        </div>
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="secondary-btn"
+            data-close="tradeModal">
+            Cancel
+          </button>
+
+          <button
+            class="primary-btn"
+            type="submit">
+            Save execution
+          </button>
 
         </div>
 
-      </div>
-
-      <button class="save-btn" id="saveTrade">
-        SAVE TRADE
-      </button>
-
-    </div>
-
-    <div class="panel review-card">
-
-      <div class="form-title">
-        Psychology
-      </div>
-
-      <div class="review-score">
-
-        <span>DISCIPLINE SCORE</span>
-
-        <strong>
-          8.2
-          <small style="font-size:10px;color:#596269">/10</small>
-        </strong>
-
-      </div>
-
-      <div class="score">
-        <i></i>
-      </div>
-
-      <div class="tag-list">
-
-        <span class="tag selected">Calm</span>
-        <span class="tag">Confident</span>
-        <span class="tag">FOMO</span>
-        <span class="tag">Hesitant</span>
-        <span class="tag">Impatient</span>
-        <span class="tag">Focused</span>
-        <span class="tag">Revenge</span>
-
-      </div>
-
-      <div class="insight">
-        <b>REVIEW TIP</b><br><br>
-        Don't only record whether the trade won. Record whether
-        the decision followed your process. A losing trade can be
-        well executed. A winning trade can still violate your rules.
-      </div>
+      </form>
 
     </div>
 
   </div>
-
-</section>
-
-<!-- ======================================================
-     TRADE HISTORY
-====================================================== -->
-
-<section class="view" id="trades">
-
-  <div class="view-header">
-
-    <div>
-      <h1>Trade history</h1>
-      <p>Every trade. Every decision. One complete record.</p>
-    </div>
-
-    <div class="filters">
-      <button class="filter active">ALL</button>
-      <button class="filter">WINS</button>
-      <button class="filter">LOSSES</button>
-      <button class="filter">US100</button>
-      <button class="filter">XAUUSD</button>
-    </div>
-
-  </div>
-
-  <div class="panel">
-
-    <div class="trade-table">
-
-      <div class="table-head">
-        <span>Market</span>
-        <span>Direction</span>
-        <span>Strategy</span>
-        <span>Result</span>
-        <span>R</span>
-        <span>Date</span>
-      </div>
-
-      <div class="table-row">
-        <span class="market">US100<small>London</small></span>
-        <span class="green">LONG</span>
-        <span><span class="badge">Liquidity</span></span>
-        <span class="green">WIN</span>
-        <span class="green">+2.10R</span>
-        <span>29 Sep</span>
-      </div>
-
-      <div class="table-row">
-        <span class="market">XAUUSD<small>New York</small></span>
-        <span class="red">SHORT</span>
-        <span><span class="badge">FVG</span></span>
-        <span class="green">WIN</span>
-        <span class="green">+1.70R</span>
-        <span>28 Sep</span>
-      </div>
-
-      <div class="table-row">
-        <span class="market">SPX500<small>New York</small></span>
-        <span class="green">LONG</span>
-        <span><span class="badge">Breakout</span></span>
-        <span class="red">LOSS</span>
-        <span class="red">-1.00R</span>
-        <span>27 Sep</span>
-      </div>
-
-      <div class="table-row">
-        <span class="market">US100<small>London</small></span>
-        <span class="green">LONG</span>
-        <span><span class="badge">Sweep</span></span>
-        <span class="green">WIN</span>
-        <span class="green">+2.80R</span>
-        <span>26 Sep</span>
-      </div>
-
-      <div class="table-row">
-        <span class="market">XAUUSD<small>London</small></span>
-        <span class="red">SHORT</span>
-        <span><span class="badge">Order Block</span></span>
-        <span class="green">WIN</span>
-        <span class="green">+1.40R</span>
-        <span>25 Sep</span>
-      </div>
-
-      <div class="table-row">
-        <span class="market">US100<small>New York</small></span>
-        <span class="green">LONG</span>
-        <span><span class="badge">FVG</span></span>
-        <span class="red">LOSS</span>
-        <span class="red">-1.00R</span>
-        <span>24 Sep</span>
-      </div>
-
-      <div class="table-row">
-        <span class="market">SPX500<small>London</small></span>
-        <span class="green">LONG</span>
-        <span><span class="badge">Liquidity</span></span>
-        <span class="green">WIN</span>
-        <span class="green">+1.90R</span>
-        <span>23 Sep</span>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ======================================================
-     ANALYTICS
-====================================================== -->
-
-<section class="view" id="analytics">
-
-  <div class="view-header">
-
-    <div>
-      <h1>Analytics</h1>
-      <p>Find patterns hiding inside your trading history.</p>
-    </div>
-
-    <div class="filters">
-      <button class="filter">7D</button>
-      <button class="filter active">30D</button>
-      <button class="filter">90D</button>
-      <button class="filter">ALL</button>
-    </div>
-
-  </div>
-
-  <div class="analytics-grid">
-
-    <div class="panel">
-
-      <div class="panel-head">
-        <strong>Equity Performance</strong>
-        <span>+18.42%</span>
-      </div>
-
-      <div class="big-chart">
-
-        <div class="big-chart-grid"></div>
-
-        <svg viewBox="0 0 900 320" preserveAspectRatio="none">
-
-          <defs>
-
-            <linearGradient
-              id="bigFill"
-              x1="0"
-              x2="0"
-              y1="0"
-              y2="1">
-
-              <stop
-                offset="0%"
-                stop-color="#78f2ad"
-                stop-opacity=".15"/>
-
-              <stop
-                offset="100%"
-                stop-color="#78f2ad"
-                stop-opacity="0"/>
-
-            </linearGradient>
-
-          </defs>
-
-          <path
-            d="M0 290 L50 280 L100 287 L150 250
-               L200 263 L250 215 L300 230 L350 190
-               L400 202 L450 160 L500 177 L550 128
-               L600 146 L650 102 L700 115 L750 74
-               L800 89 L850 45 L900 25
-               L900 320 L0 320 Z"
-            fill="url(#bigFill)"
-          />
-
-          <path
-            class="analytics-line"
-            d="M0 290 L50 280 L100 287 L150 250
-               L200 263 L250 215 L300 230 L350 190
-               L400 202 L450 160 L500 177 L550 128
-               L600 146 L650 102 L700 115 L750 74
-               L800 89 L850 45 L900 25"
-          />
-
-        </svg>
-
-      </div>
-
-    </div>
-
-    <div class="analytics-cards">
-
-      <div class="analytics-card">
-        <small>Expectancy</small>
-        <strong class="green">+0.91R</strong>
-      </div>
-
-      <div class="analytics-card">
-        <small>Profit Factor</small>
-        <strong>2.31</strong>
-      </div>
-
-      <div class="analytics-card">
-        <small>Avg Win</small>
-        <strong class="green">+1.91R</strong>
-      </div>
-
-      <div class="analytics-card">
-        <small>Avg Loss</small>
-        <strong class="red">-1.00R</strong>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div style="height:10px"></div>
-
-  <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">
-
-    <div class="panel">
-
-      <div class="panel-head">
-        <strong>Performance by Session</strong>
-        <span>AVERAGE R</span>
-      </div>
-
-      <div class="bar-list" style="padding:0 20px">
-
-        <div class="bar-item">
-          <div class="bar-top">
-            <span>London</span>
-            <span class="green">+2.14R</span>
-          </div>
-          <div class="bar-bg">
-            <i style="width:88%"></i>
-          </div>
-        </div>
-
-        <div class="bar-item">
-          <div class="bar-top">
-            <span>New York</span>
-            <span>+1.38R</span>
-          </div>
-          <div class="bar-bg">
-            <i style="width:63%"></i>
-          </div>
-        </div>
-
-        <div class="bar-item">
-          <div class="bar-top">
-            <span>Asia</span>
-            <span>+0.42R</span>
-          </div>
-          <div class="bar-bg">
-            <i style="width:28%"></i>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="panel">
-
-      <div class="panel-head">
-        <strong>Performance by Market</strong>
-        <span>WIN RATE</span>
-      </div>
-
-      <div class="bar-list" style="padding:0 20px">
-
-        <div class="bar-item">
-          <div class="bar-top">
-            <span>US100</span>
-            <span class="green">81%</span>
-          </div>
-          <div class="bar-bg">
-            <i style="width:81%"></i>
-          </div>
-        </div>
-
-        <div class="bar-item">
-          <div class="bar-top">
-            <span>XAUUSD</span>
-            <span>74%</span>
-          </div>
-          <div class="bar-bg">
-            <i style="width:74%"></i>
-          </div>
-        </div>
-
-        <div class="bar-item">
-          <div class="bar-top">
-            <span>SPX500</span>
-            <span>68%</span>
-          </div>
-          <div class="bar-bg">
-            <i style="width:68%"></i>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ======================================================
-     STRATEGIES
-====================================================== -->
-
-<section class="view" id="strategies">
-
-  <div class="view-header">
-
-    <div>
-      <h1>Strategies</h1>
-      <p>Measure the setups that make up your trading process.</p>
-    </div>
-
-    <button class="top-btn primary">
-      + NEW STRATEGY
-    </button>
-
-  </div>
-
-  <div class="strategy-grid">
-
-    <div class="strategy-card">
-
-      <div class="strategy-top">
-        <span class="strategy-number">STRATEGY 01</span>
-        <span class="strategy-status">ACTIVE</span>
-      </div>
-
-      <h3>Liquidity Sweep</h3>
-
-      <p>
-        Track trades involving liquidity events, confirmation,
-        displacement and defined execution rules.
-      </p>
-
-      <div class="strategy-stats">
-        <div>
-          <span>WIN RATE</span>
-          <strong class="green">81%</strong>
-        </div>
-
-        <div>
-          <span>AVG R</span>
-          <strong>+1.82R</strong>
-        </div>
-
-        <div>
-          <span>TRADES</span>
-          <strong>34</strong>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="strategy-card">
-
-      <div class="strategy-top">
-        <span class="strategy-number">STRATEGY 02</span>
-        <span class="strategy-status">ACTIVE</span>
-      </div>
-
-      <h3>Fair Value Gap</h3>
-
-      <p>
-        Track FVG-based executions and compare their performance
-        across instruments and sessions.
-      </p>
-
-      <div class="strategy-stats">
-        <div>
-          <span>WIN RATE</span>
-          <strong class="green">77%</strong>
-        </div>
-
-        <div>
-          <span>AVG R</span>
-          <strong>+1.51R</strong>
-        </div>
-
-        <div>
-          <span>TRADES</span>
-          <strong>27</strong>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="strategy-card">
-
-      <div class="strategy-top">
-        <span class="strategy-number">STRATEGY 03</span>
-        <span class="strategy-status">ACTIVE</span>
-      </div>
-
-      <h3>Breakout</h3>
-
-      <p>
-        Measure breakout executions independently so you can compare
-        them against reversal and liquidity-based setups.
-      </p>
-
-      <div class="strategy-stats">
-        <div>
-          <span>WIN RATE</span>
-          <strong>68%</strong>
-        </div>
-
-        <div>
-          <span>AVG R</span>
-          <strong>+1.08R</strong>
-        </div>
-
-        <div>
-          <span>TRADES</span>
-          <strong>18</strong>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ======================================================
-     PSYCHOLOGY
-====================================================== -->
-
-<section class="view" id="psychology">
-
-  <div class="view-header">
-
-    <div>
-      <h1>Psychology</h1>
-      <p>Your behaviour is part of your performance.</p>
-    </div>
-
-  </div>
-
-  <div class="psych-grid">
-
-    <div class="panel psych-score">
-
-      <div class="panel-head" style="padding:0 0 15px">
-        <strong>Discipline Index</strong>
-        <span>THIS MONTH</span>
-      </div>
-
-      <div class="score-circle">
-
-        <div class="circle-text">
-          <strong>82</strong>
-          <span>out of 100</span>
-        </div>
-
-      </div>
-
-      <div style="text-align:center;color:#697278;font-size:9px">
-        +7 points compared with previous month
-      </div>
-
-    </div>
-
-    <div class="panel">
-
-      <div class="panel-head">
-        <strong>Behaviour Breakdown</strong>
-        <span>89 TRADES</span>
-      </div>
-
-      <div class="emotion-grid">
-
-        <div class="emotion-card">
-          <span>CALM</span>
-          <strong class="green">74%</strong>
-        </div>
-
-        <div class="emotion-card">
-          <span>CONFIDENT</span>
-          <strong>68%</strong>
-        </div>
-
-        <div class="emotion-card">
-          <span>FOMO</span>
-          <strong class="red">11%</strong>
-        </div>
-
-        <div class="emotion-card">
-          <span>IMPATIENT</span>
-          <strong class="red">8%</strong>
-        </div>
-
-        <div class="emotion-card">
-          <span>FOCUSED</span>
-          <strong class="green">79%</strong>
-        </div>
-
-        <div class="emotion-card">
-          <span>HESITANT</span>
-          <strong>13%</strong>
-        </div>
-
-      </div>
-
-      <div class="insight" style="margin:0 20px 20px">
-        <b>OBSERVATION</b><br><br>
-        Your journal shows stronger average R when the execution
-        score is above 8/10. Review those trades to identify what
-        conditions were present.
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ======================================================
-     CALENDAR
-====================================================== -->
-
-<section class="view" id="calendar">
-
-  <div class="view-header">
-
-    <div>
-      <h1>Trading calendar</h1>
-      <p>See your trading activity and performance day by day.</p>
-    </div>
-
-  </div>
-
-  <div class="panel calendar-large">
-
-    <div class="calendar-month">
-      <strong>September 2026</strong>
-      <span>18 ACTIVE DAYS · 71 TRADES</span>
-    </div>
-
-    <div class="calendar-grid">
-
-      <div class="calendar-cell empty"></div>
-      <div class="calendar-cell">
-        <span class="number">1</span>
-        <strong>—</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">2</span>
-        <strong class="green">+2.1R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">3</span>
-        <strong class="green">+1.4R</strong>
-      </div>
-
-      <div class="calendar-cell red-cell">
-        <span class="number">4</span>
-        <strong class="red">-1R</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">5</span>
-        <strong>—</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">6</span>
-        <strong>—</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">7</span>
-        <strong class="green">+2.8R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">8</span>
-        <strong class="green">+1.2R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">9</span>
-        <strong class="green">+1.7R</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">10</span>
-        <strong>0R</strong>
-      </div>
-
-      <div class="calendar-cell red-cell">
-        <span class="number">11</span>
-        <strong class="red">-1.0R</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">12</span>
-        <strong>—</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">13</span>
-        <strong>—</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">14</span>
-        <strong class="green">+3.1R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">15</span>
-        <strong class="green">+1.8R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">16</span>
-        <strong class="green">+2.2R</strong>
-      </div>
-
-      <div class="calendar-cell red-cell">
-        <span class="number">17</span>
-        <strong class="red">-1R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">18</span>
-        <strong class="green">+1.6R</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">19</span>
-        <strong>—</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">20</span>
-        <strong>—</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">21</span>
-        <strong class="green">+2.4R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">22</span>
-        <strong class="green">+1.9R</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">23</span>
-        <strong class="green">+1.9R</strong>
-      </div>
-
-      <div class="calendar-cell red-cell">
-        <span class="number">24</span>
-        <strong class="red">-1R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">25</span>
-        <strong class="green">+1.4R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">26</span>
-        <strong class="green">+2.8R</strong>
-      </div>
-
-      <div class="calendar-cell red-cell">
-        <span class="number">27</span>
-        <strong class="red">-1R</strong>
-      </div>
-
-      <div class="calendar-cell green-cell">
-        <span class="number">28</span>
-        <strong class="green">+1.7R</strong>
-      </div>
-
-      <div class="calendar-cell today green-cell">
-        <span class="number">29</span>
-        <strong class="green">+2.1R</strong>
-      </div>
-
-      <div class="calendar-cell">
-        <span class="number">30</span>
-        <strong>—</strong>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ======================================================
-     SETTINGS
-====================================================== -->
-
-<section class="view" id="settings">
-
-  <div class="view-header">
-
-    <div>
-      <h1>Settings</h1>
-      <p>Customize your NEXT CANDLE workspace.</p>
-    </div>
-
-  </div>
-
-  <div class="settings-grid">
-
-    <div class="panel settings-menu">
-
-      <button class="settings-tab active">
-        Profile
-      </button>
-
-      <button class="settings-tab">
-        Trading
-      </button>
-
-      <button class="settings-tab">
-        Notifications
-      </button>
-
-      <button class="settings-tab">
-        Appearance
-      </button>
-
-    </div>
-
-    <div class="panel settings-content">
-
-      <div class="setting-row">
-
-        <div>
-          <h4>Account name</h4>
-          <p>Shown across your trading workspace.</p>
-        </div>
-
-        <span style="font-size:9px;color:#879095">
-          Member
-        </span>
-
-      </div>
-
-      <div class="setting-row">
-
-        <div>
-          <h4>Default risk</h4>
-          <p>Used when creating a new trade.</p>
-        </div>
-
-        <span style="font-size:9px;color:#879095">
-          1.00R
-        </span>
-
-      </div>
-
-      <div class="setting-row">
-
-        <div>
-          <h4>Daily review reminder</h4>
-          <p>Remind me to review my trades.</p>
-        </div>
-
-        <div class="toggle on">
-          <i></i>
-        </div>
-
-      </div>
-
-      <div class="setting-row">
-
-        <div>
-          <h4>Performance notifications</h4>
-          <p>Receive updates about your journal statistics.</p>
-        </div>
-
-        <div class="toggle">
-          <i></i>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-</div>
-</main>
 
 </div>
 
-<!-- ======================================================
-     TRADE MODAL
-====================================================== -->
 
-<div class="modal" id="modal">
+<!-- =========================================================
+     SETUP MODAL
+========================================================= -->
 
-  <div class="modal-box">
+<div class="modal-overlay" id="setupModal">
+
+  <div class="modal">
 
     <div class="modal-head">
-      <strong>Trade saved</strong>
-      <button class="close" id="closeModal">×</button>
+
+      <div class="modal-title" id="setupModalTitle">
+        Setup
+      </div>
+
+      <button class="close" data-close="setupModal">
+        ×
+      </button>
+
     </div>
 
     <div class="modal-body">
 
-      <div class="insight" style="margin:0">
+      <div class="eyebrow">
+        PLAYBOOK FRAMEWORK
+      </div>
 
-        <b>TRADE ADDED SUCCESSFULLY</b><br><br>
+      <h2
+        id="setupTitle"
+        style="
+          font-family:Manrope;
+          font-size:25px;
+          margin-bottom:10px;
+        ">
+      </h2>
 
-        Your trade has been added to your journal.
-        Review your execution and psychology later to
-        build a more complete performance history.
+      <p
+        style="
+          color:#777;
+          font-size:11px;
+          line-height:1.8;
+        ">
+        Use this space to document your exact conditions,
+        confirmation rules, invalidation, execution model and
+        review criteria. The framework should describe your process,
+        not predict the market.
+      </p>
+
+      <div style="height:20px"></div>
+
+      <div class="checklist">
+
+        <div class="check">
+          <span>01</span>
+          <span style="flex:1">Context identified</span>
+          <span>○</span>
+        </div>
+
+        <div class="check">
+          <span>02</span>
+          <span style="flex:1">Liquidity / structure confirmed</span>
+          <span>○</span>
+        </div>
+
+        <div class="check">
+          <span>03</span>
+          <span style="flex:1">Entry condition confirmed</span>
+          <span>○</span>
+        </div>
+
+        <div class="check">
+          <span>04</span>
+          <span style="flex:1">Risk defined before execution</span>
+          <span>○</span>
+        </div>
 
       </div>
 
@@ -3043,6 +3700,107 @@ a{
   </div>
 
 </div>
+
+
+<!-- =========================================================
+     SEARCH MODAL
+========================================================= -->
+
+<div class="modal-overlay" id="searchModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        Search workspace
+      </div>
+
+      <button class="close" data-close="searchModal">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <input
+        class="search"
+        style="width:100%"
+        autofocus
+        placeholder="Search trades, lessons, setups…">
+
+      <div style="
+        margin-top:15px;
+        color:#444;
+        font-family:DM Mono,monospace;
+        font-size:8px;
+      ">
+        Press ESC to close
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     NOTIFICATION MODAL
+========================================================= -->
+
+<div class="modal-overlay" id="notifyModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title">
+        Notifications
+      </div>
+
+      <button class="close" data-close="notifyModal">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="check">
+        <span>01</span>
+        <span style="flex:1">
+          New replay session available
+        </span>
+        <span style="color:#555">
+          18m
+        </span>
+      </div>
+
+      <div style="height:8px"></div>
+
+      <div class="check">
+        <span>02</span>
+        <span style="flex:1">
+          Weekly journal review is due
+        </span>
+        <span style="color:#555">
+          2h
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="toast" id="toast">
+  Saved successfully
+</div>
+
 
 <script>
 
@@ -3050,283 +3808,587 @@ a{
    NAVIGATION
 ========================================================= */
 
-const navButtons =
-  document.querySelectorAll(".nav-btn");
+const navButtons = document.querySelectorAll(".nav-btn");
+const sections = document.querySelectorAll(".section");
+const currentPage = document.getElementById("currentPage");
 
-const views =
-  document.querySelectorAll(".view");
+function showSection(name){
 
-const pageTitle =
-  document.getElementById("pageTitle");
-
-const pageSub =
-  document.getElementById("pageSub");
-
-const titles = {
-
-  dashboard:[
-    "Dashboard",
-    "Your trading performance at a glance"
-  ],
-
-  journal:[
-    "New Trade",
-    "Capture the trade while the information is fresh"
-  ],
-
-  trades:[
-    "Trade History",
-    "Every trade. Every decision. One complete record."
-  ],
-
-  analytics:[
-    "Analytics",
-    "Find patterns hiding inside your trading history."
-  ],
-
-  strategies:[
-    "Strategies",
-    "Measure the setups that make up your trading process."
-  ],
-
-  psychology:[
-    "Psychology",
-    "Your behaviour is part of your performance."
-  ],
-
-  calendar:[
-    "Calendar",
-    "See your trading activity and performance day by day."
-  ],
-
-  settings:[
-    "Settings",
-    "Customize your NEXT CANDLE workspace."
-  ]
-
-};
-
-function openView(viewName){
+  sections.forEach(section=>{
+    section.classList.toggle(
+      "active",
+      section.id === name
+    );
+  });
 
   navButtons.forEach(btn=>{
     btn.classList.toggle(
       "active",
-      btn.dataset.view===viewName
+      btn.dataset.section === name
     );
   });
 
-  views.forEach(view=>{
-    view.classList.toggle(
-      "active",
-      view.id===viewName
+  const activeButton =
+    document.querySelector(
+      `.nav-btn[data-section="${name}"]`
     );
-  });
 
-  pageTitle.textContent =
-    titles[viewName][0];
-
-  pageSub.textContent =
-    titles[viewName][1];
+  if(activeButton){
+    currentPage.textContent =
+      activeButton
+        .querySelector(".nav-name")
+        .textContent;
+  }
 
   window.scrollTo({
     top:0,
     behavior:"smooth"
   });
 
-  document
-    .getElementById("sidebar")
+  document.getElementById("sidebar")
     .classList.remove("open");
-
 }
 
-navButtons.forEach(button=>{
-
-  button.addEventListener("click",()=>{
-
-    openView(button.dataset.view);
-
+navButtons.forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    showSection(btn.dataset.section);
   });
-
 });
+
 
 /* =========================================================
    MOBILE SIDEBAR
 ========================================================= */
 
-const menuBtn =
-  document.getElementById("menuBtn");
+document
+  .getElementById("mobileMenu")
+  .addEventListener("click",()=>{
+    document
+      .getElementById("sidebar")
+      .classList.toggle("open");
+  });
 
-const sidebar =
-  document.getElementById("sidebar");
-
-menuBtn.addEventListener("click",()=>{
-
-  sidebar.classList.toggle("open");
-
-});
 
 /* =========================================================
-   QUICK TRADE
+   MODALS
 ========================================================= */
 
-const quickTrade =
-  document.getElementById("quickTrade");
+function openModal(id){
+  document
+    .getElementById(id)
+    .classList.add("open");
+}
 
-quickTrade.addEventListener("click",()=>{
+function closeModal(id){
+  document
+    .getElementById(id)
+    .classList.remove("open");
+}
 
-  openView("journal");
-
+document.querySelectorAll("[data-close]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    closeModal(btn.dataset.close);
+  });
 });
+
+document.querySelectorAll(".modal-overlay").forEach(overlay=>{
+  overlay.addEventListener("click",e=>{
+    if(e.target === overlay){
+      overlay.classList.remove("open");
+    }
+  });
+});
+
 
 /* =========================================================
-   SAVE TRADE
+   TRADE MODAL
 ========================================================= */
-
-const saveTrade =
-  document.getElementById("saveTrade");
-
-const modal =
-  document.getElementById("modal");
-
-saveTrade.addEventListener("click",()=>{
-
-  modal.classList.add("show");
-
-});
 
 document
-  .getElementById("closeModal")
+  .getElementById("newTradeBtn")
   .addEventListener("click",()=>{
+    openModal("tradeModal");
+  });
 
-    modal.classList.remove("show");
+document
+  .getElementById("addTradeTop")
+  .addEventListener("click",()=>{
+    openModal("tradeModal");
+  });
+
+
+/* =========================================================
+   TRADE SAVE
+========================================================= */
+
+document
+  .getElementById("tradeForm")
+  .addEventListener("submit",e=>{
+
+    e.preventDefault();
+
+    const asset =
+      document.getElementById("tradeAsset").value;
+
+    const direction =
+      document.getElementById("tradeDirection").value;
+
+    const session =
+      document.getElementById("tradeSession").value;
+
+    const setup =
+      document.getElementById("tradeSetup").value ||
+      "Custom";
+
+    const result =
+      document.getElementById("tradeResult").value ||
+      "0";
+
+    const now =
+      new Date();
+
+    const date =
+      `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}`;
+
+    const row =
+      document.createElement("tr");
+
+    row.dataset.search =
+      `${asset} ${direction} ${session} ${setup}`.toLowerCase();
+
+    row.innerHTML = `
+      <td class="symbol">${asset}</td>
+      <td>
+        <span class="direction">${direction}</span>
+      </td>
+      <td>${session}</td>
+      <td>${setup}</td>
+      <td class="result ${Number(result)>=0 ? "win":"loss"}">
+        ${Number(result)>0 ? "+" : ""}${result}R
+      </td>
+      <td>—</td>
+      <td>${date}</td>
+    `;
+
+    document
+      .getElementById("journalBody")
+      .prepend(row);
+
+    closeModal("tradeModal");
+
+    document
+      .getElementById("tradeForm")
+      .reset();
+
+    showToast("Execution added to journal");
 
   });
 
-modal.addEventListener("click",(e)=>{
-
-  if(e.target===modal){
-
-    modal.classList.remove("show");
-
-  }
-
-});
 
 /* =========================================================
-   PSYCHOLOGY TAGS
+   SEARCH
 ========================================================= */
 
-document.querySelectorAll(".tag").forEach(tag=>{
-
-  tag.addEventListener("click",()=>{
-
-    tag.classList.toggle("selected");
-
+document
+  .getElementById("searchBtn")
+  .addEventListener("click",()=>{
+    openModal("searchModal");
   });
 
-});
+document
+  .getElementById("tradeSearch")
+  .addEventListener("input",function(){
 
-/* =========================================================
-   FILTERS
-========================================================= */
+    const query =
+      this.value.toLowerCase();
 
-document.querySelectorAll(".filter").forEach(filter=>{
+    document
+      .querySelectorAll("#journalBody tr")
+      .forEach(row=>{
 
-  filter.addEventListener("click",()=>{
+        row.style.display =
+          row.dataset.search.includes(query)
+            ? ""
+            : "none";
 
-    const parent=filter.parentElement;
-
-    parent
-      .querySelectorAll(".filter")
-      .forEach(item=>{
-        item.classList.remove("active");
       });
 
-    filter.classList.add("active");
-
   });
 
-});
 
 /* =========================================================
-   SETTINGS TABS
+   DIRECTION FILTER
 ========================================================= */
 
-document.querySelectorAll(".settings-tab")
-.forEach(tab=>{
+document
+  .getElementById("directionFilter")
+  .addEventListener("change",function(){
 
-  tab.addEventListener("click",()=>{
+    const value = this.value;
 
-    tab.parentElement
-      .querySelectorAll(".settings-tab")
-      .forEach(item=>{
-        item.classList.remove("active");
+    document
+      .querySelectorAll("#journalBody tr")
+      .forEach(row=>{
+
+        const direction =
+          row.querySelector(".direction")
+            ?.textContent;
+
+        row.style.display =
+          value === "all" ||
+          direction === value
+            ? ""
+            : "none";
+
       });
 
-    tab.classList.add("active");
-
   });
 
-});
 
 /* =========================================================
-   TOGGLES
+   NOTIFICATIONS
 ========================================================= */
 
-document.querySelectorAll(".toggle")
-.forEach(toggle=>{
-
-  toggle.addEventListener("click",()=>{
-
-    toggle.classList.toggle("on");
-
+document
+  .getElementById("notifyBtn")
+  .addEventListener("click",()=>{
+    openModal("notifyModal");
   });
 
-});
 
 /* =========================================================
-   ESC CLOSE MODAL
+   SETUPS
 ========================================================= */
 
-document.addEventListener("keydown",(e)=>{
+function openSetup(name){
 
-  if(e.key==="Escape"){
+  document
+    .getElementById("setupModalTitle")
+    .textContent = name;
 
-    modal.classList.remove("show");
+  document
+    .getElementById("setupTitle")
+    .textContent = name;
 
-    sidebar.classList.remove("open");
+  openModal("setupModal");
+}
 
-  }
+document
+  .getElementById("newSetupBtn")
+  .addEventListener("click",()=>{
+    showToast("Setup builder ready");
+  });
 
-});
 
 /* =========================================================
-   SMALL LIVE CLOCK
+   TOAST
 ========================================================= */
 
-function updateClock(){
+let toastTimeout;
 
-  const now=new Date();
+function showToast(message){
 
-  const hours=
-    String(now.getHours()).padStart(2,"0");
+  const toast =
+    document.getElementById("toast");
 
-  const minutes=
-    String(now.getMinutes()).padStart(2,"0");
+  toast.textContent = message;
 
-  const dateEl=
-    document.querySelector(".date");
+  toast.classList.add("show");
 
-  if(dateEl){
+  clearTimeout(toastTimeout);
 
-    dateEl.textContent=
-      "29 SEP 2026 · "+hours+":"+minutes;
+  toastTimeout =
+    setTimeout(()=>{
+      toast.classList.remove("show");
+    },2500);
+}
 
-  }
+
+/* =========================================================
+   COUNTERS
+========================================================= */
+
+function animateCounters(){
+
+  document
+    .querySelectorAll("[data-count]")
+    .forEach(el=>{
+
+      const target =
+        Number(el.dataset.count);
+
+      const isPercent =
+        el.textContent.includes("%");
+
+      const duration = 1200;
+      const start = performance.now();
+
+      function update(time){
+
+        const progress =
+          Math.min(
+            (time-start)/duration,
+            1
+          );
+
+        const eased =
+          1-Math.pow(1-progress,3);
+
+        const value =
+          Math.round(target*eased);
+
+        if(target > 1000){
+
+          el.textContent =
+            "€"+value.toLocaleString();
+
+        }else{
+
+          el.textContent =
+            value+(isPercent ? "%" : "");
+
+        }
+
+        if(progress < 1){
+          requestAnimationFrame(update);
+        }
+
+      }
+
+      requestAnimationFrame(update);
+
+    });
 
 }
 
-setInterval(updateClock,1000);
+setTimeout(animateCounters,300);
+
+
+/* =========================================================
+   PSYCHOLOGY SLIDERS
+========================================================= */
+
+const confidence =
+  document.getElementById("confidence");
+
+const discipline =
+  document.getElementById("discipline");
+
+confidence.addEventListener("input",()=>{
+  document
+    .getElementById("confidenceValue")
+    .textContent =
+    confidence.value;
+});
+
+discipline.addEventListener("input",()=>{
+  document
+    .getElementById("disciplineValue")
+    .textContent =
+    discipline.value;
+});
+
+
+/* =========================================================
+   MOODS
+========================================================= */
+
+document.querySelectorAll(".mood").forEach(button=>{
+  button.addEventListener("click",()=>{
+
+    document
+      .querySelectorAll(".mood")
+      .forEach(m=>m.classList.remove("selected"));
+
+    button.classList.add("selected");
+
+    showToast(
+      `State recorded: ${button.textContent}`
+    );
+
+  });
+});
+
+
+/* =========================================================
+   REPLAY
+========================================================= */
+
+let replayRunning = false;
+let replayProgress = 48;
+let replayInterval;
+
+const playReplay =
+  document.getElementById("playReplay");
+
+const timelineFill =
+  document.getElementById("timelineFill");
+
+const timecode =
+  document.getElementById("timecode");
+
+playReplay.addEventListener("click",()=>{
+
+  replayRunning =
+    !replayRunning;
+
+  playReplay.textContent =
+    replayRunning ? "Ⅱ" : "▶";
+
+  if(replayRunning){
+
+    replayInterval =
+      setInterval(()=>{
+
+        replayProgress += .6;
+
+        if(replayProgress >= 100){
+          replayProgress = 0;
+        }
+
+        timelineFill.style.width =
+          replayProgress+"%";
+
+        timecode.textContent =
+          Math.round(replayProgress)+"%";
+
+      },80);
+
+  }else{
+
+    clearInterval(replayInterval);
+
+  }
+
+});
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+========================================================= */
+
+document.addEventListener("keydown",e=>{
+
+  if(e.key === "Escape"){
+
+    document
+      .querySelectorAll(".modal-overlay.open")
+      .forEach(modal=>{
+        modal.classList.remove("open");
+      });
+
+  }
+
+  if(
+    e.key.toLowerCase()==="n" &&
+    !["INPUT","TEXTAREA","SELECT"].includes(
+      document.activeElement.tagName
+    )
+  ){
+    openModal("tradeModal");
+  }
+
+  if(
+    e.key==="/" &&
+    !["INPUT","TEXTAREA","SELECT"].includes(
+      document.activeElement.tagName
+    )
+  ){
+    e.preventDefault();
+    openModal("searchModal");
+  }
+
+});
+
+
+/* =========================================================
+   CHECKLIST
+========================================================= */
+
+document.querySelectorAll(".check input")
+  .forEach(input=>{
+
+    input.addEventListener("change",()=>{
+
+      const checks =
+        [...document.querySelectorAll(
+          ".check input"
+        )];
+
+      const checked =
+        checks.filter(c=>c.checked).length;
+
+      if(
+        checked === checks.length &&
+        checks.length
+      ){
+        showToast("Checklist complete");
+      }
+
+    });
+
+  });
+
+
+/* =========================================================
+   SUBTLE PARALLAX
+========================================================= */
+
+document.addEventListener("mousemove",e=>{
+
+  const x =
+    (e.clientX/window.innerWidth-.5)*2;
+
+  const y =
+    (e.clientY/window.innerHeight-.5)*2;
+
+  document
+    .querySelectorAll(".stat")
+    .forEach((card,i)=>{
+
+      if(window.innerWidth > 900){
+
+        card.style.transform =
+          `translate3d(${x*(i%2)*1.2}px,${y*(i%3)*.7}px,0)`;
+
+      }
+
+    });
+
+});
+
+
+/* =========================================================
+   RESET PARALLAX
+========================================================= */
+
+document.addEventListener("mouseleave",()=>{
+
+  document
+    .querySelectorAll(".stat")
+    .forEach(card=>{
+      card.style.transform="";
+    });
+
+});
+
+
+/* =========================================================
+   LOCAL STORAGE DEMO STATE
+========================================================= */
+
+const savedTheme =
+  localStorage.getItem("nextcandle-member");
+
+if(!savedTheme){
+  localStorage.setItem(
+    "nextcandle-member",
+    JSON.stringify({
+      version:1,
+      workspace:"member"
+    })
+  );
+}
 
 </script>
 
