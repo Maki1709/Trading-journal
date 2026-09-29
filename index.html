@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#060708">
+<meta name="description" content="NEXT CANDLE — A premium trading journal built to help traders understand performance, execution and psychology.">
+<title>NEXT CANDLE — Trading Journal</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg:#060708;
+  --bg2:#090b0d;
+  --surface:#0d1012;
+  --surface2:#111417;
+  --surface3:#161a1d;
+  --white:#f5f7f4;
+  --soft:#d7dbd7;
+  --muted:#858c91;
+  --muted2:#5c6368;
+  --line:rgba(255,255,255,.075);
+  --line2:rgba(255,255,255,.13);
+  --green:#9cffc9;
+  --green2:#55e99b;
+  --greenDark:#0d2419;
+  --red:#ff858c;
+  --blue:#9dbaff;
+  --gold:#f1d38d;
+  --purple:#c2a1ff;
+  --max:1240px;
+  --radius:28px;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:
+    radial-gradient(circle at 50% -10%,rgba(156,255,201,.095),transparent 30%),
+    radial-gradient(circle at 90% 28%,rgba(157,186,255,.045),transparent 24%),
+    var(--bg);
+  color:var(--white);
+  font-family:"Manrope","DM Sans",Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+body:after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.018;
+  z-index:999;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+}
+
+.container{
+  width:min(calc(100% - 48px),var(--max));
+  margin:auto;
+}
+
+/* CURSOR */
+.cursor-glow{
+  position:fixed;
+  width:420px;
+  height:420px;
+  border-radius:50%;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(156,255,201,.065),transparent 65%);
+  z-index:0;
+  transition:opacity .3s;
+}
+
+/* NAVIGATION */
+.nav-wrap{
+  position:fixed;
+  top:16px;
+  left:0;
+  width:100%;
+  z-index:100;
+}
+
+nav{
+  width:min(calc(100% - 32px),1120px);
+  margin:auto;
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px 0 22px;
+  border:1px solid var(--line2);
+  border-radius:22px;
+  background:rgba(9,11,13,.72);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  box-shadow:0 18px 60px rgba(0,0,0,.28);
+  transition:.35s var(--ease);
+}
+
+nav.scrolled{
+  background:rgba(8,10,11,.92);
+  border-color:rgba(255,255,255,.12);
+  box-shadow:0 20px 80px rgba(0,0,0,.42);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.13em;
+}
+
+.logo-mark{
+  width:32px;
+  height:32px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#d9ffe8,#6ef0a7);
+  color:#07120c;
+  font-size:15px;
+  box-shadow:0 0 30px rgba(110,240,167,.16);
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:30px;
+  color:#9ba1a5;
+  font-size:13px;
+  font-weight:600;
+}
+
+.nav-links a{
+  transition:.25s;
+}
+
+.nav-links a:hover{
+  color:#fff;
+}
+
+.nav-cta{
+  height:42px;
+  padding:0 17px;
+  border-radius:13px;
+  background:#f3f5f2;
+  color:#090b0c;
+  font-size:12px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:.3s var(--ease);
+}
+
+.nav-cta:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 35px rgba(255,255,255,.13);
+}
+
+.mobile-menu{
+  display:none;
+  border:0;
+  background:none;
+  color:#fff;
+  font-size:22px;
+}
+
+/* HERO */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  padding:170px 0 100px;
+  overflow:hidden;
+}
+
+.hero-grid{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.35;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:80px 80px;
+  mask-image:linear-gradient(to bottom,#000,transparent 80%);
+}
+
+.hero-glow{
+  position:absolute;
+  width:700px;
+  height:700px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(90,239,160,.075),transparent 67%);
+  left:50%;
+  top:12%;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  width:100%;
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  padding:8px 12px;
+  border:1px solid var(--line2);
+  border-radius:999px;
+  background:rgba(255,255,255,.025);
+  color:#a8b0ae;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:28px;
+}
+
+.live-dot{
+  width:6px;
+  height:6px;
+  background:var(--green);
+  border-radius:50%;
+  box-shadow:0 0 14px var(--green);
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.45;transform:scale(.7)}
+}
+
+.hero h1{
+  max-width:1000px;
+  margin:auto;
+  font-size:clamp(58px,8vw,112px);
+  line-height:.92;
+  letter-spacing:-.075em;
+  font-weight:800;
+}
+
+.hero h1 span{
+  color:#7af0aa;
+  background:linear-gradient(100deg,#f5f7f4 5%,#9cffc9 60%,#55e99b);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.hero-sub{
+  max-width:650px;
+  margin:28px auto 0;
+  color:#8f9699;
+  font-size:17px;
+  line-height:1.75;
+}
+
+.hero-actions{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:38px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  min-height:54px;
+  padding:0 22px;
+  border-radius:15px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-size:13px;
+  font-weight:800;
+  transition:.35s var(--ease);
+  border:1px solid var(--line2);
+}
+
+.btn-primary{
+  background:#f4f6f3;
+  color:#080a0b;
+}
+
+.btn-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 15px 50px rgba(255,255,255,.13);
+}
+
+.btn-secondary{
+  background:rgba(255,255,255,.025);
+  color:#d8ddda;
+}
+
+.btn-secondary:hover{
+  background:rgba(255,255,255,.06);
+  transform:translateY(-3px);
+}
+
+.hero-note{
+  margin-top:17px;
+  color:#555d61;
+  font-size:11px;
+}
+
+/* DASHBOARD */
+.dashboard-wrap{
+  position:relative;
+  margin:80px auto 0;
+  width:min(1060px,100%);
+  perspective:1500px;
+}
+
+.dashboard{
+  position:relative;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:26px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018)),
+    #0a0d0f;
+  box-shadow:
+    0 50px 120px rgba(0,0,0,.55),
+    0 0 0 1px rgba(0,0,0,.3),
+    0 0 100px rgba(90,239,160,.035);
+  overflow:hidden;
+  transform:rotateX(5deg);
+  transition:transform 1s var(--ease);
+}
+
+.dashboard:hover{
+  transform:rotateX(1deg) translateY(-4px);
+}
+
+.dash-top{
+  height:54px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+  justify-content:space-between;
+}
+
+.dash-dots{
+  display:flex;
+  gap:6px;
+}
+
+.dash-dots i{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#33393c;
+}
+
+.dash-title{
+  font-size:10px;
+  color:#697075;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.dash-user{
+  width:23px;
+  height:23px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#d6ffe6,#4ddc92);
+}
+
+.dash-body{
+  padding:18px;
+}
+
+.metric-row{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.metric{
+  padding:17px;
+  min-height:92px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:rgba(255,255,255,.018);
+}
+
+.metric-label{
+  color:#686f74;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.09em;
+  font-weight:700;
+}
+
+.metric-value{
+  margin-top:9px;
+  font-size:21px;
+  font-weight:800;
+  letter-spacing:-.04em;
+}
+
+.positive{
+  color:var(--green);
+}
+
+.metric-small{
+  margin-top:4px;
+  font-size:9px;
+  color:#60686b;
+}
+
+.chart-grid{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:1.75fr .85fr;
+  gap:10px;
+}
+
+.panel{
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:rgba(255,255,255,.018);
+  overflow:hidden;
+}
+
+.panel-head{
+  height:50px;
+  padding:0 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+}
+
+.panel-head strong{
+  font-size:11px;
+}
+
+.panel-head span{
+  font-size:9px;
+  color:#61686d;
+}
+
+.chart{
+  height:260px;
+  position:relative;
+  padding:22px 18px 18px;
+}
+
+.chart:before{
+  content:"";
+  position:absolute;
+  inset:20px 18px 25px;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:100% 25%,20% 100%;
+}
+
+.chart svg{
+  position:relative;
+  z-index:2;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+.chart-line{
+  fill:none;
+  stroke:var(--green);
+  stroke-width:3;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  filter:drop-shadow(0 0 8px rgba(156,255,201,.2));
+  stroke-dasharray:1000;
+  stroke-dashoffset:1000;
+  animation:draw 2.5s 1s var(--ease) forwards;
+}
+
+.chart-area{
+  fill:url(#area);
+  opacity:.3;
+}
+
+@keyframes draw{
+  to{stroke-dashoffset:0}
+}
+
+.side-stats{
+  padding:16px;
+}
+
+.stat-line{
+  padding:13px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.stat-line:last-child{border-bottom:0}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  color:#6e767a;
+  font-size:9px;
+}
+
+.stat-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:6px;
+}
+
+.stat-bottom strong{
+  font-size:15px;
+}
+
+.mini-bar{
+  width:50%;
+  height:4px;
+  border-radius:99px;
+  background:#1c2225;
+  overflow:hidden;
+}
+
+.mini-bar i{
+  display:block;
+  height:100%;
+  width:76%;
+  background:var(--green);
+  border-radius:99px;
+}
+
+.dash-bottom{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:1.3fr 1fr 1fr;
+  gap:10px;
+}
+
+.trade-list{
+  padding:5px 15px 12px;
+}
+
+.trade{
+  height:45px;
+  display:grid;
+  grid-template-columns:1.3fr .8fr .7fr;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+  font-size:9px;
+}
+
+.trade:last-child{border:0}
+
+.trade-name{color:#b8bebc}
+.trade-symbol{color:#6d7578}
+.trade-profit{text-align:right}
+
+.win{color:var(--green)}
+.loss{color:var(--red)}
+
+.fade-bottom{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:120px;
+  background:linear-gradient(transparent,var(--bg));
+  pointer-events:none;
+}
+
+/* TRUST */
+.trust{
+  padding:35px 0 115px;
+  text-align:center;
+}
+
+.trust p{
+  font-size:10px;
+  color:#4e5559;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+}
+
+.trust-row{
+  display:flex;
+  justify-content:center;
+  gap:55px;
+  margin-top:25px;
+  flex-wrap:wrap;
+  color:#555d61;
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.08em;
+}
+
+/* SECTIONS */
+section{
+  position:relative;
+}
+
+.section{
+  padding:125px 0;
+}
+
+.section-header{
+  max-width:750px;
+  margin-bottom:60px;
+}
+
+.section-kicker{
+  color:var(--green);
+  font-size:10px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+.section-title{
+  font-size:clamp(39px,5vw,68px);
+  line-height:1;
+  letter-spacing:-.06em;
+  font-weight:800;
+}
+
+.section-description{
+  color:#747c80;
+  margin-top:20px;
+  line-height:1.75;
+  font-size:15px;
+  max-width:610px;
+}
+
+/* FEATURE GRID */
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
+}
+
+.feature-card{
+  position:relative;
+  min-height:310px;
+  padding:26px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:
+    radial-gradient(circle at 90% 10%,rgba(156,255,201,.035),transparent 30%),
+    linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.012));
+  overflow:hidden;
+  transition:.5s var(--ease);
+}
+
+.feature-card:hover{
+  transform:translateY(-7px);
+  border-color:rgba(156,255,201,.15);
+  background:
+    radial-gradient(circle at 90% 10%,rgba(156,255,201,.065),transparent 32%),
+    linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+}
+
+.feature-number{
+  color:#41484c;
+  font-size:10px;
+  font-weight:800;
+}
+
+.feature-icon{
+  margin-top:55px;
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  border:1px solid var(--line2);
+  background:rgba(255,255,255,.035);
+  color:var(--green);
+  font-size:18px;
+}
+
+.feature-card h3{
+  margin-top:20px;
+  font-size:19px;
+  letter-spacing:-.035em;
+}
+
+.feature-card p{
+  margin-top:10px;
+  color:#71797d;
+  font-size:12px;
+  line-height:1.7;
+  max-width:290px;
+}
+
+.feature-orb{
+  position:absolute;
+  width:180px;
+  height:180px;
+  right:-80px;
+  bottom:-80px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(156,255,201,.06),transparent 68%);
+}
+
+/* ANALYTICS */
+.analytics{
+  background:
+    linear-gradient(180deg,transparent,rgba(255,255,255,.012),transparent);
+}
+
+.analytics-layout{
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:60px;
+  align-items:center;
+}
+
+.analytics-copy .big-number{
+  font-size:clamp(70px,9vw,120px);
+  font-weight:800;
+  letter-spacing:-.09em;
+  line-height:.9;
+  color:#eff3ef;
+}
+
+.analytics-copy .big-number span{
+  color:var(--green);
+}
+
+.analytics-copy p{
+  margin-top:25px;
+  color:#727a7d;
+  line-height:1.8;
+  font-size:14px;
+}
+
+.check-list{
+  margin-top:28px;
+  display:grid;
+  gap:12px;
+}
+
+.check{
+  display:flex;
+  gap:11px;
+  align-items:center;
+  color:#9aa19f;
+  font-size:12px;
+}
+
+.check b{
+  width:20px;
+  height:20px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:rgba(156,255,201,.08);
+  color:var(--green);
+  font-size:9px;
+}
+
+.analytics-card{
+  border:1px solid var(--line2);
+  border-radius:30px;
+  padding:18px;
+  background:linear-gradient(145deg,#101417,#090b0d);
+  box-shadow:0 35px 90px rgba(0,0,0,.35);
+}
+
+.analytics-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 7px 18px;
+}
+
+.analytics-head strong{
+  font-size:12px;
+}
+
+.periods{
+  display:flex;
+  gap:5px;
+}
+
+.periods span{
+  padding:6px 9px;
+  border-radius:8px;
+  color:#636a6f;
+  font-size:9px;
+}
+
+.periods span.active{
+  color:#101512;
+  background:var(--green);
+}
+
+.equity-chart{
+  height:290px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:
+    linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px),
+    #0a0d0f;
+  background-size:100% 20%,16.66% 100%;
+  padding:25px 20px;
+}
+
+.equity-chart svg{
+  width:100%;
+  height:100%;
+}
+
+.equity-path{
+  fill:none;
+  stroke:var(--green);
+  stroke-width:3;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-dasharray:1200;
+  stroke-dashoffset:1200;
+}
+
+.reveal.visible .equity-path{
+  animation:draw 2.2s .2s var(--ease) forwards;
+}
+
+.analytics-mini{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:9px;
+}
+
+.analytics-mini div{
+  padding:15px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.018);
+}
+
+.analytics-mini small{
+  display:block;
+  color:#61696d;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.analytics-mini strong{
+  display:block;
+  margin-top:7px;
+  font-size:16px;
+}
+
+/* WORKFLOW */
+.workflow{
+  border-top:1px solid var(--line);
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:25px;
+  overflow:hidden;
+}
+
+.step{
+  min-height:300px;
+  padding:27px;
+  background:var(--bg);
+  position:relative;
+}
+
+.step-num{
+  color:#555c60;
+  font-size:10px;
+  font-weight:800;
+}
+
+.step-line{
+  width:30px;
+  height:1px;
+  background:var(--green);
+  margin-top:48px;
+  opacity:.7;
+}
+
+.step h3{
+  margin-top:22px;
+  font-size:21px;
+  letter-spacing:-.04em;
+}
+
+.step p{
+  color:#6c7478;
+  font-size:12px;
+  line-height:1.75;
+  margin-top:11px;
+}
+
+/* JOURNAL */
+.journal-layout{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.journal-panel{
+  border:1px solid var(--line);
+  border-radius:28px;
+  overflow:hidden;
+  background:linear-gradient(145deg,#101316,#0b0d0f);
+}
+
+.journal-head{
+  height:60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 21px;
+  border-bottom:1px solid var(--line);
+}
+
+.journal-head strong{
+  font-size:12px;
+}
+
+.journal-head span{
+  font-size:9px;
+  color:#62696d;
+}
+
+.journal-table{
+  padding:7px 18px 18px;
+}
+
+.j-row{
+  display:grid;
+  grid-template-columns:1.2fr .8fr .8fr .7fr;
+  min-height:55px;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+  font-size:10px;
+}
+
+.j-row:last-child{border:0}
+
+.j-row.header{
+  min-height:39px;
+  color:#555d61;
+  font-size:8px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.tag{
+  display:inline-flex;
+  width:max-content;
+  padding:5px 7px;
+  border-radius:6px;
+  font-size:8px;
+  color:#8e9696;
+  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+}
+
+.review{
+  padding:24px;
+}
+
+.review-score{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+}
+
+.review-score small{
+  color:#62696d;
+  font-size:9px;
+}
+
+.review-score strong{
+  font-size:40px;
+  letter-spacing:-.07em;
+}
+
+.score-bar{
+  height:5px;
+  margin-top:15px;
+  background:#1a1e21;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.score-bar i{
+  display:block;
+  width:82%;
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,#5fe89e,#a7ffcf);
+}
+
+.emotions{
+  margin-top:27px;
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.emotion{
+  padding:8px 10px;
+  border-radius:9px;
+  border:1px solid var(--line);
+  color:#777f83;
+  font-size:9px;
+}
+
+.emotion.active{
+  color:var(--green);
+  border-color:rgba(156,255,201,.18);
+  background:rgba(156,255,201,.045);
+}
+
+.note{
+  margin-top:25px;
+  padding:15px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  color:#6e767a;
+  font-size:10px;
+  line-height:1.7;
+  background:rgba(255,255,255,.015);
+}
+
+/* PSYCHOLOGY */
+.psychology{
+  overflow:hidden;
+}
+
+.psychology-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.psych-card{
+  min-height:440px;
+  border-radius:30px;
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,#101316,#0a0c0e);
+  padding:30px;
+  position:relative;
+  overflow:hidden;
+}
+
+.psych-card h3{
+  font-size:22px;
+  letter-spacing:-.04em;
+}
+
+.psych-card>p{
+  color:#6f777b;
+  font-size:12px;
+  line-height:1.75;
+  margin-top:10px;
+  max-width:430px;
+}
+
+.discipline{
+  position:absolute;
+  bottom:-65px;
+  left:50%;
+  transform:translateX(-50%);
+  width:330px;
+  height:330px;
+  border-radius:50%;
+  background:
+    conic-gradient(var(--green) 0 82%,#1b2320 82% 100%);
+  display:grid;
+  place-items:center;
+  box-shadow:0 0 90px rgba(156,255,201,.07);
+}
+
+.discipline:after{
+  content:"";
+  position:absolute;
+  width:255px;
+  height:255px;
+  border-radius:50%;
+  background:#0d1012;
+  border:1px solid var(--line);
+}
+
+.discipline-content{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  margin-top:-30px;
+}
+
+.discipline-content strong{
+  display:block;
+  font-size:57px;
+  letter-spacing:-.08em;
+}
+
+.discipline-content span{
+  color:#666e72;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.ai-chat{
+  margin-top:36px;
+  display:grid;
+  gap:10px;
+}
+
+.message{
+  max-width:88%;
+  padding:13px 15px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  font-size:10px;
+  line-height:1.65;
+  color:#747d80;
+}
+
+.message.ai{
+  background:rgba(156,255,201,.035);
+  border-color:rgba(156,255,201,.08);
+}
+
+.message.user{
+  justify-self:end;
+  color:#9ea6a7;
+  background:rgba(255,255,255,.025);
+}
+
+/* REPLAY */
+.replay-box{
+  border:1px solid var(--line2);
+  border-radius:30px;
+  background:#090c0e;
+  overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,.35);
+}
+
+.replay-top{
+  height:60px;
+  padding:0 20px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.replay-title{
+  font-size:11px;
+  font-weight:800;
+}
+
+.replay-controls{
+  display:flex;
+  gap:5px;
+}
+
+.replay-controls span{
+  width:27px;
+  height:27px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:7px;
+  color:#687074;
+  font-size:9px;
+}
+
+.replay-chart{
+  height:430px;
+  position:relative;
+  background:
+    linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:100% 50px,75px 100%;
+  overflow:hidden;
+}
+
+.candles{
+  position:absolute;
+  inset:45px 35px;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+}
+
+.candle{
+  position:relative;
+  width:8px;
+  border-radius:2px;
+  background:var(--green);
+  box-shadow:0 0 8px rgba(156,255,201,.08);
+}
+
+.candle:before{
+  content:"";
+  position:absolute;
+  width:1px;
+  left:50%;
+  transform:translateX(-50%);
+  background:inherit;
+  top:-22px;
+  bottom:-22px;
+}
+
+.candle.red{
+  background:var(--red);
+}
+
+.candle:nth-child(1){height:70px}
+.candle:nth-child(2){height:95px}
+.candle:nth-child(3){height:52px}
+.candle:nth-child(4){height:110px}
+.candle:nth-child(5){height:80px}
+.candle:nth-child(6){height:130px}
+.candle:nth-child(7){height:105px}
+.candle:nth-child(8){height:150px}
+.candle:nth-child(9){height:112px}
+.candle:nth-child(10){height:170px}
+.candle:nth-child(11){height:142px}
+.candle:nth-child(12){height:195px}
+.candle:nth-child(13){height:160px}
+.candle:nth-child(14){height:205px}
+.candle:nth-child(15){height:225px}
+.candle:nth-child(16){height:180px}
+.candle:nth-child(17){height:245px}
+.candle:nth-child(18){height:215px}
+.candle:nth-child(19){height:260px}
+.candle:nth-child(20){height:235px}
+
+.replay-line{
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:51%;
+  border-top:1px dashed rgba(156,255,201,.3);
+}
+
+.replay-badge{
+  position:absolute;
+  left:63%;
+  top:32%;
+  padding:7px 10px;
+  border:1px solid rgba(156,255,201,.2);
+  background:rgba(10,30,20,.85);
+  border-radius:8px;
+  color:var(--green);
+  font-size:8px;
+  backdrop-filter:blur(8px);
+}
+
+/* PRICING */
+.pricing{
+  padding-bottom:160px;
+}
+
+.price-wrap{
+  max-width:850px;
+  margin:auto;
+  position:relative;
+}
+
+.price-glow{
+  position:absolute;
+  width:500px;
+  height:500px;
+  border-radius:50%;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(156,255,201,.08),transparent 68%);
+  pointer-events:none;
+}
+
+.price-card{
+  position:relative;
+  z-index:2;
+  border:1px solid rgba(156,255,201,.16);
+  border-radius:34px;
+  padding:42px;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(156,255,201,.055),transparent 30%),
+    linear-gradient(145deg,#111617,#090b0c);
+  box-shadow:
+    0 50px 120px rgba(0,0,0,.5),
+    0 0 80px rgba(156,255,201,.035);
+}
+
+.price-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.price-label{
+  color:var(--green);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+
+.price-card h2{
+  margin-top:14px;
+  font-size:42px;
+  letter-spacing:-.06em;
+}
+
+.price-card>p{
+  margin-top:10px;
+  color:#727a7d;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.price{
+  text-align:right;
+}
+
+.price strong{
+  display:block;
+  font-size:64px;
+  line-height:.85;
+  letter-spacing:-.08em;
+}
+
+.price small{
+  color:#626a6e;
+  font-size:10px;
+}
+
+.price-features{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+  margin-top:35px;
+  padding-top:30px;
+  border-top:1px solid var(--line);
+}
+
+.price-feature{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  color:#9da4a3;
+  font-size:11px;
+}
+
+.price-feature i{
+  font-style:normal;
+  color:var(--green);
+}
+
+.buy{
+  width:100%;
+  min-height:58px;
+  margin-top:35px;
+  border:0;
+  border-radius:15px;
+  background:linear-gradient(100deg,#f4f7f3,#c9ffd9);
+  color:#07100a;
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+  transition:.35s var(--ease);
+}
+
+.buy:hover{
+  transform:translateY(-3px);
+  box-shadow:0 18px 50px rgba(156,255,201,.12);
+}
+
+.price-note{
+  margin-top:13px;
+  text-align:center;
+  color:#4e5659;
+  font-size:9px;
+}
+
+/* FAQ */
+.faq-list{
+  max-width:850px;
+  margin:auto;
+}
+
+.faq{
+  border-top:1px solid var(--line);
+}
+
+.faq:last-child{
+  border-bottom:1px solid var(--line);
+}
+
+.faq-question{
+  width:100%;
+  padding:24px 0;
+  border:0;
+  background:none;
+  color:#d9ddda;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  text-align:left;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:700;
+}
+
+.faq-question span:last-child{
+  color:#667074;
+  font-size:20px;
+  transition:.3s;
+}
+
+.faq.open .faq-question span:last-child{
+  transform:rotate(45deg);
+  color:var(--green);
+}
+
+.faq-answer{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .5s var(--ease);
+}
+
+.faq-answer p{
+  color:#6e767a;
+  line-height:1.8;
+  font-size:12px;
+  padding:0 50px 23px 0;
+}
+
+/* CTA */
+.final-cta{
+  padding:130px 0 100px;
+  text-align:center;
+  overflow:hidden;
+}
+
+.final-cta:before{
+  content:"";
+  position:absolute;
+  width:700px;
+  height:350px;
+  left:50%;
+  top:40%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(156,255,201,.065),transparent 68%);
+}
+
+.final-cta h2{
+  position:relative;
+  z-index:2;
+  font-size:clamp(50px,7vw,90px);
+  line-height:.92;
+  letter-spacing:-.075em;
+}
+
+.final-cta h2 span{
+  color:var(--green);
+}
+
+.final-cta p{
+  position:relative;
+  z-index:2;
+  max-width:500px;
+  margin:25px auto;
+  color:#737b7e;
+  font-size:14px;
+  line-height:1.75;
+}
+
+.final-cta .btn{
+  position:relative;
+  z-index:2;
+}
+
+/* FOOTER */
+footer{
+  border-top:1px solid var(--line);
+  padding:35px 0;
+}
+
+.footer-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.footer-copy{
+  color:#50585c;
+  font-size:10px;
+}
+
+.footer-links{
+  display:flex;
+  gap:20px;
+  color:#5e666a;
+  font-size:10px;
+}
+
+.footer-links a:hover{
+  color:#aab0ae;
+}
+
+/* REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(35px);
+  transition:
+    opacity .8s var(--ease),
+    transform .8s var(--ease);
+}
+
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .nav-links{display:none}
+  .mobile-menu{display:block}
+  .nav-cta{display:none}
+
+  .hero{
+    padding-top:145px;
+  }
+
+  .hero h1{
+    font-size:clamp(50px,13vw,82px);
+  }
+
+  .metric-row{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .chart-grid{
+    grid-template-columns:1fr;
+  }
+
+  .chart{
+    height:220px;
+  }
+
+  .side-stats{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+  }
+
+  .stat-line{
+    border:1px solid var(--line);
+    padding:12px;
+    border-radius:10px;
+  }
+
+  .feature-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .analytics-layout{
+    grid-template-columns:1fr;
+    gap:40px;
+  }
+
+  .steps{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .journal-layout,
+  .psychology-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:620px){
+  .container{
+    width:min(calc(100% - 30px),var(--max));
+  }
+
+  nav{
+    width:calc(100% - 20px);
+    height:62px;
+  }
+
+  .hero{
+    min-height:auto;
+    padding:140px 0 70px;
+  }
+
+  .hero-sub{
+    font-size:14px;
+  }
+
+  .hero-actions{
+    flex-direction:column;
+    width:100%;
+  }
+
+  .hero-actions .btn{
+    width:100%;
+  }
+
+  .dashboard-wrap{
+    margin-top:55px;
+  }
+
+  .dashboard{
+    transform:none;
+  }
+
+  .dash-body{
+    padding:10px;
+  }
+
+  .metric{
+    padding:12px;
+    min-height:78px;
+  }
+
+  .metric-value{
+    font-size:17px;
+  }
+
+  .dash-bottom{
+    grid-template-columns:1fr;
+  }
+
+  .trust-row{
+    gap:22px;
+  }
+
+  .section{
+    padding:90px 0;
+  }
+
+  .section-header{
+    margin-bottom:38px;
+  }
+
+  .feature-grid{
+    grid-template-columns:1fr;
+  }
+
+  .feature-card{
+    min-height:270px;
+  }
+
+  .feature-icon{
+    margin-top:40px;
+  }
+
+  .steps{
+    grid-template-columns:1fr;
+  }
+
+  .step{
+    min-height:220px;
+  }
+
+  .journal-layout{
+    grid-template-columns:1fr;
+  }
+
+  .j-row{
+    grid-template-columns:1.1fr .7fr .7fr;
+  }
+
+  .j-row span:last-child{
+    display:none;
+  }
+
+  .price-card{
+    padding:25px;
+    border-radius:25px;
+  }
+
+  .price-top{
+    display:block;
+  }
+
+  .price{
+    text-align:left;
+    margin-top:28px;
+  }
+
+  .price strong{
+    font-size:58px;
+  }
+
+  .price-features{
+    grid-template-columns:1fr;
+  }
+
+  .footer-inner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .footer-links{
+    flex-wrap:wrap;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<div class="nav-wrap">
+<nav id="nav">
+  <a href="#top" class="logo">
+    <span class="logo-mark">N</span>
+    NEXT CANDLE
+  </a>
+
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#analytics">Analytics</a>
+    <a href="#journal">Journal</a>
+    <a href="#psychology">Psychology</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+
+  <a class="nav-cta" href="https://whop.com/next-candle-3630" target="_blank">
+    GET ACCESS <span>↗</span>
+  </a>
+
+  <button class="mobile-menu" id="mobileMenu">☰</button>
+</nav>
+</div>
+
+<!-- HERO -->
+<main id="top">
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+
+  <div class="container hero-content">
+
+    <div class="eyebrow reveal">
+      <span class="live-dot"></span>
+      THE TRADING PERFORMANCE SYSTEM
+    </div>
+
+    <h1 class="reveal">
+      Stop guessing.<br>
+      Start <span>measuring.</span>
+    </h1>
+
+    <p class="hero-sub reveal">
+      NEXT CANDLE gives you one place to journal trades, understand your
+      performance, review your execution and build better trading habits.
+    </p>
+
+    <div class="hero-actions reveal">
+      <a href="https://whop.com/next-candle-3630" target="_blank" class="btn btn-primary">
+        GET NEXT CANDLE — €19.99
+        <span>↗</span>
+      </a>
+
+      <a href="#features" class="btn btn-secondary">
+        EXPLORE THE SYSTEM
+        <span>↓</span>
+      </a>
+    </div>
+
+    <div class="hero-note reveal">
+      One-time access · Built for serious traders · Educational purposes only
+    </div>
+
+    <!-- DASHBOARD MOCKUP -->
+    <div class="dashboard-wrap reveal">
+      <div class="dashboard">
+
+        <div class="dash-top">
+          <div class="dash-dots">
+            <i></i><i></i><i></i>
+          </div>
+          <div class="dash-title">NEXT CANDLE / PERFORMANCE</div>
+          <div class="dash-user"></div>
+        </div>
+
+        <div class="dash-body">
+
+          <div class="metric-row">
+
+            <div class="metric">
+              <div class="metric-label">Net P&L</div>
+              <div class="metric-value positive">+$4,286</div>
+              <div class="metric-small">+18.42% this month</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">Win Rate</div>
+              <div class="metric-value">76.4%</div>
+              <div class="metric-small">+4.8% vs last month</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">Profit Factor</div>
+              <div class="metric-value">2.31</div>
+              <div class="metric-small">Based on 89 trades</div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-label">Avg. R</div>
+              <div class="metric-value positive">+1.42R</div>
+              <div class="metric-small">Expectancy +0.91R</div>
+            </div>
+
+          </div>
+
+          <div class="chart-grid">
+
+            <div class="panel">
+              <div class="panel-head">
+                <strong>Equity Curve</strong>
+                <span>LAST 30 DAYS</span>
+              </div>
+
+              <div class="chart">
+                <svg viewBox="0 0 800 250" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="area" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stop-color="#9cffc9" stop-opacity=".22"/>
+                      <stop offset="100%" stop-color="#9cffc9" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <path class="chart-area"
+                    d="M0 220 L55 205 L105 214 L155 185 L205 192 L255 160 L305 170 L355 140 L405 150 L455 115 L505 125 L555 93 L605 105 L655 72 L705 83 L755 40 L800 27 L800 250 L0 250 Z"/>
+                  <path class="chart-line"
+                    d="M0 220 L55 205 L105 214 L155 185 L205 192 L255 160 L305 170 L355 140 L405 150 L455 115 L505 125 L555 93 L605 105 L655 72 L705 83 L755 40 L800 27"/>
+                </svg>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <strong>Performance</strong>
+                <span>SUMMARY</span>
+              </div>
+
+              <div class="side-stats">
+
+                <div class="stat-line">
+                  <div class="stat-top">
+                    <span>Winning Trades</span>
+                    <span>68</span>
+                  </div>
+                  <div class="stat-bottom">
+                    <strong class="positive">76%</strong>
+                    <div class="mini-bar"><i></i></div>
+                  </div>
+                </div>
+
+                <div class="stat-line">
+                  <div class="stat-top">
+                    <span>Avg Win</span>
+                    <span>1.9R</span>
+                  </div>
+                  <div class="stat-bottom">
+                    <strong class="positive">+$138</strong>
+                  </div>
+                </div>
+
+                <div class="stat-line">
+                  <div class="stat-top">
+                    <span>Avg Loss</span>
+                    <span>1R</span>
+                  </div>
+                  <div class="stat-bottom">
+                    <strong>-$72</strong>
+                  </div>
+                </div>
+
+                <div class="stat-line">
+                  <div class="stat-top">
+                    <span>Max Drawdown</span>
+                    <span>Low</span>
+                  </div>
+                  <div class="stat-bottom">
+                    <strong>4.8%</strong>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="dash-bottom">
+
+            <div class="panel">
+              <div class="panel-head">
+                <strong>Recent Trades</strong>
+                <span>VIEW ALL →</span>
+              </div>
+
+              <div class="trade-list">
+                <div class="trade">
+                  <span class="trade-name">US100 · London</span>
+                  <span class="trade-symbol">LONG</span>
+                  <span class="trade-profit win">+2.1R</span>
+                </div>
+                <div class="trade">
+                  <span class="trade-name">XAUUSD · NY</span>
+                  <span class="trade-symbol">SHORT</span>
+                  <span class="trade-profit win">+1.7R</span>
+                </div>
+                <div class="trade">
+                  <span class="trade-name">SPX500 · NY</span>
+                  <span class="trade-symbol">LONG</span>
+                  <span class="trade-profit loss">-1R</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <strong>Best Session</strong>
+                <span>MONTH</span>
+              </div>
+              <div style="padding:25px 16px">
+                <div style="font-size:27px;font-weight:800">London</div>
+                <div style="color:#687074;font-size:9px;margin-top:6px">+2.84R average</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <strong>Discipline</strong>
+                <span>SCORE</span>
+              </div>
+              <div style="padding:25px 16px">
+                <div style="font-size:27px;font-weight:800;color:#9cffc9">82/100</div>
+                <div style="color:#687074;font-size:9px;margin-top:6px">+7 this week</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TRUST -->
+<div class="trust">
+  <div class="container">
+    <p>Built around the metrics that actually matter</p>
+    <div class="trust-row">
+      <span>EXECUTION</span>
+      <span>RISK</span>
+      <span>PSYCHOLOGY</span>
+      <span>STATISTICS</span>
+      <span>DISCIPLINE</span>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div class="section-kicker">01 / The system</div>
+      <h2 class="section-title">Everything you need to understand your trading.</h2>
+      <p class="section-description">
+        Stop keeping screenshots in random folders and numbers in spreadsheets.
+        Build a complete picture of how you trade.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+
+      <article class="feature-card reveal">
+        <span class="feature-number">01</span>
+        <div class="feature-icon">⌁</div>
+        <h3>Trade Journal</h3>
+        <p>
+          Record entries, exits, risk, setup, session, emotions and notes.
+          Turn every trade into structured data.
+        </p>
+        <div class="feature-orb"></div>
+      </article>
+
+      <article class="feature-card reveal">
+        <span class="feature-number">02</span>
+        <div class="feature-icon">◫</div>
+        <h3>Deep Analytics</h3>
+        <p>
+          Break down win rate, R-multiple, expectancy, profit factor,
+          drawdown and performance over time.
+        </p>
+        <div class="feature-orb"></div>
+      </article>
+
+      <article class="feature-card reveal">
+        <span class="feature-number">03</span>
+        <div class="feature-icon">◎</div>
+        <h3>Strategy Tracking</h3>
+        <p>
+          Tag trades by strategy and setup so you can see exactly which
+          conditions are producing your results.
+        </p>
+        <div class="feature-orb"></div>
+      </article>
+
+      <article class="feature-card reveal">
+        <span class="feature-number">04</span>
+        <div class="feature-icon">⌁</div>
+        <h3>Psychology</h3>
+        <p>
+          Track emotions and discipline alongside your results to identify
+          behavioural patterns before they become expensive habits.
+        </p>
+        <div class="feature-orb"></div>
+      </article>
+
+      <article class="feature-card reveal">
+        <span class="feature-number">05</span>
+        <div class="feature-icon">◷</div>
+        <h3>Calendar Review</h3>
+        <p>
+          Review your trading day by day and identify the sessions, days
+          and conditions where your execution performs best.
+        </p>
+        <div class="feature-orb"></div>
+      </article>
+
+      <article class="feature-card reveal">
+        <span class="feature-number">06</span>
+        <div class="feature-icon">↗</div>
+        <h3>Review & Improve</h3>
+        <p>
+          Convert your trade history into actionable observations and
+          continuously refine the process behind your decisions.
+        </p>
+        <div class="feature-orb"></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ANALYTICS -->
+<section class="section analytics" id="analytics">
+  <div class="container">
+
+    <div class="analytics-layout">
+
+      <div class="analytics-copy reveal">
+        <div class="section-kicker">02 / Data over emotion</div>
+        <div class="big-number">89<span>%</span></div>
+        <p>
+          Your trading history contains information you are probably not
+          looking at. NEXT CANDLE turns individual trades into patterns
+          you can actually understand.
+        </p>
+
+        <div class="check-list">
+          <div class="check">
+            <b>✓</b>
+            Win rate by strategy
+          </div>
+          <div class="check">
+            <b>✓</b>
+            Performance by session
+          </div>
+          <div class="check">
+            <b>✓</b>
+            Average R & expectancy
+          </div>
+          <div class="check">
+            <b>✓</b>
+            Drawdown & risk behaviour
+          </div>
+        </div>
+      </div>
+
+      <div class="analytics-card reveal">
+
+        <div class="analytics-head">
+          <strong>Performance Analytics</strong>
+          <div class="periods">
+            <span>7D</span>
+            <span class="active">30D</span>
+            <span>90D</span>
+            <span>ALL</span>
+          </div>
+        </div>
+
+        <div class="equity-chart">
+          <svg viewBox="0 0 900 280" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="equityArea" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#9cffc9" stop-opacity=".18"/>
+                <stop offset="100%" stop-color="#9cffc9" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+
+            <path
+              d="M0 245 L55 235 L100 240 L150 210 L195 218 L245 175 L290 187 L340 155 L390 163 L440 126 L490 139 L540 96 L590 112 L640 76 L690 88 L740 52 L790 65 L840 30 L900 18 L900 280 L0 280 Z"
+              fill="url(#equityArea)"
+            />
+
+            <path
+              class="equity-path"
+              d="M0 245 L55 235 L100 240 L150 210 L195 218 L245 175 L290 187 L340 155 L390 163 L440 126 L490 139 L540 96 L590 112 L640 76 L690 88 L740 52 L790 65 L840 30 L900 18"
+            />
+          </svg>
+        </div>
+
+        <div class="analytics-mini">
+          <div>
+            <small>Win Rate</small>
+            <strong class="positive">76.4%</strong>
+          </div>
+          <div>
+            <small>Expectancy</small>
+            <strong>+0.91R</strong>
+          </div>
+          <div>
+            <small>Profit Factor</small>
+            <strong>2.31</strong>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- WORKFLOW -->
+<section class="section workflow">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div class="section-kicker">03 / The workflow</div>
+      <h2 class="section-title">One trade. Four steps. More clarity.</h2>
+      <p class="section-description">
+        The goal isn't to journal for the sake of journaling.
+        The goal is to create feedback that makes your process measurable.
+      </p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-line"></div>
+        <h3>Capture</h3>
+        <p>
+          Log the trade while the information is fresh. Entry, exit,
+          risk, market, session and setup.
+        </p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-line"></div>
+        <h3>Tag</h3>
+        <p>
+          Label the conditions behind the trade. Strategy, setup,
+          session, emotion and execution quality.
+        </p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-line"></div>
+        <h3>Analyze</h3>
+        <p>
+          Let the numbers reveal patterns across your trading history,
+          instead of relying on memory.
+        </p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-line"></div>
+        <h3>Improve</h3>
+        <p>
+          Turn observations into rules and repeat the process with
+          better information behind every decision.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- JOURNAL -->
+<section class="section" id="journal">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div class="section-kicker">04 / Your journal</div>
+      <h2 class="section-title">Your trading history, finally organized.</h2>
+      <p class="section-description">
+        A clean workspace designed to make reviewing trades feel less like
+        administration and more like part of your trading process.
+      </p>
+    </div>
+
+    <div class="journal-layout">
+
+      <div class="journal-panel reveal">
+        <div class="journal-head">
+          <strong>Trade History</strong>
+          <span>89 TRADES</span>
+        </div>
+
+        <div class="journal-table">
+
+          <div class="j-row header">
+            <span>MARKET</span>
+            <span>SETUP</span>
+            <span>RESULT</span>
+            <span>R</span>
+          </div>
+
+          <div class="j-row">
+            <span>US100 · London</span>
+            <span><span class="tag">Liquidity</span></span>
+            <span class="win">WIN</span>
+            <span class="win">+2.1R</span>
+          </div>
+
+          <div class="j-row">
+            <span>XAUUSD · NY</span>
+            <span><span class="tag">FVG</span></span>
+            <span class="win">WIN</span>
+            <span class="win">+1.7R</span>
+          </div>
+
+          <div class="j-row">
+            <span>SPX500 · NY</span>
+            <span><span class="tag">Breakout</span></span>
+            <span class="loss">LOSS</span>
+            <span class="loss">-1R</span>
+          </div>
+
+          <div class="j-row">
+            <span>US100 · London</span>
+            <span><span class="tag">Sweep</span></span>
+            <span class="win">WIN</span>
+            <span class="win">+2.8R</span>
+          </div>
+
+          <div class="j-row">
+            <span>XAUUSD · London</span>
+            <span><span class="tag">OB</span></span>
+            <span class="win">WIN</span>
+            <span class="win">+1.4R</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="journal-panel reveal">
+        <div class="journal-head">
+          <strong>Trade Review</strong>
+          <span>US100 · 28 SEP</span>
+        </div>
+
+        <div class="review">
+
+          <div class="review-score">
+            <div>
+              <small>EXECUTION SCORE</small>
+            </div>
+            <strong>8.2<span style="font-size:16px;color:#555d61">/10</span></strong>
+          </div>
+
+          <div class="score-bar">
+            <i></i>
+          </div>
+
+          <div class="emotions">
+            <span class="emotion active">Calm</span>
+            <span class="emotion">Confident</span>
+            <span class="emotion">FOMO</span>
+            <span class="emotion">Hesitant</span>
+            <span class="emotion">Impatient</span>
+          </div>
+
+          <div class="note">
+            <strong style="color:#a8afad">Review note</strong><br><br>
+            Entry followed the planned setup. Risk stayed within the plan.
+            Waited for confirmation instead of entering immediately after
+            the liquidity event.
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PSYCHOLOGY -->
+<section class="section psychology" id="psychology">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div class="section-kicker">05 / Psychology</div>
+      <h2 class="section-title">Because execution is more than a chart.</h2>
+      <p class="section-description">
+        Your best setup can still become a bad trade when discipline,
+        patience or risk management disappears.
+      </p>
+    </div>
+
+    <div class="psychology-grid">
+
+      <div class="psych-card reveal">
+        <h3>Discipline Index</h3>
+        <p>
+          Track how consistently you follow your own rules instead of
+          judging performance only by whether the trade won.
+        </p>
+
+        <div class="discipline">
+          <div class="discipline-content">
+            <strong>82</strong>
+            <span>Discipline score</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="psych-card reveal">
+        <h3>Review your decisions</h3>
+        <p>
+          Build context around your trades and identify repeated emotional
+          patterns in your execution.
+        </p>
+
+        <div class="ai-chat">
+          <div class="message user">
+            I noticed I perform worse when I take trades outside my normal session.
+          </div>
+
+          <div class="message ai">
+            Your journal shows lower expectancy during those trades. Compare
+            session, setup and emotional state before changing your process.
+          </div>
+
+          <div class="message user">
+            What should I review first?
+          </div>
+
+          <div class="message ai">
+            Start with your last 20 trades. Group them by session and compare
+            average R, win rate and execution score.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- REPLAY -->
+<section class="section">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <div class="section-kicker">06 / Replay mindset</div>
+      <h2 class="section-title">Study the market. Not just the outcome.</h2>
+      <p class="section-description">
+        Review the context behind your decisions and separate a good process
+        from a lucky result.
+      </p>
+    </div>
+
+    <div class="replay-box reveal">
+
+      <div class="replay-top">
+        <div class="replay-title">MARKET REPLAY / US100</div>
+        <div class="replay-controls">
+          <span>1H</span>
+          <span>15M</span>
+          <span>▶</span>
+        </div>
+      </div>
+
+      <div class="replay-chart">
+
+        <div class="replay-line"></div>
+
+        <div class="replay-badge">
+          +2.1R · VALID SETUP
+        </div>
+
+        <div class="candles">
+          <div class="candle red"></div>
+          <div class="candle"></div>
+          <div class="candle red"></div>
+          <div class="candle"></div>
+          <div class="candle"></div>
+          <div class="candle red"></div>
+          <div class="candle"></div>
+          <div class="candle"></div>
+          <div class="candle red"></div>
+          <div class="candle"></div>
+          <div class="candle"></div>
+          <div class="candle"></div>
+          <div class="candle red"></div>
+          <div class="candle"></div>
+          <div class="candle"></div>
+          <div class="candle"></div>
+          <div class="candle red"></div>
+          <div class="candle"></div>
+          <div class="candle"></div>
+          <div class="candle"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section pricing" id="pricing">
+  <div class="container">
+
+    <div class="section-header reveal" style="text-align:center;margin-left:auto;margin-right:auto">
+      <div class="section-kicker">07 / Get access</div>
+      <h2 class="section-title">Build a better trading process.</h2>
+      <p class="section-description" style="margin-left:auto;margin-right:auto">
+        One simple price. Everything you need to start turning your
+        trading history into useful information.
+      </p>
+    </div>
+
+    <div class="price-wrap reveal">
+
+      <div class="price-glow"></div>
+
+      <div class="price-card">
+
+        <div class="price-top">
+
+          <div>
+            <div class="price-label">NEXT CANDLE ACCESS</div>
+            <h2>Trading Performance System</h2>
+            <p>
+              A focused workspace for traders who want to stop guessing
+              and start understanding their numbers.
+            </p>
+          </div>
+
+          <div class="price">
+            <strong>€19.99</strong>
+            <small>one-time access</small>
+          </div>
+
+        </div>
+
+        <div class="price-features">
+
+          <div class="price-feature">
+            <i>✓</i> Trade journal
+          </div>
+
+          <div class="price-feature">
+            <i>✓</i> Performance analytics
+          </div>
+
+          <div class="price-feature">
+            <i>✓</i> Strategy tracking
+          </div>
+
+          <div class="price-feature">
+            <i>✓</i> Psychology tracking
+          </div>
+
+          <div class="price-feature">
+            <i>✓</i> Trade review workflow
+          </div>
+
+          <div class="price-feature">
+            <i>✓</i> Performance metrics
+          </div>
+
+          <div class="price-feature">
+            <i>✓</i> Replay / review concepts
+          </div>
+
+          <div class="price-feature">
+            <i>✓</i> Continuous improvements
+          </div>
+
+        </div>
+
+        <a href="https://whop.com/next-candle-3630" target="_blank">
+          <button class="buy">
+            GET NEXT CANDLE — €19.99 &nbsp; ↗
+          </button>
+        </a>
+
+        <div class="price-note">
+          Secure checkout through Whop · Educational use only · Trading involves risk
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container">
+
+    <div class="section-header reveal" style="margin-left:auto;margin-right:auto;text-align:center">
+      <div class="section-kicker">08 / Questions</div>
+      <h2 class="section-title">Frequently asked.</h2>
+    </div>
+
+    <div class="faq-list reveal">
+
+      <div class="faq">
+        <button class="faq-question">
+          <span>What is NEXT CANDLE?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          <p>
+            NEXT CANDLE is a trading performance system designed to help
+            traders organize their trades, analyze their results and review
+            their execution and psychology.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq">
+        <button class="faq-question">
+          <span>Who is it for?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          <p>
+            It is designed for traders who want a more structured way to
+            review their trading process and learn from their own data.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq">
+        <button class="faq-question">
+          <span>Is this financial advice?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          <p>
+            No. NEXT CANDLE is an educational and organizational product.
+            It does not provide personalized financial advice or guarantee
+            trading results.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq">
+        <button class="faq-question">
+          <span>How much does it cost?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          <p>
+            Access is currently offered for €19.99 through the NEXT CANDLE
+            Whop checkout.
+          </p>
+        </div>
+      </div>
+
+      <div class="faq">
+        <button class="faq-question">
+          <span>Can I use it for different markets?</span>
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          <p>
+            The framework is designed around the trading process rather than
+            one specific market, so the concepts can be applied across
+            different instruments and strategies.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+
+    <h2 class="reveal">
+      Trade with data.<br>
+      <span>Improve with intent.</span>
+    </h2>
+
+    <p class="reveal">
+      Your trading history is already telling you something.
+      NEXT CANDLE helps you listen.
+    </p>
+
+    <a href="https://whop.com/next-candle-3630" target="_blank" class="btn btn-primary reveal">
+      GET ACCESS FOR €19.99
+      <span>↗</span>
+    </a>
+
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container footer-inner">
+
+    <div class="footer-copy">
+      © 2026 NEXT CANDLE. All rights reserved.
+    </div>
+
+    <div class="footer-links">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#top">Back to top ↑</a>
+      <a href="https://whop.com/next-candle-3630" target="_blank">Whop ↗</a>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+/* NAV SCROLL */
+const nav = document.getElementById("nav");
+
+window.addEventListener("scroll",()=>{
+  if(window.scrollY > 40){
+    nav.classList.add("scrolled");
+  }else{
+    nav.classList.remove("scrolled");
+  }
+});
+
+/* CURSOR GLOW */
+const glow = document.getElementById("cursorGlow");
+
+window.addEventListener("mousemove",(e)=>{
+  glow.style.left=e.clientX+"px";
+  glow.style.top=e.clientY+"px";
+});
+
+/* REVEAL ANIMATION */
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+      observer.unobserve(entry.target);
+    }
+  });
+},{
+  threshold:.12
+});
+
+document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+
+/* FAQ */
+document.querySelectorAll(".faq").forEach(faq=>{
+
+  const button=faq.querySelector(".faq-question");
+  const answer=faq.querySelector(".faq-answer");
+
+  button.addEventListener("click",()=>{
+
+    const isOpen=faq.classList.contains("open");
+
+    document.querySelectorAll(".faq").forEach(other=>{
+      other.classList.remove("open");
+      other.querySelector(".faq-answer").style.maxHeight=null;
+    });
+
+    if(!isOpen){
+      faq.classList.add("open");
+      answer.style.maxHeight=answer.scrollHeight+"px";
+    }
+
+  });
+
+});
+
+/* SMOOTH INTERNAL LINKS */
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener("click",(e)=>{
+    const target=document.querySelector(link.getAttribute("href"));
+
+    if(target){
+      e.preventDefault();
+
+      const y=target.getBoundingClientRect().top+
+              window.pageYOffset-100;
+
+      window.scrollTo({
+        top:y,
+        behavior:"smooth"
+      });
+    }
+  });
+});
+
+/* DASHBOARD PARALLAX */
+const dashboard=document.querySelector(".dashboard");
+
+if(dashboard && window.innerWidth > 900){
+
+  window.addEventListener("mousemove",(e)=>{
+
+    const x=(e.clientX/window.innerWidth-.5);
+    const y=(e.clientY/window.innerHeight-.5);
+
+    dashboard.style.transform=
+      `rotateX(${5-y*5}deg) rotateY(${x*2}deg)`;
+
+  });
+
+}
+
+/* MOBILE MENU */
+const mobileMenu=document.getElementById("mobileMenu");
+const navLinks=document.querySelector(".nav-links");
+
+mobileMenu.addEventListener("click",()=>{
+  if(navLinks.style.display==="flex"){
+    navLinks.style.display="";
+    return;
+  }
+
+  navLinks.style.position="absolute";
+  navLinks.style.top="72px";
+  navLinks.style.left="0";
+  navLinks.style.right="0";
+  navLinks.style.display="flex";
+  navLinks.style.flexDirection="column";
+  navLinks.style.padding="20px";
+  navLinks.style.border="1px solid rgba(255,255,255,.08)";
+  navLinks.style.borderRadius="18px";
+  navLinks.style.background="rgba(9,11,13,.96)";
+  navLinks.style.backdropFilter="blur(20px)";
+});
+
+/* BUTTON MICRO INTERACTION */
+document.querySelectorAll(".btn,.buy,.nav-cta").forEach(button=>{
+  button.addEventListener("mouseenter",()=>{
+    button.style.transition="transform .25s cubic-bezier(.22,1,.36,1)";
+  });
+});
+
+/* ACTIVE FAQ ACCESSIBILITY */
+document.querySelectorAll(".faq-question").forEach(button=>{
+  button.setAttribute("aria-expanded","false");
+
+  button.addEventListener("click",()=>{
+    button.setAttribute(
+      "aria-expanded",
+      button.closest(".faq").classList.contains("open")
+    );
+  });
+});
+</script>
+
+</body>
+</html>
